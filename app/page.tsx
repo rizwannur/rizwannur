@@ -42,7 +42,7 @@ export default function Home() {
       <main className="flex flex-col items-center justify-center">
         <Hero />
         <Work />
-        <Reviews/>
+        {/* <Reviews/> */}
         <About />
         <Blog />
         <Contact />
