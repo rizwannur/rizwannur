@@ -17,7 +17,7 @@ const Hero = () => {
       <motion.div className="absolute left-0 top-0 right-0 bottom-0 h-full w-full bg-[#0E1016] mix-blend-color"></motion.div>
 
       <div className="absolute top-10 flex justify-between sm:w-[90%] lg:max-w-[1440px]">
-        <div>
+        {/* <div>
           <Link
             href="https://cal.com/victorwilliams/30min"
             target="_blank"
@@ -30,11 +30,11 @@ const Hero = () => {
               BOOK A CALL
             </motion.button>
           </Link>
-        </div>
+        </div> */}
 
         <div className="flex gap-10 text-[#e4ded7] sm:gap-12 md:gap-14 lg:gap-14">
           <Link
-            href="https://github.com/victorcodess"
+            href="https://github.com/rizwannur"
             target="_blank"
             aria-label="View GitHub Profile"
           >
@@ -46,7 +46,7 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://www.linkedin.com/in/Rafey-williams-chukwudi/"
+            href="https://www.linkedin.com/in/rizwannur/"
             target="_blank"
             aria-label="View LinkedIn Profile"
           >
@@ -58,7 +58,7 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://twitter.com/victorwill__"
+            href="https://twitter.com/rizwannur"
             target="_blank"
             aria-label="View Twitter Profile"
           >
@@ -70,7 +70,7 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://contra.com/victorwilliams"
+            href="https://contra.com/rizwannur"
             target="_blank"
             aria-label="View Contra Profile"
           >
@@ -118,14 +118,14 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="z-50 text-center text-[16px] font-medium text-[#e4ded7] md:text-[20px] lg:text-left">
-            Frontend Engineer and Web Designer, prev at{" "}
+            Passionate Fullstack Developer, prev at{" "}
             <Link
-              href="https://www.mono.co/"
+              href="https://www.github.com/rizwannur"
               target="_blank"
               className="underline underline-offset-2 hover:no-underline"
               aria-label="Mono Website"
             >
-              Mono,
+              Myself,
             </Link>{" "}
             currently available for work.
           </p>
@@ -136,8 +136,8 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="text-right text-[16px] font-semibold text-[#e4ded7] md:text-[20px]">
-            Focused on interfaces and experiences, working remotely from Lagos,
-            Nigeria.
+            Focused on interfaces and experiences, working remotely from
+            Dhaka, Bangladesh.
           </p>
         </motion.div>
       </div>

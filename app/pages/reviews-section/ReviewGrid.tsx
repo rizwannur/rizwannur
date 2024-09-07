@@ -37,7 +37,7 @@ const Reviews = () => {
           );
         })}
       </motion.div>
-
+{/* 
       <motion.a
         initial={{ opacity: 0, y: 20 }}
         whileInView={{
@@ -58,7 +58,7 @@ const Reviews = () => {
         className="mt-10 mb-5 sm:mb-0 sm:mt-20"
       >
         <Image src={hireMe} alt={"hire me"} className="w-full" />
-      </motion.a>
+      </motion.a> */}
 
       {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
