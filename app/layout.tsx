@@ -40,11 +40,11 @@ export const metadata: Metadata = {
     title: "Rizwan Nur — Fullstack Developer",
     description:
       "Fullstack Developer. Focused on interfaces and experiences, working remotely from Dhhaka, Bangladesh.",
-    url: "https://www.victorwilliams.me/",
-    siteName: "www.victorwilliams.me",
+    url: "https://www.rizwannur.xyz/",
+    siteName: "www.rizwannur.xyz",
     images: [
       {
-        url: "https://user-images.githubusercontent.com/84178696/228620835-e3cc5c9b-72fc-4f54-a628-407ef7b650f5.png",
+        url: "",
         width: 1200,
         height: 630,
         alt: "Rizwan Nur — Frontend Engineer",
@@ -58,10 +58,10 @@ export const metadata: Metadata = {
     title: "Rizwan Nur — Fullstack Developer",
     description:
       "Fullstack Developer. Focused on interfaces and experiences, working remotely from Dhhaka, Bangladesh.",
-    creator: "victorwill__",
-    creatorId: "1243720976552144897",
+    creator: "rizwannur__",
+    creatorId: "",
     images: [
-      "https://user-images.githubusercontent.com/84178696/228620835-e3cc5c9b-72fc-4f54-a628-407ef7b650f5.png",
+      "",
     ],
   },
   robots: {
