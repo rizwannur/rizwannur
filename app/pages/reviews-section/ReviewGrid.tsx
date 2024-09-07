@@ -53,7 +53,7 @@ const Reviews = () => {
           amount: "some",
           once: true,
         }}
-        href="https://contra.com/victorwilliams"
+        href="https://contra.com/rizwannur"
         target="_blank"
         className="mt-10 mb-5 sm:mb-0 sm:mt-20"
       >
