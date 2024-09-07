@@ -100,7 +100,7 @@ const Hero = () => {
               src={profile}
               priority
               alt="Rafey's headshot"
-              data-blobity-tooltip="Giga Chad"
+              data-blobity-tooltip="Fine Boy"
               data-blobity-invert="false"
               className=" w-[150px] rounded-[16px] grayscale hover:grayscale-0 md:w-[200px] md:rounded-[32px] lg:w-[245px]"
             />
@@ -118,7 +118,7 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="z-50 text-center text-[16px] font-medium text-[#e4ded7] md:text-[20px] lg:text-left">
-            Passionate Fullstack Developer, prev at{" "}
+            Passionate Fullstack Developer, working for{" "}
             <Link
               href="https://www.github.com/rizwannur"
               target="_blank"
@@ -127,7 +127,7 @@ const Hero = () => {
             >
               Myself,
             </Link>{" "}
-            currently available for work.
+            currently available for hire.
           </p>
         </motion.div>
 
@@ -136,7 +136,7 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="text-right text-[16px] font-semibold text-[#e4ded7] md:text-[20px]">
-            Focused on interfaces and experiences, working remotely from
+            Focused on Websites and web apps, working remotely from
             Dhaka, Bangladesh.
           </p>
         </motion.div>
