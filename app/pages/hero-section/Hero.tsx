@@ -32,7 +32,7 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://www.linkedin.com/in/rizwannur/"
+            href="https://www.linkedin.com/in/"
             target="_blank"
             aria-label="View LinkedIn Profile"
           >
@@ -44,7 +44,7 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://twitter.com/rizwannur"
+            href="https://twitter.com/"
             target="_blank"
             aria-label="View Twitter Profile"
           >
@@ -56,9 +56,9 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://contra.com/rizwannur"
+            href="https://x.com/"
             target="_blank"
-            aria-label="View Contra Profile"
+            aria-label="View X Profile"
           >
             <motion.p
               className="text-[16px] font-bold text-[#e4ded7] md:text-[16px]"
