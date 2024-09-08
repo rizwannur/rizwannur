@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Syne } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+
 
 const syne = Syne({
   subsets: ["latin"],
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Rizwan Nur — Fullstack Developer",
     description:
-      "Fullstack Developer. Focused on interfaces and experiences, working remotely from Dhhaka, Bangladesh.",
+      "Fullstack Developer. Focused on interfaces and experiences, working remotely from Dhaka, Bangladesh.",
     url: "https://www.rizwannur.xyz/",
     siteName: "www.rizwannur.xyz",
     images: [
@@ -93,7 +93,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         {children}
         <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

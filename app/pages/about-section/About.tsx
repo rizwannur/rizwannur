@@ -12,7 +12,7 @@ const About = () => {
       <div className="mx-auto flex w-[90%] flex-col items-center justify-center lg:max-w-[1212.8px]">
         <AnimatedTitle
           text={
-            "I MAKE BRANDS BEAUTIFUL, WEBSITES POWERFUL AND CONTENT CAPTIVATING."
+            "Enthusiastic about Technology"
           }
           className={
             "mb-10 text-left text-[40px] font-bold leading-[0.9em] tracking-tighter text-[#e4ded7] sm:text-[45px] md:mb-16 md:text-[60px] lg:text-[80px]"
@@ -25,36 +25,32 @@ const About = () => {
           <div className="mb-10 flex w-[100%] flex-col gap-4 text-[18px] font-medium  leading-relaxed tracking-wide text-[#e4ded7] md:mb-16 md:gap-6 md:text-[20px] md:leading-relaxed lg:mb-16  lg:max-w-[90%] lg:text-[24px] ">
             <AnimatedBody
               text={
-                "I specialize in crafting high-converting landing pages and websites for SaaS, Web3 & AI startups. I'm passionate about building software that makes a difference."
+                "I'm currently an 11th grader from Bangladesh, pursuing my higher secondary education. I'm preparing for my board exams and I want to learn new things and build my own startup."
               }
             />
             <AnimatedBody
               text={
-                "Whether I’m designing a sleek user interface or coding a complex application, I’m always striving to create something unique and innovative. I love experimenting with new technologies and staying up-to-date with the latest trends in the tech world."
+                "Due to my interest in technology, I started learning web development and programming. I began with JavaScript out of enthusiasm and continued building Discord bots, eventually finding that I enjoyed creating them more than anything else. Later, I decided to start learning other programming languages and technologies."
               }
               className={"hidden"}
             />
             <AnimatedBody
               text={
-                "Beyond my work as a frontend developer, I'm an active leader in tech communities."
+                "I always knew I had to do something significant in my life, but I was unsure where to start. I had a vision of building my own startup and becoming my own boss. I might pursue a career in AI or something related to technology. That's precisely what I plan to do after my board exams. I'll also try to apply for internships to gain more experience and learn new things."
               }
             />
             <AnimatedBody
               text={
-                "When I'm not coding, you can find me binge-watching anime, hanging out with friends, cheering on Real Madrid, or discovering new music in my favorite genres like K-pop, J-pop, and Bollywood and Rap."
+                "I haven't started working on my startup yet, but I will soon. I'll keep posting updates on my website as I progress in my journey. Alongside that, I'll be writing blogs about my experiences and journey. Due to academic commitments, I'll be doing all of this during my weekends and vacations. At this point, it's more of a passion for me, and I want to see where it leads."
               }
             />
-            <AnimatedBody
-              text={
-                "I'm currently working on some exciting projects that I can't wait to share with you. But I’m always open to new opportunities and collaborations."
-              }
-            />
+            
           </div>
 
           <div className="mb-24 flex w-[100%] flex-col gap-4 text-[18px] font-normal leading-relaxed tracking-wide text-[#e4ded7]/80 sm:mb-32 md:mb-40 md:gap-6 md:text-[16px] md:leading-normal lg:mt-0 lg:mb-16 lg:max-w-[30%] lg:text-[18px]">
             <div className="flex flex-col gap-4 md:gap-3">
               <AnimatedTitle
-                text={"Frontend Tools"}
+                text={"What can i do"}
                 className={
                   "text-[24px] text-[#e4ded7] md:text-[30px] lg:text-[20px]"
                 }
@@ -63,13 +59,13 @@ const About = () => {
               />
               <AnimatedBody
                 text={
-                  "JavaScript (ES6+), React, Next.js, TypeScript, Prismic CMS, Redux, Redux Toolkit, React Testing Library, Vitetest, HTML5, Git/GitHub, NextAuth, Formik."
+                  "Learning Js, CSS, HTML. I can understand how a program works, comprehend its logic and flow. I can build full-stack applications using the MERN stack and create simple Discord bots using the Discord.js library. I can read documentation and learn how to use APIs of different libraries and frameworks. While I don't consider myself a UI/UX designer, I can create simple designs using AI and various tools. Then, I can craft them into a working and responsive website."
                 }
               />
             </div>
             <div className="flex flex-col gap-3">
               <AnimatedTitle
-                text={"UI Libraries"}
+                text={"What i plan to do"}
                 className={
                   "text-[24px] text-[#e4ded7] md:text-[30px] lg:text-[20px]"
                 }
@@ -78,25 +74,11 @@ const About = () => {
               />
               <AnimatedBody
                 text={
-                  "CSS3/SCSS/SASS, Tailwind CSS, Material UI, Framer Motion, GSAP, Bootstrap, Chart.js."
+                  "After my 12th Board exams, I want to explore universities abroad and apply to them. I currently don't have any preferences, but I'll try to find scholarships to assist with my education. In addition to my current skills, I plan to engage in extracurricular activities to further develop my abilities. I intend to learn more about AI and delve into robotics. Although I haven't found suitable opportunities yet, I'll continue searching and eventually start working on these areas. As a self-learner, I excel at my own pace but struggle with strict deadlines. While I prefer working independently, my ability to collaborate depends on the team dynamics. I'm more introverted and value privacy in professional settings."
                 }
               />
             </div>
-            <div className="flex flex-col gap-3">
-              <AnimatedTitle
-                text={"Design Tools"}
-                className={
-                  "text-[24px] text-[#e4ded7] md:text-[30px] lg:text-[20px]"
-                }
-                wordSpace={"mr-[0.25em]"}
-                charSpace={"mr-[0.01em]"}
-              />
-              <AnimatedBody
-                text={
-                  "Figma, Framer, FigJam, Adobe XD, ProtoPie, Adobe Photoshop, UX Research, UI Design, Prototyping."
-                }
-              />
-            </div>
+           
           </div>
         </div>
         <div className="mt-10 flex flex-col md:-mt-0 lg:mt-28">

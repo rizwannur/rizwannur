@@ -17,20 +17,6 @@ const Hero = () => {
       <motion.div className="absolute left-0 top-0 right-0 bottom-0 h-full w-full bg-[#0E1016] mix-blend-color"></motion.div>
 
       <div className="absolute top-10 flex justify-between sm:w-[90%] lg:max-w-[1440px]">
-        {/* <div>
-          <Link
-            href="https://cal.com/victorwilliams/30min"
-            target="_blank"
-            aria-label="BOOK A CALL"
-          >
-            <motion.button
-              className="hidden rounded-md border-2 border-[#e4ded7] py-2 px-4 text-[14px] font-semibold text-[#e4ded7] sm:block  md:text-[16px] lg:block"
-              variants={bodyAnimation}
-            >
-              BOOK A CALL
-            </motion.button>
-          </Link>
-        </div> */}
 
         <div className="flex gap-10 text-[#e4ded7] sm:gap-12 md:gap-14 lg:gap-14">
           <Link
@@ -136,8 +122,7 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="text-right text-[16px] font-semibold text-[#e4ded7] md:text-[20px]">
-            Focused on Websites and web apps, working remotely from
-            Dhaka, Bangladesh.
+            Active learner. Will be writing blogs about my journey and experiences.
           </p>
         </motion.div>
       </div>

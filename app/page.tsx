@@ -8,11 +8,11 @@ import { initialBlobityOptions } from "./utils/BlobityConfig";
 import NavBar from "./components/NavBar";
 
 import dynamic from "next/dynamic";
-import Reviews from "./pages/reviews-section/ReviewGrid";
-const Work = dynamic(() => import("./pages/work-section/Work"));
+// import Reviews from "./pages/reviews-section/ReviewGrid";
+// const Work = dynamic(() => import("./pages/work-section/Work"));
 const About = dynamic(() => import("./pages/about-section/About"));
-const Blog = dynamic(() => import("./pages/blog-section/BlogGrid"));
-const Contact = dynamic(() => import("./pages/contact-section/Contact"));
+// const Blog = dynamic(() => import("./pages/blog-section/BlogGrid"));
+// const Contact = dynamic(() => import("./pages/contact-section/Contact"));
 const Footer = dynamic(() => import("./components/Footer"));
 
 export default function Home() {
@@ -41,11 +41,11 @@ export default function Home() {
       {/* <ScrollerMotion> */}
       <main className="flex flex-col items-center justify-center">
         <Hero />
-        <Work />
-        <Reviews/>
+        {/* <Work />
+        <Reviews/> */}
         <About />
-        <Blog />
-        <Contact />
+        {/* <Blog />
+        <Contact /> */}
         <Footer />
       </main>
       {/* </ScrollerMotion> */}
