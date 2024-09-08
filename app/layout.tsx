@@ -12,7 +12,7 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "Rizwan Nur — Frontend Engineer",
+  title: "Rizwan Nur",
   description:
     "Fullstack Developer. Focused on interfaces and experiences, working remotely from Dhhaka, Bangladesh.",
   generator: "Next.js",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
         url: "",
         width: 1200,
         height: 630,
-        alt: "Rizwan Nur — Frontend Engineer",
+        alt: "Rizwan Nur",
       },
     ],
     locale: "en-US",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     title: "Rizwan Nur — Fullstack Developer",
     description:
       "Fullstack Developer. Focused on interfaces and experiences, working remotely from Dhhaka, Bangladesh.",
-    creator: "rizwannur__",
+    creator: "rizwannur",
     creatorId: "",
     images: [
       "",
