@@ -32,7 +32,7 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://www.linkedin.com/in/"
+            href="https://www.linkedin.com/in/rizwannur"
             target="_blank"
             aria-label="View LinkedIn Profile"
           >
@@ -44,7 +44,7 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://twitter.com/"
+            href="https://x.com/rafegx"
             target="_blank"
             aria-label="View Twitter Profile"
           >
@@ -52,19 +52,19 @@ const Hero = () => {
               className="text-[16px] font-bold text-[#e4ded7] md:text-[16px]"
               variants={bodyAnimation}
             >
-              TW
+              X
             </motion.p>
           </Link>
           <Link
-            href="https://x.com/"
+            href="https://instagram.com/rafeygx"
             target="_blank"
-            aria-label="View X Profile"
+            aria-label="View Instagram Profile"
           >
             <motion.p
               className="text-[16px] font-bold text-[#e4ded7] md:text-[16px]"
               variants={bodyAnimation}
             >
-              CO
+              IG
             </motion.p>
           </Link>
         </div>
