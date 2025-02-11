@@ -1,23 +1,26 @@
+// SongCard.tsx
 import Image from "next/image";
 import { SongProps } from "./songDetails";
 import Link from "next/link";
 
 const SongCard = ({ title, artist, image, link }: SongProps) => {
   return (
-    <Link href={link} target="_blank" aria-label="Check out song on Spotify">
-      <div
-        className={`relative flex h-[138px] w-[195px] items-center justify-center overflow-hidden rounded-xl py-0 sm:h-[140px] sm:w-[200px] md:h-[160px] md:w-[250px] lg:h-[190px] lg:w-[270px]`}
-      >
+    <Link href={link} target="_blank" aria-label={`Check out ${title} by ${artist}`}>
+      <div className="relative aspect-square h-[150px] w-[150px] overflow-hidden rounded-xl sm:h-[180px] sm:w-[180px] md:h-[200px] md:w-[200px] lg:h-[220px] lg:w-[220px]">
         <Image
-          src={image}
-          alt={title}
-          className="w-full items-stretch justify-center rounded-xl bg-cover bg-center"
+          src={image.src}
+          alt={`${title} - ${artist}`}
+          width={image.width}
+          height={image.height}
+          className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
         />
-        <div className=" hidden h-[150%] w-full bg-gradient-to-t from-black to-transparent"></div>
-
-        <div className="absolute bottom-3 left-5 hidden">
-          <p className="text-[14px] text-white">{artist}</p>
-          <h4 className="text-[30px] text-white">{title}</h4>
+        
+        {/* Optional overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        
+        <div className="absolute bottom-3 left-3 text-white">
+          <p className="text-sm font-medium sm:text-base">{artist}</p>
+          <h4 className="line-clamp-1 text-lg font-bold sm:text-xl">{title}</h4>
         </div>
       </div>
     </Link>

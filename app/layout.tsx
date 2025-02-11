@@ -14,7 +14,7 @@ const syne = Syne({
 export const metadata: Metadata = {
   title: "Rizwan Nur",
   description:
-    "Fullstack Developer. Focused on interfaces and experiences, working remotely from Dhhaka, Bangladesh.",
+    "Fullstack Developer",
   generator: "Next.js",
   applicationName: "Rizwan Nur",
   keywords: [
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Rizwan Nur — Fullstack Developer",
     description:
-      "Fullstack Developer. Focused on interfaces and experiences, working remotely from Dhaka, Bangladesh.",
+      "Fullstack Developer",
     url: "https://www.rizwannur.xyz/",
     siteName: "www.rizwannur.xyz",
     images: [
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rizwan Nur — Fullstack Developer",
     description:
-      "Fullstack Developer. Focused on interfaces and experiences, working remotely from Dhhaka, Bangladesh.",
+      "Fullstack Developer",
     creator: "rizwannur",
     creatorId: "",
     images: [

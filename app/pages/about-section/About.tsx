@@ -11,9 +11,7 @@ const About = () => {
     >
       <div className="mx-auto flex w-[90%] flex-col items-center justify-center lg:max-w-[1212.8px]">
         <AnimatedTitle
-          text={
-            "Enthusiastic about Technology"
-          }
+          text={"Entrepreneurial Mindset & Tech Enthusiast"}
           className={
             "mb-10 text-left text-[40px] font-bold leading-[0.9em] tracking-tighter text-[#e4ded7] sm:text-[45px] md:mb-16 md:text-[60px] lg:text-[80px]"
           }
@@ -22,35 +20,34 @@ const About = () => {
         />
 
         <div className="mx-auto flex w-[100%] flex-col lg:max-w-[1200px] lg:flex-row lg:gap-20">
-          <div className="mb-10 flex w-[100%] flex-col gap-4 text-[18px] font-medium  leading-relaxed tracking-wide text-[#e4ded7] md:mb-16 md:gap-6 md:text-[20px] md:leading-relaxed lg:mb-16  lg:max-w-[90%] lg:text-[24px] ">
+          <div className="mb-10 flex w-[100%] flex-col gap-4 text-[18px] font-medium leading-relaxed tracking-wide text-[#e4ded7] md:mb-16 md:gap-6 md:text-[20px] md:leading-relaxed lg:mb-16 lg:max-w-[90%] lg:text-[24px] ">
             <AnimatedBody
               text={
-                "I'm currently an 11th grader from Bangladesh, pursuing my higher secondary education. I'm preparing for my board exams and I want to learn new things and build my own startup."
+                "Business is my passion, and I'm always looking for ways to innovate and grow. My journey started with an interest in technology, and over time, I developed a deep appreciation for entrepreneurship."
               }
             />
             <AnimatedBody
               text={
-                "Due to my interest in technology, I started learning web development and programming. I began with JavaScript out of enthusiasm and continued building Discord bots, eventually finding that I enjoyed creating them more than anything else. Later, I decided to start learning other programming languages and technologies."
+                "I have experience in web development, particularly with the MERN stack, and enjoy experimenting with creative coding. While I don't primarily identify as a developer, I have the ability to work with code and bring ideas to life when needed. My expertise lies in business strategy, branding, and scaling ventures."
               }
               className={"hidden"}
             />
             <AnimatedBody
               text={
-                "I always knew I had to do something significant in my life, but I was unsure where to start. I had a vision of building my own startup and becoming my own boss. I might pursue a career in AI or something related to technology. That's precisely what I plan to do after my board exams. I'll also try to apply for internships to gain more experience and learn new things."
+                "My goal is to achieve financial independence, retire my parents, and build impactful businesses. I navigate multiple industries, including fashion, tech, and marketing, while leveraging my skills in RMG merchandising to help brands place fresh orders at wholesale prices. My drive for success is fueled by a vision of growth and innovation."
               }
             />
             <AnimatedBody
               text={
-                "I haven't started working on my startup yet, but I will soon. I'll keep posting updates on my website as I progress in my journey. Alongside that, I'll be writing blogs about my experiences and journey. Due to academic commitments, I'll be doing all of this during my weekends and vacations. At this point, it's more of a passion for me, and I want to see where it leads."
+                "Although my main focus is growing my brand and business, I also explore various side projects, keeping an open mind to new opportunities. I share my journey through my work, and as I scale up, I plan to document more insights and experiences for aspiring entrepreneurs."
               }
             />
-            
           </div>
 
           <div className="mb-24 flex w-[100%] flex-col gap-4 text-[18px] font-normal leading-relaxed tracking-wide text-[#e4ded7]/80 sm:mb-32 md:mb-40 md:gap-6 md:text-[16px] md:leading-normal lg:mt-0 lg:mb-16 lg:max-w-[30%] lg:text-[18px]">
             <div className="flex flex-col gap-4 md:gap-3">
               <AnimatedTitle
-                text={"What can i do"}
+                text={"Skills & Strengths"}
                 className={
                   "text-[24px] text-[#e4ded7] md:text-[30px] lg:text-[20px]"
                 }
@@ -59,13 +56,13 @@ const About = () => {
               />
               <AnimatedBody
                 text={
-                  "Learning Js, CSS, HTML. I can understand how a program works, comprehend its logic and flow. I can build full-stack applications using the MERN stack and create simple Discord bots using the Discord.js library. I can read documentation and learn how to use APIs of different libraries and frameworks. While I don't consider myself a UI/UX designer, I can create simple designs using AI and various tools. Then, I can craft them into a working and responsive website."
+                  "I understand business strategies, branding, and marketing. I can build and scale online stores, leverage social media for growth, and navigate RMG exports. I also have a foundation in web development and UI/UX, allowing me to bring ideas to life in digital form."
                 }
               />
             </div>
             <div className="flex flex-col gap-3">
               <AnimatedTitle
-                text={"What i plan to do"}
+                text={"Future Plans"}
                 className={
                   "text-[24px] text-[#e4ded7] md:text-[30px] lg:text-[20px]"
                 }
@@ -74,17 +71,16 @@ const About = () => {
               />
               <AnimatedBody
                 text={
-                  "After my 12th Board exams, I want to explore universities abroad and apply to them. I currently don't have any preferences, but I'll try to find scholarships to assist with my education. In addition to my current skills, I plan to engage in extracurricular activities to further develop my abilities. I intend to learn more about AI and delve into robotics. Although I haven't found suitable opportunities yet, I'll continue searching and eventually start working on these areas. As a self-learner, I excel at my own pace but struggle with strict deadlines. While I prefer working independently, my ability to collaborate depends on the team dynamics. I'm more introverted and value privacy in professional settings."
+                  "My vision is to expand my brand, dominate the online fashion market, and explore new business opportunities. I also plan to study abroad to gain global exposure. While my main focus is business, I’m open to AI, robotics, and new tech innovations. My approach is always hands-on—I experiment, learn fast, and adapt to challenges."
                 }
               />
             </div>
-           
           </div>
         </div>
         <div className="mt-10 flex flex-col md:-mt-0 lg:mt-28">
           <SongCarousel />
           <AnimatedBody
-            text="A few songs I can recommend if you're looking for some fresh tunes :)"
+            text="Some songs I vibe with—give them a listen if you're into good music."
             className="absolute bottom-10 right-0 left-0 mx-auto w-[90%] text-center text-[14px] font-semibold uppercase text-[#e4ded7] sm:w-[500px] md:bottom-12 md:w-[550px] md:text-[16px] "
           />
         </div>

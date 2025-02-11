@@ -104,16 +104,16 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="z-50 text-center text-[16px] font-medium text-[#e4ded7] md:text-[20px] lg:text-left">
-            Passionate Fullstack Developer, working for{" "}
+            Passionate{" "}
             <Link
               href="https://www.github.com/rizwannur"
               target="_blank"
               className="underline underline-offset-2 hover:no-underline"
               aria-label="Mono Website"
             >
-              Myself,
+              Fullstack Developer, 
             </Link>{" "}
-            currently available for hire.
+             currently available for hire!
           </p>
         </motion.div>
 
@@ -122,7 +122,7 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="text-right text-[16px] font-semibold text-[#e4ded7] md:text-[20px]">
-            Active learner. Will be writing blogs about my journey and experiences.
+            Active learner, will journal my progerss here.
           </p>
         </motion.div>
       </div>

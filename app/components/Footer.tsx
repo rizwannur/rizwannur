@@ -15,7 +15,7 @@ const Footer = () => {
         <AnimatedBody text={`Copyright ${year}`} className={"m-0 p-0"} />
         <div className="flex flex-col sm:flex-row  sm:gap-1 md:gap-2">
           <AnimatedBody
-            text={"Design & Development by"}
+            text={""}
             className={"m-0 p-0"}
           />
           <Link
@@ -24,7 +24,7 @@ const Footer = () => {
             aria-label="Rafey's GitHub Profile"
           >
             <span className="underline underline-offset-2 hover:no-underline">
-              <AnimatedBody text={"Rizwan Nur"} className={"m-0 p-0"} />
+              <AnimatedBody text={""} className={"m-0 p-0"} />
             </span>{" "}
           </Link>
         </div>
