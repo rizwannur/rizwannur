@@ -56,7 +56,7 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://instagram.com/rafeygx"
+            href="https://instagram.com/"
             target="_blank"
             aria-label="View Instagram Profile"
           >
