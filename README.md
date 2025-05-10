@@ -96,12 +96,42 @@
 
 ---
 
-### 📈 GitHub Stats
+### 📊 GitHub Stats
+---
 
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=rizwannur&show_icons=true&theme=tokyonight&count_private=true" height="180px"/>
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=rizwannur&layout=compact&langs_count=10&theme=tokyonight" height="180px"/>
-</p>
+<div align="center">
+  <!-- GitHub Stats -->
+  <a href="https://github.com/rizwannur">
+    <img src="https://github-readme-stats.vercel.app/api?username=rizwannur&show_icons=true&theme=tokyonight&count_private=true" height="200px" />
+  </a>
+</div>
+
+<div align="center">
+  <!-- Streak Stats -->
+  <img src="https://github-readme-streak-stats.herokuapp.com?user=rizwannur&theme=tokyonight&hide_border=true&background=00000000&dates=7A79FF&stroke=7A79FF" height="200px" />
+</div>
+
+
+---
+
+### 🏆 Achievements
+---
+
+<div align="center">
+  
+  <img src="https://github-profile-trophy.vercel.app/?username=rizwannur&theme=tokyonight&margin-w=15&no-frame=true&row=2&column=4" />
+  
+</div>
+
+---
+
+<div align="center">
+  
+  ![Profile Views](https://komarev.com/ghpvc/?username=rizwannur&color=7A79FF&style=flat-square)
+  ![Repos Badge](https://badges.pufler.dev/repos/rizwannur?color=7A79FF&style=flat-square)
+  ![Years Badge](https://badges.pufler.dev/years/rizwannur?color=7A79FF&style=flat-square)
+  
+</div>
 
 ---
 
