@@ -1,6 +1,6 @@
 <!-- Banner -->
 <p align="center">
-  <img src="https://raw.githubusercontent.com/rizwannur/rizwannur/main/assets/banner.jpg" alt="Rizwan Nur Banner" />
+  <img src="https://i.pinimg.com/736x/c2/2e/34/c22e345acafa35ac47f23d8dc82b021b.jpg" alt="Rizwan Nur Banner" />
 </p>
 
 <!-- Wave Gif & Intro -->
@@ -14,7 +14,7 @@
 - 📚 Currently prepping for Japan: tech studies, JLPT, and HSC exams  
 - ⚡ I design and code sleek, minimal experiences — function meets aesthetic  
 - 🌏 Dream: Settle in Sapporo or Fukuoka, build in public, and create long-term impact  
-- 💬 Reach me: [hi@rizwannur.dev](mailto:hi@rizwannur.xyz)  
+- 💬 Reach me: [hi@rizwannur.xyz](mailto:hi@rizwannur.xyz)  
 
 - 🎮 Passionate about anime, gaming, and coding — always looking for ways to combine the two in innovative projects  
 - 📈 Obsessed with optimizing my productivity and learning through diverse tools and strategies  
@@ -107,9 +107,17 @@
 
 ### 🌱 Currently Learning
 
-📘 Japanese (JLPT N4)  
-💻 Full-stack with Next.js, Prisma, REST/GraphQL  
-🎨 UI/UX design patterns for clean, responsive layouts
+- 📘 **Japanese (JLPT N4)**: Mastering basic conversational and written Japanese for smoother interactions in Japan.
+- 💻 **Full-stack Development with Next.js & Prisma**: Enhancing my skills in full-stack web development with modern technologies.
+- 🎨 **UI/UX Design Patterns**: Deep diving into design principles to create intuitive, responsive layouts.
+- 🧠 **Machine Learning & AI**: Exploring AI/ML models to implement in projects for more innovative solutions.
+- 📊 **Data Structures & Algorithms**: Strengthening my problem-solving skills for technical interviews and software optimization.
+- 🌐 **GraphQL & REST APIs**: Learning how to design efficient and scalable APIs for seamless data communication in apps.
+- 🛠️ **DevOps & Cloud Infrastructure**: Familiarizing myself with DevOps tools and cloud platforms to streamline deployment and automation.
+- 📝 **Content Creation & Blogging**: Developing writing and content strategy skills to document my journey and share knowledge online.
+- 🌍 **Cultural Studies (Japan traditions)**: Studying Japanese culture to bridge the gap when relocating and building connections.
+- 🎥 **Video Production & Editing**: Learning how to create high-quality videos for tutorials, vlogs, and social media engagement.
+- 🔒 **Cybersecurity**: Building knowledge in security best practices to protect websites and systems I develop.
 
 ---
 
