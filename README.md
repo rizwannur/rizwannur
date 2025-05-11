@@ -14,8 +14,7 @@
 - 📚 Currently prepping for Japan: tech studies, JLPT, and HSC exams  
 - ⚡ I design and code sleek, minimal experiences — function meets aesthetic  
 - 🌏 Dream: Settle in Sapporo or Fukuoka, build in public, and create long-term impact  
-- 💬 Reach me: [hi@rizwannur.xyz](mailto:hi@rizwannur.xyz)  
-
+- 💬 Reach me: [rizwannur116@gmail.com](mailto:rizwannur116@gmail.com)  
 - 🎮 Passionate about anime, gaming, and coding — always looking for ways to combine the two in innovative projects  
 - 📈 Obsessed with optimizing my productivity and learning through diverse tools and strategies  
 - 🌍 I believe in global collaboration — connecting with people across cultures and working together towards a better future  
