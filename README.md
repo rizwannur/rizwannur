@@ -1,6 +1,6 @@
 <!-- Banner -->
 <p align="center">
-  <img src="https://i.pinimg.com/736x/c2/2e/34/c22e345acafa35ac47f23d8dc82b021b.jpg" alt="Rizwan Nur Banner" />
+  <img src="./assets/flower.jpeg" alt="Rizwan Nur Banner" />
 </p>
 
 <!-- Wave Gif & Intro -->
