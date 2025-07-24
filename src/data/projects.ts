@@ -1,3 +1,5 @@
+export const projectsTitle = "Featured Work";
+
 import { DevProject, DesignProject } from "../lib/types";
 import odunsiImage from "../../public/projects/odunsi.png";
 import interlockImage from "../../public/projects/interlock.png";

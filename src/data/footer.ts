@@ -1,6 +1,6 @@
 export const footerData = {
   designText: "Design & Development by",
-  developerName: "Victor Williams",
-  developerUrl: "https://github.com/victorcodess",
-  ariaLabel: "Victor's GitHub Profile"
+  developerName: "Rafey",
+  developerUrl: "https://github.com/rizwannur",
+  ariaLabel: "Rafey's GitHub Profile"
 };

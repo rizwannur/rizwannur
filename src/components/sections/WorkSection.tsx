@@ -1,4 +1,4 @@
-import { devProjects } from "@/data/projects";
+import { devProjects, projectsTitle } from "@/data/projects";
 import ProjectCard from "../cards/ProjectCard";
 import { DevProject } from "@/lib/types";
 
@@ -13,7 +13,7 @@ const WorkSection = ({ className = "" }: WorkSectionProps) => {
       id="work"
     >
       <h2 className="mb-10 hidden text-4xl text-[#e4ded7] md:mb-16 md:text-[42px] lg:mb-16 lg:text-7xl">
-        Featured Work
+        {projectsTitle}
       </h2>
 
       <div className="grid w-[90%] grid-cols-1 grid-rows-2 gap-y-10 gap-x-6 lg:max-w-[1200px] lg:grid-cols-1">

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { monaSans } from "@/app/fonts/monaSans";
 import { imageAnimation, bodyAnimation } from "../animations/animations";
 import AnimatedWords from "../animations/AnimatedWords";
-import profile from "./../../../public/profile.webp";
+import { heroData } from "@/data/hero";
 
 interface HeroSectionProps {
   className?: string;
@@ -23,7 +23,7 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
       <div className="absolute top-10 flex justify-between sm:w-[90%] lg:max-w-[1440px]">
         <div>
           <Link
-            href="https://cal.com/victorwilliams/30min"
+            href={heroData.callUrl}
             target="_blank"
             aria-label="BOOK A CALL"
           >
@@ -37,54 +37,21 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
         </div>
 
         <div className="flex gap-10 text-[#e4ded7] sm:gap-12 md:gap-14 lg:gap-14">
-          <Link
-            href="https://github.com/victorcodess"
-            target="_blank"
-            aria-label="View GitHub Profile"
-          >
-            <motion.p
-              className="text-base font-bold text-[#e4ded7]"
-              variants={bodyAnimation}
+          {heroData.socials.map((social, index) => (
+            <Link
+              key={index}
+              href={social.url}
+              target="_blank"
+              aria-label={`View ${social.name} Profile`}
             >
-              GH
-            </motion.p>
-          </Link>
-          <Link
-            href="https://www.linkedin.com/in/victor-williams-chukwudi/"
-            target="_blank"
-            aria-label="View LinkedIn Profile"
-          >
-            <motion.p
-              className="text-base font-bold text-[#e4ded7]"
-              variants={bodyAnimation}
-            >
-              LN
-            </motion.p>
-          </Link>
-          <Link
-            href="https://twitter.com/victorwill__"
-            target="_blank"
-            aria-label="View Twitter Profile"
-          >
-            <motion.p
-              className="text-base font-bold text-[#e4ded7]"
-              variants={bodyAnimation}
-            >
-              TW
-            </motion.p>
-          </Link>
-          <Link
-            href="https://contra.com/victorwilliams"
-            target="_blank"
-            aria-label="View Contra Profile"
-          >
-            <motion.p
-              className="text-base font-bold text-[#e4ded7]"
-              variants={bodyAnimation}
-            >
-              CO
-            </motion.p>
-          </Link>
+              <motion.p
+                className="text-base font-bold text-[#e4ded7]"
+                variants={bodyAnimation}
+              >
+                {social.shortName}
+              </motion.p>
+            </Link>
+          ))}
         </div>
       </div>
 
@@ -93,7 +60,7 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
           className={`relative flex flex-col items-center justify-center ${monaSans.className}`}
         >
           <AnimatedWords
-            title="VICTOR WILLIAMS"
+            title={heroData.name}
             style="inline-block overflow-hidden pt-1 -mr-4 sm:-mr-5 md:-mr-7 lg:-mr-9 -mb-1 sm:-mb-2 md:-mb-3 lg:-mb-4"
           />
           <motion.div
@@ -101,10 +68,12 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
             variants={imageAnimation}
           >
             <Image
-              src={profile}
+              src={heroData.profileImage}
+              width={245}
+              height={245}
               priority
-              alt="Victor's headshot"
-              data-blobity-tooltip="Giga Chad"
+              alt="Rafey's Headshot"
+              data-blobity-tooltip="Fine Boy"
               data-blobity-invert="false"
               className="w-[150px] rounded-2xl grayscale hover:grayscale-0 md:w-[200px] md:rounded-[32px] lg:w-[245px]"
             />
@@ -118,16 +87,16 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
           variants={bodyAnimation}
         >
           <p className="z-50 text-center text-base font-medium text-[#e4ded7] md:text-xl lg:text-left">
-            Frontend Engineer and Web Designer, prev at{" "}
+            {heroData.tagline[0]}{" "}
             <Link
-              href="https://www.korahq.com/"
+              href={heroData.koraUrl}
               target="_blank"
               className="underline underline-offset-2 hover:no-underline"
               aria-label="Kora Website"
             >
-              Kora,
+              {heroData.tagline[1]}
             </Link>{" "}
-            currently available for work.
+            {heroData.tagline[2]}
           </p>
         </motion.div>
 
@@ -136,8 +105,7 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
           variants={bodyAnimation}
         >
           <p className="text-right text-base font-semibold text-[#e4ded7] md:text-xl">
-            Focused on interfaces and experiences, working remotely from Lagos,
-            Nigeria.
+            {heroData.location}
           </p>
         </motion.div>
       </div>

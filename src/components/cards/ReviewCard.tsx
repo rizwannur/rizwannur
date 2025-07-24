@@ -9,7 +9,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
 
   const abbreviateName = (name: string): string => {
     const [firstName, lastName] = name.split(" ");
-    return `${firstName} ${lastName[0]}.`;
+    return lastName ? `${firstName} ${lastName[0]}.` : firstName;
   };
 
   return (

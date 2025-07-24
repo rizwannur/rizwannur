@@ -6,3 +6,5 @@ export * from "./blogs";
 export * from "./footer";
 export * from "./navbar";
 export * from "./about";
+export * from "./contact";
+export * from "./hero";
