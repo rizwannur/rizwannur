@@ -4,7 +4,6 @@ import SongCard from "../cards/SongCard";
 import AnimatedBody from "../animations/AnimatedBody";
 import AnimatedTitle from "../animations/AnimatedTitle";
 import { aboutData } from "@/data/AboutSection";
-import { fetchPlaylistSongs } from '@/lib/youtube'; // Import the new utility
 import "../animations/animate.css";
 
 interface AboutSectionProps {
@@ -17,20 +16,17 @@ const AboutSection = ({ className = "" }: AboutSectionProps) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const playlistId = process.env.NEXT_PUBLIC_YOUTUBE_PLAYLIST_ID;
-    const apiKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
-
-    if (!playlistId || !apiKey) {
-      console.error("YouTube Playlist ID or API Key is not set in environment variables.");
-      setError("Configuration error: YouTube playlist data cannot be loaded.");
-      setLoading(false);
-      return;
-    }
-
     const getSongs = async () => {
       try {
         setLoading(true);
-        const fetchedSongs = await fetchPlaylistSongs(playlistId, apiKey);
+        const response = await fetch('/api/youtube');
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to fetch songs from API');
+        }
+        
+        const fetchedSongs = await response.json();
         setSongs(fetchedSongs);
       } catch (err) {
         setError("Failed to load songs from YouTube playlist.");
