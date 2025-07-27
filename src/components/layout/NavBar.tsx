@@ -8,7 +8,7 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 const pdfIcon = faFilePdf as IconDefinition;
 import { Button } from "@/components/ui/button";
 import { NavbarProps } from "@/lib/types";
-import { navbarData } from "@/data/navbar";
+import { NAV_RESUME_URL, NAV_RESUME_ARIA_LABEL, NAV_RESUME_TOOLTIP, NAV_LINKS } from "@/data/Globals"; // Import from Globals.ts
 
 const NavBar: React.FC<NavbarProps> = () => {
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -33,17 +33,17 @@ const NavBar: React.FC<NavbarProps> = () => {
         className="flex p-2 text-[16px] hover:bg-[#e4ded7]/10 sm:px-4 md:py-1"
       >
         <Link
-          href={navbarData.resumeUrl}
+          href={NAV_RESUME_URL} // Using constant
           target="_blank"
-          aria-label={navbarData.resumeAriaLabel}
-          data-blobity-tooltip={navbarData.resumeTooltip}
+          aria-label={NAV_RESUME_ARIA_LABEL} // Using constant
+          data-blobity-tooltip={NAV_RESUME_TOOLTIP} // Using constant
           data-blobity-magnetic="false"
         >
           <FontAwesomeIcon icon={pdfIcon} />
         </Link>
       </Button>
 
-      {navbarData.navigationLinks.map((link) => (
+      {NAV_LINKS.map((link) => ( // Using constant
         <Button
           key={link.href}
           asChild

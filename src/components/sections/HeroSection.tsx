@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { monaSans } from "@/app/fonts/monaSans";
 import { imageAnimation, bodyAnimation } from "../animations/animations";
 import AnimatedWords from "../animations/AnimatedWords";
-import { heroData } from "@/data/hero";
+import { heroData } from "@/data/HeroSection"; // Importing the data
 
 interface HeroSectionProps {
   className?: string;
@@ -23,7 +23,7 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
       <div className="absolute top-10 flex justify-between sm:w-[90%] lg:max-w-[1440px]">
         <div>
           <Link
-            href={heroData.callUrl}
+            href={heroData.callUrl} // Using data from heroData
             target="_blank"
             aria-label="BOOK A CALL"
           >
@@ -37,7 +37,7 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
         </div>
 
         <div className="flex gap-10 text-[#e4ded7] sm:gap-12 md:gap-14 lg:gap-14">
-          {heroData.socials.map((social, index) => (
+          {heroData.socials.map((social, index) => ( // Using data from heroData
             <Link
               key={index}
               href={social.url}
@@ -60,7 +60,7 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
           className={`relative flex flex-col items-center justify-center ${monaSans.className}`}
         >
           <AnimatedWords
-            title={heroData.name}
+            title={heroData.name} // Using data from heroData
             style="inline-block overflow-hidden pt-1 -mr-4 sm:-mr-5 md:-mr-7 lg:-mr-9 -mb-1 sm:-mb-2 md:-mb-3 lg:-mb-4"
           />
           <motion.div
@@ -68,7 +68,7 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
             variants={imageAnimation}
           >
             <Image
-              src={heroData.profileImage}
+              src={heroData.profileImage} // Using data from heroData
               width={245}
               height={245}
               priority
@@ -87,16 +87,16 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
           variants={bodyAnimation}
         >
           <p className="z-50 text-center text-base font-medium text-[#e4ded7] md:text-xl lg:text-left">
-            {heroData.tagline[0]}{" "}
+            {heroData.tagline[0]}{" "} {/* Using data from heroData */}
             <Link
-              href={heroData.koraUrl}
+              href={heroData.koraUrl} // Using data from heroData
               target="_blank"
               className="underline underline-offset-2 hover:no-underline"
               aria-label="Kora Website"
             >
-              {heroData.tagline[1]}
+              {heroData.tagline[1]} {/* Using data from heroData */}
             </Link>{" "}
-            {heroData.tagline[2]}
+            {heroData.tagline[2]} {/* Using data from heroData */}
           </p>
         </motion.div>
 
@@ -105,7 +105,7 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
           variants={bodyAnimation}
         >
           <p className="text-right text-base font-semibold text-[#e4ded7] md:text-xl">
-            {heroData.location}
+            {heroData.location} {/* Using data from heroData */}
           </p>
         </motion.div>
       </div>

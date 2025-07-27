@@ -1,6 +1,24 @@
 import type { Metadata } from "next";
 
-export const siteMetadata: Metadata = {
+// --- Navbar Data ---
+export const NAV_RESUME_URL = "https://drive.google.com/file/d/1Mmwl-FRGPm5QVe3AjtukJr_Jpc366Ear/view";
+export const NAV_RESUME_ARIA_LABEL = "Open my resume";
+export const NAV_RESUME_TOOLTIP = "View Resume";
+export const NAV_LINKS = [
+  { href: "#home", label: "Home", ariaLabel: "Scroll to Home Section" },
+  { href: "#work", label: "Work", ariaLabel: "Scroll to Work Section" },
+  { href: "#about", label: "About", ariaLabel: "Scroll to About Section" },
+  { href: "#contact", label: "Contact", ariaLabel: "Scroll to Contact Section" }
+];
+
+// --- Footer Data ---
+export const FOOTER_DESIGN_TEXT = "Design & Development by";
+export const FOOTER_DEVELOPER_URL = "https://github.com/rizwannur";
+export const FOOTER_ARIA_LABEL = "Rafey's GitHub Profile";
+export const FOOTER_DEVELOPER_NAME = "Rafey";
+
+// --- Layout Metadata ---
+export const SITE_METADATA: Metadata = {
   title: "Rizwan Nur — Full-Stack Developer & Digital Operator",
   description:
     "Full-Stack Developer and Digital Operator based in Dhaka, Bangladesh. I craft backend-first tools, CMS systems, and digital workflows. Currently co-managing Amader Health and preparing for university in Japan.",

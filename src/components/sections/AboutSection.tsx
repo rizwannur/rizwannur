@@ -3,7 +3,7 @@ import SongCard from "../cards/SongCard";
 import { Song } from "@/lib/types";
 import AnimatedBody from "../animations/AnimatedBody";
 import AnimatedTitle from "../animations/AnimatedTitle";
-import { aboutData } from "@/data/about";
+import { aboutData } from "@/data/AboutSection"; // Importing the data
 import "../animations/animate.css";
 
 interface AboutSectionProps {
@@ -18,7 +18,7 @@ const AboutSection = ({ className = "" }: AboutSectionProps) => {
     >
       <div className="mx-auto flex w-[90%] flex-col items-center justify-center lg:max-w-[1212.8px]">
         <AnimatedTitle
-          text={aboutData.mainTitle}
+          text={aboutData.mainTitle} // Using data from aboutData
           className="mb-10 text-left text-[40px] font-bold leading-[0.9em] tracking-tighter text-[#e4ded7] sm:text-[45px] md:mb-16 md:text-[60px] lg:text-[80px]"
           wordSpace="mr-[14px]"
           charSpace="mr-[0.001em]"
@@ -27,63 +27,63 @@ const AboutSection = ({ className = "" }: AboutSectionProps) => {
         <div className="mx-auto flex w-full flex-col lg:max-w-[1200px] lg:flex-row lg:gap-20">
           <div className="mb-10 flex w-full flex-col gap-4 text-lg font-medium leading-relaxed tracking-wide text-[#e4ded7] md:mb-16 md:gap-6 md:text-xl md:leading-relaxed lg:mb-16 lg:max-w-[90%] lg:text-2xl">
             <AnimatedBody
-              text={aboutData.description[0]}
+              text={aboutData.description[0]} // Using data from aboutData
             />
             <AnimatedBody
-              text={aboutData.description[1]}
+              text={aboutData.description[1]} // Using data from aboutData
               className="hidden"
             />
             <AnimatedBody
-              text={aboutData.description[2]}
+              text={aboutData.description[2]} // Using data from aboutData
             />
             <AnimatedBody
-              text={aboutData.description[3]}
+              text={aboutData.description[3]} // Using data from aboutData
             />
             <AnimatedBody
-              text={aboutData.description[4]}
+              text={aboutData.description[4]} // Using data from aboutData
             />
           </div>
 
           <div className="mb-24 flex w-full flex-col gap-4 text-lg font-normal leading-relaxed tracking-wide text-[#e4ded7]/80 sm:mb-32 md:mb-40 md:gap-6 md:text-base md:leading-normal lg:mt-0 lg:mb-16 lg:max-w-[30%] lg:text-lg">
             <div className="flex flex-col gap-4 md:gap-3">
               <AnimatedTitle
-                text={aboutData.skills.frontendTools.title}
+                text={aboutData.skills.frontendTools.title} // Using data from aboutData
                 className="text-2xl text-[#e4ded7] md:text-[30px] lg:text-xl"
                 wordSpace="mr-[0.25em]"
                 charSpace="mr-[0.01em]"
               />
               <AnimatedBody
-                text={aboutData.skills.frontendTools.description}
+                text={aboutData.skills.frontendTools.description} // Using data from aboutData
               />
             </div>
             <div className="flex flex-col gap-3">
               <AnimatedTitle
-                text={aboutData.skills.uiLibraries.title}
+                text={aboutData.skills.uiLibraries.title} // Using data from aboutData
                 className="text-2xl text-[#e4ded7] md:text-[30px] lg:text-xl"
                 wordSpace="mr-[0.25em]"
                 charSpace="mr-[0.01em]"
               />
               <AnimatedBody
-                text={aboutData.skills.uiLibraries.description}
+                text={aboutData.skills.uiLibraries.description} // Using data from aboutData
               />
             </div>
             <div className="flex flex-col gap-3">
               <AnimatedTitle
-                text={aboutData.skills.designTools.title}
+                text={aboutData.skills.designTools.title} // Using data from aboutData
                 className="text-2xl text-[#e4ded7] md:text-[30px] lg:text-xl"
                 wordSpace="mr-[0.25em]"
                 charSpace="mr-[0.01em]"
               />
               <AnimatedBody
-                text={aboutData.skills.designTools.description}
+                text={aboutData.skills.designTools.description} // Using data from aboutData
               />
             </div>
           </div>
         </div>
-        
+
         <div className="mt-10 flex flex-col items-center md:-mt-0 lg:mt-28">
           <AnimatedBody
-            text={aboutData.musicSectionText}
+            text={aboutData.musicSectionText} // Using data from aboutData
             className="mb-8 w-[90%] text-center text-sm font-semibold uppercase text-[#e4ded7] sm:w-[500px] md:mb-12 md:w-[550px] md:text-base"
           />
           <div className="relative w-full overflow-hidden">

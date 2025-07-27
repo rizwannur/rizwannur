@@ -1,10 +1,9 @@
 // Export all data from the data directory
-export * from "./projects";
-export * from "./reviews";
+export * from "./WorkSection";
+export * from "./ReviewSection";
 export * from "./songs";
-export * from "./blogs";
-export * from "./footer";
-export * from "./navbar";
-export * from "./about";
-export * from "./contact";
-export * from "./hero";
+export * from "./BlogSection";
+export * from "./Globals";
+export * from "./AboutSection";
+export * from "./ContactSection";
+export * from "./HeroSection";

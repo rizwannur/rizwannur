@@ -1,4 +1,4 @@
-import { reviews, reviewsTitle, reviewsDescription } from "@/data/reviews";
+import { reviews, reviewsTitle, reviewsDescription } from "@/data/ReviewSection";
 import ReviewCard from "../cards/ReviewCard";
 import AnimatedWords2 from "../animations/AnimatedWords2";
 import AnimatedBody from "../animations/AnimatedBody";
@@ -49,7 +49,7 @@ const ReviewsSection = ({ className = "" }: ReviewsSectionProps) => {
           amount: "some",
           once: true,
         }}
-        href="https://contra.com/victorwilliams"
+        href="https://contra.com/rizwannur"
         target="_blank"
         className="mt-10 mb-5 sm:mb-0 sm:mt-20"
       >

@@ -2,11 +2,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import AnimatedBody from "@/components/animations/AnimatedBody";
 import { FooterProps } from "@/lib/types";
-import { footerData } from "@/data/footer";
+import { FOOTER_DESIGN_TEXT, FOOTER_DEVELOPER_URL, FOOTER_ARIA_LABEL, FOOTER_DEVELOPER_NAME } from "@/data/Globals"; // Import from Globals.ts
 
 const Footer: React.FC<FooterProps> = () => {
   const year = new Date().getFullYear();
-  
+
   return (
     <motion.section
       className="h-[15vh] w-full items-center justify-center border-t-[3px] border-[#e4ded7]/30 bg-[#0E1016] pt-10 font-bold uppercase md:h-[20vh] md:py-16 lg:h-[10vh] lg:pt-6 lg:pb-0"
@@ -17,16 +17,16 @@ const Footer: React.FC<FooterProps> = () => {
         <AnimatedBody text={`Copyright ${year}`} className="m-0 p-0" />
         <div className="flex flex-col gap-1 sm:flex-row md:gap-2">
           <AnimatedBody
-            text={footerData.designText}
+            text={FOOTER_DESIGN_TEXT} // Using constant
             className="m-0 p-0"
           />
           <Link
-            href={footerData.developerUrl}
+            href={FOOTER_DEVELOPER_URL} // Using constant
             target="_blank"
-            aria-label={footerData.ariaLabel}
+            aria-label={FOOTER_ARIA_LABEL} // Using constant
             className="underline underline-offset-2 hover:no-underline"
           >
-            <AnimatedBody text={footerData.developerName} className="m-0 p-0" />
+            <AnimatedBody text={FOOTER_DEVELOPER_NAME} className="m-0 p-0" /> {/* Using constant */}
           </Link>
         </div>
       </motion.div>

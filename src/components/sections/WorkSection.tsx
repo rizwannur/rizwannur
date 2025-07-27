@@ -1,4 +1,4 @@
-import { devProjects, projectsTitle } from "@/data/projects";
+import { devProjects, projectsTitle } from "@/data/WorkSection";
 import ProjectCard from "../cards/ProjectCard";
 import { DevProject } from "@/lib/types";
 
