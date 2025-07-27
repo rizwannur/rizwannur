@@ -41,6 +41,20 @@ export interface Song {
 }
 
 /**
+ * Validates a song object
+ * @param song The song to validate
+ * @returns True if the song is valid, false otherwise
+ */
+export function validateSong(song: Partial<Song>): song is Song {
+  return (
+    typeof song.title === 'string' &&
+    typeof song.artist === 'string' &&
+    !!song.image &&
+    typeof song.link === 'string'
+  );
+}
+
+/**
  * Component props interfaces
  */
 export interface AnimatedBodyProps {
