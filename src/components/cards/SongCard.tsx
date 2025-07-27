@@ -14,7 +14,9 @@ const SongCard = ({ song }: SongCardProps) => {
           alt={`${title} by ${artist}`}
           className="h-full w-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-110"
           fill
-          sizes="(max-width: 640px) 200px, (max-width: 768px) 220px, (max-width: 1024px) 250px, 280px"
+          sizes="(max-width: 640px) 400px, (max-width: 768px) 440px, (max-width: 1024px) 500px, 560px"
+          quality={95}
+          priority={false}
         />
 
         {/* Gradient overlay */}
