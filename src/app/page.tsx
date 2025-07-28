@@ -57,10 +57,10 @@ export default function Home() {
 
       <main className="flex flex-col items-center justify-center">
         <HeroSection />
-         {/*  <WorkSection />
-        <ReviewsSection /> */}
+        {/*   <WorkSection />     */}
+        {/*   <ReviewsSection />  */}
         <AboutSection />
-       {/*   <BlogSection /> */}
+        {/*   <BlogSection />     */}
         <ContactSection />
         <Footer />
       </main>

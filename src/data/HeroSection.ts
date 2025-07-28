@@ -19,7 +19,7 @@ interface HeroData {
 
 export const heroData: HeroData = {
   name: "RIZWAN NUR",
-  profileImage: "/profile.webp", // Update path based on your file structure if needed
+  profileImage: "/profile.jpg", // Update path based on your file structure if needed
   backgroundImage: "/hero.jpg", // Optional custom bg image
   tagline: [
     "Full-Stack Developer & Digital Operator from Dhaka,",

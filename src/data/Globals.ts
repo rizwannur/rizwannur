@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 // --- Navbar Data ---
-export const NAV_RESUME_URL = "https://drive.google.com/file/d/1Mmwl-FRGPm5QVe3AjtukJr_Jpc366Ear/view";
+export const NAV_RESUME_URL = "https://docs.google.com/document/d/15W39xx3tRk7Cdbk690ODD9yLBJv9xZvq/edit?usp=sharing&ouid=103439662159800937701&rtpof=true&sd=true";
 export const NAV_RESUME_ARIA_LABEL = "Open my resume";
 export const NAV_RESUME_TOOLTIP = "View Resume";
 export const NAV_LINKS = [
@@ -12,7 +12,7 @@ export const NAV_LINKS = [
 ];
 
 // --- Footer Data ---
-export const FOOTER_DESIGN_TEXT = "Design & Development by";
+export const FOOTER_DESIGN_TEXT = "Adapted by";
 export const FOOTER_DEVELOPER_URL = "https://github.com/rizwannur";
 export const FOOTER_ARIA_LABEL = "Rafey's GitHub Profile";
 export const FOOTER_DEVELOPER_NAME = "Rafey";
@@ -63,7 +63,7 @@ export const SITE_METADATA: Metadata = {
     title: "Rizwan Nur — Full-Stack Developer & Digital Operator",
     description:
       "Shipping real-world tools and preparing for tech education in Japan. Available for freelance and part-time collaboration.",
-    creator: "@rafeydotdev", // Or update to "@rizwannur" if you switch handles
+    creator: "@rafeyum", // Or update to "@rizwannur" if you switch handles
     images: [
       "https://rizwannur.xyz/og-image.png",
     ],
