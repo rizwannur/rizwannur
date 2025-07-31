@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 // --- Navbar Data ---
-export const NAV_RESUME_URL = "https://docs.google.com/document/d/15W39xx3tRk7Cdbk690ODD9yLBJv9xZvq/edit?usp=sharing&ouid=103439662159800937701&rtpof=true&sd=true";
+export const NAV_RESUME_URL =
+  "https://docs.google.com/document/d/15W39xx3tRk7Cdbk690ODD9yLBJv9xZvq/edit?usp=sharing&ouid=103439662159800937701&rtpof=true&sd=true";
 export const NAV_RESUME_ARIA_LABEL = "Open my resume";
 export const NAV_RESUME_TOOLTIP = "View Resume";
 export const NAV_LINKS = [
@@ -21,52 +22,55 @@ export const FOOTER_DEVELOPER_NAME = "Rafey";
 export const SITE_METADATA: Metadata = {
   title: "Rizwan Nur — Full-Stack Developer & Digital Operator",
   description:
-    "Full-Stack Developer and Digital Operator based in Dhaka, Bangladesh. I craft backend-first tools, CMS systems, and digital workflows. Currently co-managing Amader Health and preparing for university in Japan.",
+    "Full-Stack Developer and Digital Operator from Dhaka, Bangladesh. I design backend-first tools, CMS infrastructures, and automated workflows. Currently co-managing Amader Health and preparing for university in Japan.",
   generator: "Next.js",
   applicationName: "Rizwan Nur",
   keywords: [
-    "rizwan nur",
-    "rafey",
-    "freelance developer",
+    "Rizwan Nur",
+    "Rafey",
     "full-stack developer",
-    "javascript",
-    "next.js",
-    "payload cms",
-    "nodejs",
-    "discord.js",
-    "dhaka",
-    "japan",
-    "developer portfolio",
-    "ecommerce backend",
+    "freelance developer",
+    "Bangladesh developer",
+    "Next.js developer",
+    "Payload CMS",
+    "Node.js",
+    "Discord.js",
+    "developer in Dhaka",
+    "Japan tech student",
+    "backend specialist",
     "digital operator",
-    "student developer",
+    "developer portfolio"
   ],
+  authors: [{ name: "Rizwan Nur", url: "https://rizwannur.xyz" }],
+  creator: "Rizwan Nur",
+  publisher: "Rizwan Nur",
+  category: "Technology",
+ // colorScheme: "light dark",
+ // themeColor: "#0f172a",
   openGraph: {
     title: "Rizwan Nur — Full-Stack Developer & Digital Operator",
     description:
-      "Rizwan Nur builds systems that work — backend-first tooling, automated flows, and digital product backends. Based in Dhaka, building for a future in Japan.",
+      "Crafting backend-first systems, modern CMS tooling, and digital workflows. Based in Dhaka, focused on a tech-driven future in Japan.",
     url: "https://rizwannur.xyz",
     siteName: "rizwannur.xyz",
     images: [
       {
-        url: "https://rizwannur.xyz/og-image.png", // Replace with your deployed OG image path
+        url: "https://rizwannur.xyz/meta.png",
         width: 1200,
         height: 630,
-        alt: "Rizwan Nur — Full-Stack Developer & Digital Operator",
-      },
+        alt: "Rizwan Nur — Full-Stack Developer & Digital Operator"
+      }
     ],
     locale: "en-US",
-    type: "website",
+    type: "website"
   },
   twitter: {
     card: "summary_large_image",
     title: "Rizwan Nur — Full-Stack Developer & Digital Operator",
     description:
-      "Shipping real-world tools and preparing for tech education in Japan. Available for freelance and part-time collaboration.",
-    creator: "@rafeyum", // Or update to "@rizwannur" if you switch handles
-    images: [
-      "https://rizwannur.xyz/og-image.png",
-    ],
+      "Building real-world tools and automation flows. Freelance-ready, tech-focused, and Japan-bound.",
+    creator: "@rafeyum",
+    images: ["https://rizwannur.xyz/meta.png"]
   },
   robots: {
     index: true,
@@ -78,8 +82,8 @@ export const SITE_METADATA: Metadata = {
       noimageindex: false,
       "max-video-preview": -1,
       "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+      "max-snippet": -1
+    }
   },
-  category: "technology",
+  metadataBase: new URL("https://rizwannur.xyz")
 };
