@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "img.youtube.com",
       },
+      {
+        protocol: "https",
+        hostname: "media.tenor.com",
+      },
     ],
     // Optimize for high-quality images
     formats: ["image/webp", "image/avif"],

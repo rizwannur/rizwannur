@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://rizwannur.xyz
+
+# Sitemaps
+Sitemap: https://rizwannur.xyz/sitemap.xml
