@@ -1,0 +1,120 @@
+RIZWAN NUR
+Full-Stack Developer · Tech Generalist · Software Engineering Aspirant
+Location: Dhaka, Bangladesh | Nationality: Bangladeshi  
+Email: rizwannur116@gmail.com | Phone: +8801534593563 
+Website: rizwannur.xyz  
+GitHub: github.com/rizwannur | LinkedIn: linkedin.com/in/rizwannur
+________________________________________
+Professional Summary
+Self-taught full-stack developer and tech generalist passionate about building reliable, elegant systems. I specialize in JavaScript, Python, and cloud-native applications with a bias toward automation and scale. I'm currently preparing for higher education in Japan, deepening my knowledge in AI, DevOps, and language fluency. With a history of remote freelance work, real-world projects, and open-source contributions, I blend creativity with engineering discipline to craft meaningful, cross-cultural tech solutions.
+________________________________________
+Tech Stack & Tools
+Languages
+JavaScript · TypeScript · Python · HTML · CSS · Markdown · Bash
+Frontend
+React · Vue.js · Next.js · Nuxt.js · Tailwind CSS · Vite
+Backend & Infra
+Node.js · Express · MongoDB · MySQL · PostgreSQL · Prisma · REST · GraphQL · Firebase · Supabase
+DevOps & Deployment
+AWS · Vercel · Netlify · Hetzner · Cloudflare · Git · Linux · CI/CD
+CMS & Platforms
+Payload · Shopify · WordPress · Ghost · Wix
+Design & Dev Tools
+Figma · Framer · Photoshop · Canva · VS Code · GitHub
+________________________________________
+Featured Projects
+1. Cinesync – AI-powered YouTube film automation tool
+Built an end-to-end automation pipeline for YouTube content around movie recommendations.
+•	Script & title generation via GPT-4
+•	Scene editing & sequencing with MoviePy
+•	Upload-ready formatting with FFmpeg
+•	Flask API coordination & cron automation
+Tech: Python, OpenAI, MoviePy, FFmpeg, Flask, TMDB API, Cron
+
+2. ThriftwearCMS – Custom Payload CMS for fashion e-commerce
+Built a full-featured backend with user roles, product management, and secure order tracking.
+•	Admin dashboard with content roles & auth
+•	REST API with Stripe integration & webhooks
+•	Analytics & optimized media delivery
+Tech: Node.js, React, TypeScript, MongoDB, Payload CMS, Stripe API
+3. rimuru– Discord music & utility bot
+Developed a multi-source music bot with server-level customization, logging, and moderation.
+•	Music from YouTube, Spotify, SoundCloud
+•	Slash/prefix command architecture
+•	Auto-restart, logging, and uptime monitoring
+Tech: Discord.js, DisTube, Node.js, PM2, Linux VPS
+________________________________________
+Work Experience
+Freelance Developer
+Remote · 2021 – Present
+•	Built bots, e-commerce tools, and CMS integrations for global clients
+•	Specialized in API integrations, automation, and speed optimizations
+•	Delivered branded UI kits, internal dashboards, and custom plugins
+Freelance Technical & Brand Lead – Amader Health
+Remote · 2025 – Present
+•	Solo-managed a health & hygiene brand, covering digital, technical, and marketing fronts
+•	Designed and developed a custom Shopify storefront with full product catalog integration
+•	Created and executed brand identity, social media strategy, and visual assets from scratch
+•	Built and customized CMS functionality, reusable UI components, and optimized performance
+•	Oversaw analytics, customer experience, product listings, and backend operations
+Community Contributor & Support – Discortics Bot (discortics.com)
+Volunteer · 2022 – 2023
+•	Started as a ticket support agent, later promoted to community support and moderator roles
+•	Provided technical assistance to users, including Discord server setup and bot configuration
+•	Managed Patreon user issues and helped maintain supporter perks and access
+•	Created internal tools, plugins, and documentation for custom scripts used by the community
+•	Participated in QA by bug-testing new features and submitting detailed reports for developers
+•	Stepped down in late 2024 due to academic pressure
+DevOps & Business Consultant – Voidnix LLP
+Remote · 2023 – 2024
+•	Consulted on clothing brand expansion; provided supplier connections and sourcing strategies
+•	Advised on tech infrastructure and automation for small business operations
+•	Engagement concluded in 2024 following company closure
+Hosting Operations & Community Support – Indionic Host
+Remote · 2023
+•	Led support ticket handling
+•	Developed custom ticket automation bot and internal dashboard tools
+•	Designed and structured their Discord community for client support and engagement
+•	Provided direct customer support and technical troubleshooting for hosting clients
+•	Assisted with service transition and shutdown prior to company closure in 2024
+________________________________________
+Education
+•	Engineering University School & College (EUSC)
+Higher Secondary Certificate, Science — 2024–2026 (Expected)
+Focus: Math, Computer Science, English
+Activities: Tech Club · Python Workshop Lead · OSS Contributor
+•	AK School & College (AKSC)
+Secondary School Certificate, Science — Graduated 2024
+GPA: 5.00
+Activities: Robotics Club · Science Fairs · Math Olympiad Qualifier
+________________________________________
+Certifications & Goals
+•	JLPT N4 (Target: Dec 2025) – Building foundational proficiency in Japanese for academic and daily use
+•	IELTS (Band 7.5+, mid-2026) – Preparing for English proficiency required by universities abroad
+•	Git & GitHub for Developers (Coursera, 2023) – Mastered core version control practices and collaboration workflows
+•	Fundamentals of Linux Server Management (2024) – Gained hands-on experience in server setup, CLI, and sysadmin tasks
+________________________________________
+Currently Learning
+•	Japanese (JLPT N4) – Conversational fluency, kanji basics, and sentence structure for daily communication
+•	Full-stack Development (Next.js, Prisma) – Modern React framework and ORM for scalable app building
+•	UI/UX Design – Interface patterns and responsive design principles for user-focused web development
+•	Machine Learning & AI – Foundational ML models and applications for creative tools and automation
+•	Data Structures & Algorithms – Enhancing problem-solving and coding interview performance
+•	GraphQL & REST APIs – Designing and consuming efficient, scalable APIs
+•	DevOps & Cloud Infrastructure – CI/CD, Docker, GitHub Actions, and cloud deployment workflows
+•	Content Creation & Blogging – Writing, SEO, and knowledge-sharing strategies for a digital presence
+•	Japanese Culture & Traditions – Cultural literacy and social etiquette preparation for relocation
+•	Video Production – Scripting, editing, and publishing content for vlogs, tutorials, and social platforms
+•	Cybersecurity Basics – Implementing secure development practices and risk mitigation
+________________________________________
+Community & Extras
+•	Contributor to open-source Discord bots, DevOps utilities, and self-hosted infrastructure tools
+•	Writes about technology, productivity, and Japan migration planning (personal blog launching soon)
+•	Mentors peers and newcomers on Discord in areas like freelancing, version control, and automation
+•	Participated in online hackathons and community events, contributing full-stack tools and Discord integrations
+________________________________________
+Languages
+Bengali (native) · English (fluent) · Japanese (basic)
+________________________________________
+“Build once, refine forever.” 
+— Rizwan Nur

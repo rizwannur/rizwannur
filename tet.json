@@ -1,0 +1,62 @@
+{
+    "description": "A split image showing two different anime scenes, both featuring a character pointing or gesturing towards a vast blue expanse, implying a sense of wonder or aspiration.",
+    "upper_image": {
+      "subject": {
+        "type": "anime character",
+        "description": "An anime character with dark hair, seen from the back/side, wearing a light-colored top, pointing towards a shimmering ocean horizon.",
+        "action": "Pointing towards the sea",
+        "facial_expression": "Not visible"
+      },
+      "setting": {
+        "location_type": "Seaside/Ocean",
+        "time_of_day": "Daytime",
+        "weather": "Sunny",
+        "environment_elements": [
+          "bright blue ocean",
+          "sunlight reflecting on water",
+          "distant horizon"
+        ]
+      },
+      "composition": {
+        "shot_type": "medium shot",
+        "angle": "eye-level, from behind the character",
+        "focus": "Character and ocean"
+      }
+    },
+    "lower_image": {
+      "subject": {
+        "type": "anime character",
+        "description": "A younger anime character (Eren Yeager) with dark, spiky hair, wearing a white shirt and a dark hooded jacket, with an excited expression.",
+        "action": "Stretching arms out, looking up with an open mouth",
+        "facial_expression": "Excited, astonished"
+      },
+      "setting": {
+        "location_type": "Outdoor",
+        "time_of_day": "Daytime",
+        "weather": "Clear sky with clouds",
+        "environment_elements": [
+          "vast blue sky",
+          "fluffy white clouds"
+        ]
+      },
+      "composition": {
+        "shot_type": "medium shot",
+        "angle": "low angle, looking up at the character",
+        "focus": "Character against the sky"
+      }
+    },
+    "overall_mood_and_style": {
+      "mood": [
+        "Awe",
+        "Hope",
+        "Wonder",
+        "Excitement",
+        "Discovery"
+      ],
+      "style": "Anime, animated still"
+    },
+    "visual_elements": {
+      "colors": "Dominantly blue (sky, ocean), white (clouds, shirt, light reflections), muted earth tones for characters' clothing.",
+      "lighting": "Bright, natural daylight, with strong reflections on the water in the upper image."
+    }
+  }

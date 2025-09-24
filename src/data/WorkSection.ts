@@ -1,69 +1,55 @@
 export const projectsTitle = "Featured Work";
 
 import { DevProject, DesignProject } from "../lib/types";
-import odunsiImage from "../../public/projects/odunsi.png";
-import interlockImage from "../../public/projects/interlock.png";
 import synthetixImage from "../../public/projects/synthetix-flip.png";
 import propellentImage from "../../public/projects/propellent-new.png";
 import flixifyImage from "../../public/projects/flixify.png";
-
 /**
  * Development projects data
  */
 export const devProjects: DevProject[] = [
   {
     id: 0,
-    name: "Odunsi",
+    name: "Cinesync",
     description:
-      "Portfolio website for Michael Odunsi, an experienced UI/UX designer crafting unique, user-friendly products and web experiences for Web3 founders and projects.",
-    technologies: ["React", "Tailwind CSS", "Framer Motion"],
-    github: "https://github.com/victorcodess/odunsi-web3-folio",
-    demo: "https://www.odunsi.xyz/",
-    image: odunsiImage,
-    available: true,
-  },
-  {
-    id: 1,
-    name: "Interlock",
-    description:
-      "This is a website for a Fintech Startup to showcase their innovative solutions tailored to meet the evolving needs of their clients.",
-    technologies: ["React", "Tailwind CSS", "Framer Motion"],
-    github: "https://github.com/victorcodess/interlock",
-    demo: "https://interlock-teal.vercel.app/",
-    image: interlockImage,
-    available: true,
-  },
-  {
-    id: 2,
-    name: "Synthetix",
-    description:
-      "Built specifically for an AI startup, this website lets them present cutting-edge AI data processing solutions tailored to their customers' needs.",
-    technologies: ["React", "Next.js", "Prismic CMS"],
-    github: "https://github.com/victorcodess/synthetix",
-    demo: "https://synthetix-iota.vercel.app/",
+      "AI-powered YouTube film automation tool. Built an end-to-end automation pipeline for YouTube content around movie recommendations.",
+    technologies: ["Python", "OpenAI", "MoviePy", "FFmpeg", "Flask", "TMDB API", "Cron"],
+    github: "https://github.com/rizwannur",
+    demo: "",
     image: synthetixImage,
     available: true,
   },
   {
-    id: 3,
-    name: "Propellent",
+    id: 1,
+    name: "ThriftwearCMS",
     description:
-      "A website built for a software startup and small business, to showcase their services and mark their online presence.",
-    technologies: ["React", "Tailwind CSS", "Framer Motion"],
-    github: "https://github.com/victorcodess/propellent",
-    demo: "https://propellent.vercel.app/",
+      "Custom Payload CMS for fashion e-commerce. Built a full-featured backend with user roles, product management, and secure order tracking.",
+    technologies: ["Node.js", "React", "TypeScript", "MongoDB", "Payload CMS", "Stripe API"],
+    github: "https://github.com/rizwannur",
+    demo: "",
     image: propellentImage,
     available: true,
   },
   {
-    id: 4,
-    name: "Flixify",
+    id: 2,
+    name: "rimuru",
     description:
-      "Flixify lets you seamlessly explore movies and TV series, add bookmarks, and search across all pages. It offers user authentication along with a theme switch.",
-    technologies: ["Next.js", "Typescript", "Prisma"],
-    github: "https://github.com/victorcodess/flixify",
-    demo: "https://flixify.victorwilliams.me/",
+      "Discord music & utility bot. Developed a multi-source music bot with server-level customization, logging, and moderation.",
+    technologies: ["Discord.js", "DisTube", "Node.js", "PM2", "Linux VPS"],
+    github: "https://github.com/rizwannur",
+    demo: "",
     image: flixifyImage,
+    available: true,
+  },
+  {
+    id: 3,
+    name: "Fluxcast",
+    description:
+      "A live streaming SaaS platform with voice cloning capabilities, using the ElevenLabs API.",
+    technologies: ["Next.js", "TypeScript", "Node.js", "ElevenLabs API"],
+    github: "https://github.com/rizwannur",
+    demo: "",
+    image: synthetixImage,
     available: true,
   },
 ];

@@ -19,14 +19,14 @@ interface HeroData {
 
 export const heroData: HeroData = {
   name: "RIZWAN NUR",
-  profileImage: "/profile.jpg", // Update path based on your file structure if needed
+  profileImage: "/profile.png", // Update path based on your file structure if needed
   backgroundImage: "/hero.jpg", // Optional custom bg image
   tagline: [
-    "Full-Stack Developer & Digital Operator from Dhaka,",
-    "co-running Digital Automate,",
-    "prepping for Japan — available for freelance & collaborations.",
+    "Full-Stack Developer & Tech Generalist.",
+    "I build reliable, elegant systems with a focus on automation and scale.",
+    "Available for freelance projects and custom software solutions.",
   ],
-  location: "Building systems and brands remotely from Dhaka, Bangladesh.",
+  location: "Remote developer based in Dhaka, Bangladesh — serving clients worldwide.",
   koraUrl: "", // Leave empty or replace with your most recent company or project site
   callUrl: "https://cal.com/rizwannur/30min", // Optional; update or remove if not used
   socials: [

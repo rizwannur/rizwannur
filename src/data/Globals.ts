@@ -20,9 +20,9 @@ export const FOOTER_DEVELOPER_NAME = "Rafey";
 
 // --- Layout Metadata ---
 export const SITE_METADATA: Metadata = {
-  title: "Rizwan Nur — Full-Stack Developer & Digital Operator",
+  title: "Rizwan Nur — Full-Stack Developer & Tech Generalist",
   description:
-    "Full-Stack Developer and Digital Operator from Dhaka, Bangladesh. I design backend-first tools, CMS infrastructures, and automated workflows. Currently co-managing Amader Health and preparing for university in Japan.",
+    "Self-taught full-stack developer and tech generalist specializing in JavaScript, Python, and cloud-native applications. Passionate about building reliable, elegant systems with a bias toward automation and scale. Available for freelance projects.",
   generator: "Next.js",
   applicationName: "Rizwan Nur",
   keywords: [
@@ -30,16 +30,22 @@ export const SITE_METADATA: Metadata = {
     "Rafey",
     "full-stack developer",
     "freelance developer",
+    "JavaScript developer",
+    "Python developer",
+    "React developer",
+    "Node.js developer",
+    "MongoDB developer",
+    "API integration",
+    "web development",
+    "custom software",
+    "automation specialist",
+    "tech consultant",
+    "remote developer",
     "Bangladesh developer",
-    "Next.js developer",
-    "Payload CMS",
-    "Node.js",
-    "Discord.js",
-    "developer in Dhaka",
-    "Japan tech student",
-    "backend specialist",
-    "digital operator",
-    "developer portfolio"
+    "cloud-native applications",
+    "DevOps",
+    "AI",
+    "systems automation"
   ],
   authors: [{ name: "Rizwan Nur", url: "https://rizwannur.xyz" }],
   creator: "Rizwan Nur",
@@ -48,17 +54,17 @@ export const SITE_METADATA: Metadata = {
  // colorScheme: "light dark",
  // themeColor: "#0f172a",
   openGraph: {
-    title: "Rizwan Nur — Full-Stack Developer & Digital Operator",
+    title: "Rizwan Nur — Full-Stack Developer & Tech Generalist",
     description:
-      "Crafting backend-first systems, modern CMS tooling, and digital workflows. Based in Dhaka, focused on a tech-driven future in Japan.",
+      "Self-taught full-stack developer and tech generalist specializing in JavaScript, Python, and cloud-native applications. Available for freelance projects.",
     url: "https://rizwannur.xyz",
     siteName: "rizwannur.xyz",
     images: [
       {
-        url: "https://rizwannur.xyz/meta.png",
+        url: "https://rizwannur.xyz/profile.png",
         width: 1200,
         height: 630,
-        alt: "Rizwan Nur — Full-Stack Developer & Digital Operator"
+        alt: "Rizwan Nur — Full-Stack Developer & Tech Generalist"
       }
     ],
     locale: "en-US",
@@ -66,11 +72,11 @@ export const SITE_METADATA: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rizwan Nur — Full-Stack Developer & Digital Operator",
+    title: "Rizwan Nur — Full-Stack Developer & Tech Generalist",
     description:
-      "Building real-world tools and automation flows. Freelance-ready, tech-focused, and Japan-bound.",
+      "Self-taught full-stack developer specializing in JavaScript, Python, and cloud-native applications. Available for freelance projects.",
     creator: "@rafeyum",
-    images: ["https://rizwannur.xyz/meta.png"]
+    images: ["https://rizwannur.xyz/profile.png"]
   },
   robots: {
     index: true,

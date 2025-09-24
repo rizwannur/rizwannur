@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-    siteUrl: 'https://rizwannur.xyz',
+    siteUrl: process.env.SITE_URL || 'http://localhost:3000',
     generateRobotsTxt: true, // Generates robots.txt alongside sitemap
     sitemapSize: 7000, // default max URLs per sitemap file
     changefreq: 'weekly',
