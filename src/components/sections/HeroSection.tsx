@@ -13,7 +13,7 @@ interface HeroSectionProps {
 const HeroSection = ({ className = "" }: HeroSectionProps) => {
   return (
     <motion.section
-      className={`relative z-10 flex h-[85vh] w-full items-stretch justify-center bg-[url('./../../public/hero.jpg')] bg-cover bg-center py-0 sm:h-[90vh] md:h-[100vh] 3xl:h-[85vh] ${className}`}
+      className={`relative z-10 flex h-[85vh] w-full items-stretch justify-center bg-[url('/hero.jpg')] bg-cover bg-center py-0 sm:h-[90vh] md:h-[100vh] 3xl:h-[85vh] ${className}`}
       id="home"
       initial="initial"
       animate="animate"
@@ -72,7 +72,7 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
               width={245}
               height={245}
               priority
-              alt="Rafey's Headshot"
+              alt="Hero profile photo"
               data-blobity-tooltip="Fine Boy"
               data-blobity-invert="false"
               className="w-[150px] rounded-2xl grayscale hover:grayscale-0 md:w-[200px] md:rounded-[32px] lg:w-[245px]"

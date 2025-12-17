@@ -19,7 +19,7 @@ interface HeroData {
 
 export const heroData: HeroData = {
   name: "RIZWAN NUR",
-  profileImage: "/profile.png", // Update path based on your file structure if needed
+  profileImage: "/rafey.jpeg", // Hero headshot (in /public)
   backgroundImage: "/hero.jpg", // Optional custom bg image
   tagline: [
     "Full-Stack Developer & Tech Generalist.",
