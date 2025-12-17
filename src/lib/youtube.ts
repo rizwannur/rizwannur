@@ -1,4 +1,9 @@
+import "server-only";
 import { Song } from "./types";
+
+function redactSecrets(input: string): string {
+  return input.replace(/([?&]key=)[^&]+/gi, "$1[REDACTED]");
+}
 
 interface YouTubeThumbnail {
   url: string;
@@ -112,7 +117,7 @@ export async function fetchPlaylistSongs(
       } catch {
         // If response is not JSON, use the response text for debugging
         const responseText = await response.text();
-        console.error("Non-JSON error response:", responseText);
+        console.error("Non-JSON error response:", redactSecrets(responseText));
       }
       throw new Error(errorMessage);
     }
@@ -151,7 +156,9 @@ export async function fetchPlaylistSongs(
     });
     return songs;
   } catch (error) {
-    console.error("Error fetching YouTube playlist songs:", error);
+    const safeMessage =
+      error instanceof Error ? redactSecrets(error.message) : "Unknown error";
+    console.error("Error fetching YouTube playlist songs:", safeMessage);
     return [];
   }
 }
