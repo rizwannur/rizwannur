@@ -29,7 +29,11 @@ export const UI_OR = "or";
 
 // --- Layout Metadata ---
 export const SITE_METADATA: Metadata = {
-  title: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
+  metadataBase: new URL("https://rizwannur.com"),
+  title: {
+    default: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
+    template: "%s | Rizwan Nur",
+  },
   description:
     "I help businesses plan, build, and upgrade products with AI-first engineering, modern web systems, and brand-aware design. Next.js, TypeScript, Tauri, automation.",
   generator: "Next.js",
@@ -59,32 +63,39 @@ export const SITE_METADATA: Metadata = {
   creator: "Rizwan Nur",
   publisher: "Rizwan Nur",
   category: "Technology",
- // colorScheme: "light dark",
- // themeColor: "#0f172a",
+  colorScheme: "dark light",
+  themeColor: "#0E1016",
+  manifest: "/site.webmanifest",
+  formatDetection: {
+    telephone: false,
+    address: false,
+    email: false,
+  },
   openGraph: {
     title: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
     description:
       "I help businesses plan, build, and upgrade products with AI-first engineering, modern web systems, and brand-aware design.",
-    url: "https://rizwannur.com",
+    url: "/",
     siteName: "rizwannur.com",
     images: [
       {
-        url: "https://rizwannur.com/profile.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Rizwan Nur — AI-First Product Engineer & Creative Technologist"
-      }
+        alt: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
+      },
     ],
     locale: "en-US",
-    type: "website"
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
     description:
       "I help businesses plan, build, and upgrade products with AI-first engineering, modern web systems, and brand-aware design.",
+    site: "@rafeyum",
     creator: "@rafeyum",
-    images: ["https://rizwannur.com/profile.png"]
+    images: ["/twitter-image"],
   },
   alternates: {
     canonical: "/",
@@ -107,8 +118,7 @@ export const SITE_METADATA: Metadata = {
       noimageindex: false,
       "max-video-preview": -1,
       "max-image-preview": "large",
-      "max-snippet": -1
-    }
+      "max-snippet": -1,
+    },
   },
-  metadataBase: new URL("https://rizwannur.com")
 };
