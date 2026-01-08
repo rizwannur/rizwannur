@@ -19,12 +19,12 @@ interface HeroData {
 
 export const heroData: HeroData = {
   name: "RIZWAN NUR",
-  profileImage: "/rafey.jpeg", // Hero headshot (in /public)
-  backgroundImage: "/hero.jpg", // Optional custom bg image
+  profileImage: "/profile.png", // Hero headshot (in /public)
+  backgroundImage: "/assets/hero.png", // Optional custom bg image
   tagline: [
-    "Full-Stack Developer & Tech Generalist.",
-    "I build reliable, elegant systems with a focus on automation and scale.",
-    "Available for freelance projects and custom software solutions.",
+    "Strategic Software Engineer & Creative Technologist.",
+    "I help businesses ship high-performance products and AI workflows (Next.js + Tauri).",
+    "From strategy to UI to automation—clean systems, crisp design, real outcomes.",
   ],
   location: "Remote developer based in Dhaka, Bangladesh — serving clients worldwide.",
   koraUrl: "", // Leave empty or replace with your most recent company or project site
@@ -52,7 +52,7 @@ export const heroData: HeroData = {
     },
     {
       name: "Blog",
-      url: "https://blog.rizwannur.xyz",
+      url: "https://blog.rizwannur.com",
       shortName: "PF",
     },
   ],

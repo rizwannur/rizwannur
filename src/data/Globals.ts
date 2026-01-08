@@ -6,65 +6,73 @@ export const NAV_RESUME_URL =
 export const NAV_RESUME_ARIA_LABEL = "Open my resume";
 export const NAV_RESUME_TOOLTIP = "View Resume";
 export const NAV_LINKS = [
-  { href: "#home", label: "Home", ariaLabel: "Scroll to Home Section" },
-  { href: "#work", label: "Work", ariaLabel: "Scroll to Work Section" },
-  { href: "#about", label: "About", ariaLabel: "Scroll to About Section" },
-  { href: "#contact", label: "Contact", ariaLabel: "Scroll to Contact Section" }
+  { href: "/#home", label: "Home", ariaLabel: "Scroll to Home Section" },
+  { href: "/#work", label: "Work", ariaLabel: "Scroll to Work Section" },
+  { href: "/about", label: "About", ariaLabel: "Open About Page" },
+  { href: "/#contact", label: "Contact", ariaLabel: "Scroll to Contact Section" },
 ];
 
 // --- Footer Data ---
-export const FOOTER_DESIGN_TEXT = "Adapted by";
+export const FOOTER_DESIGN_TEXT = "Built with ❤️ by";
 export const FOOTER_DEVELOPER_URL = "https://github.com/rizwannur";
 export const FOOTER_ARIA_LABEL = "Rafey's GitHub Profile";
-export const FOOTER_DEVELOPER_NAME = "Rafey";
+export const FOOTER_DEVELOPER_NAME = "rafey";
+
+// --- UI copy ---
+export const UI_LOADING = "Loading tunes...";
+export const UI_ERROR = "Failed to load songs from YouTube playlist.";
+export const UI_NO_SONGS = "No songs found in the playlist.";
+export const UI_SEND_EMAIL = "Send me an email";
+export const UI_BOOK_CALL = "Book a call";
+export const UI_BOOK_CALL_BUTTON = "BOOK A CALL";
+export const UI_OR = "or";
 
 // --- Layout Metadata ---
 export const SITE_METADATA: Metadata = {
-  title: "Rizwan Nur — Full-Stack Developer & Tech Generalist",
+  title: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
   description:
-    "Self-taught full-stack developer and tech generalist specializing in JavaScript, Python, and cloud-native applications. Passionate about building reliable, elegant systems with a bias toward automation and scale. Available for freelance projects.",
+    "I help businesses plan, build, and upgrade products with AI-first engineering, modern web systems, and brand-aware design. Next.js, TypeScript, Tauri, automation.",
   generator: "Next.js",
   applicationName: "Rizwan Nur",
   keywords: [
     "Rizwan Nur",
     "Rafey",
-    "full-stack developer",
-    "freelance developer",
-    "JavaScript developer",
-    "Python developer",
-    "React developer",
-    "Node.js developer",
-    "MongoDB developer",
-    "API integration",
-    "web development",
-    "custom software",
-    "automation specialist",
-    "tech consultant",
-    "remote developer",
-    "Bangladesh developer",
-    "cloud-native applications",
-    "DevOps",
-    "AI",
-    "systems automation"
+    "Creative Technologist",
+    "Product Engineer",
+    "AI Automation",
+    "AI Tools",
+    "Business Systems",
+    "Brand Design",
+    "Tauri Developer",
+    "Next.js Developer",
+    "Rust",
+    "React",
+    "Frontend Architecture",
+    "UI/UX Engineering",
+    "Web Development",
+    "Desktop Apps",
+    "TypeScript",
+    "Interactive Design",
+    "Motion Graphics",
   ],
-  authors: [{ name: "Rizwan Nur", url: "https://rizwannur.xyz" }],
+  authors: [{ name: "Rizwan Nur", url: "https://rizwannur.com" }],
   creator: "Rizwan Nur",
   publisher: "Rizwan Nur",
   category: "Technology",
  // colorScheme: "light dark",
  // themeColor: "#0f172a",
   openGraph: {
-    title: "Rizwan Nur — Full-Stack Developer & Tech Generalist",
+    title: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
     description:
-      "Self-taught full-stack developer and tech generalist specializing in JavaScript, Python, and cloud-native applications. Available for freelance projects.",
-    url: "https://rizwannur.xyz",
-    siteName: "rizwannur.xyz",
+      "I help businesses plan, build, and upgrade products with AI-first engineering, modern web systems, and brand-aware design.",
+    url: "https://rizwannur.com",
+    siteName: "rizwannur.com",
     images: [
       {
-        url: "https://rizwannur.xyz/profile.png",
+        url: "https://rizwannur.com/profile.png",
         width: 1200,
         height: 630,
-        alt: "Rizwan Nur — Full-Stack Developer & Tech Generalist"
+        alt: "Rizwan Nur — AI-First Product Engineer & Creative Technologist"
       }
     ],
     locale: "en-US",
@@ -72,11 +80,22 @@ export const SITE_METADATA: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rizwan Nur — Full-Stack Developer & Tech Generalist",
+    title: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
     description:
-      "Self-taught full-stack developer specializing in JavaScript, Python, and cloud-native applications. Available for freelance projects.",
+      "I help businesses plan, build, and upgrade products with AI-first engineering, modern web systems, and brand-aware design.",
     creator: "@rafeyum",
-    images: ["https://rizwannur.xyz/profile.png"]
+    images: ["https://rizwannur.com/profile.png"]
+  },
+  alternates: {
+    canonical: "/",
+  },
+  icons: {
+    icon: [
+      { url: "/favicons/favicon.ico" },
+      { url: "/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/favicons/apple-touch-icon.png", sizes: "180x180" }],
   },
   robots: {
     index: true,
@@ -91,5 +110,5 @@ export const SITE_METADATA: Metadata = {
       "max-snippet": -1
     }
   },
-  metadataBase: new URL("https://rizwannur.xyz")
+  metadataBase: new URL("https://rizwannur.com")
 };

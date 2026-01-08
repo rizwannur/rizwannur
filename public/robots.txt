@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://rizwannur.vercel.app
+Host: https://rizwannur.com
 
 # Sitemaps
-Sitemap: https://rizwannur.vercel.app/sitemap.xml
+Sitemap: https://rizwannur.com/sitemap.xml

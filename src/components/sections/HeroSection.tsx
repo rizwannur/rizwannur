@@ -5,33 +5,73 @@ import { monaSans } from "@/app/fonts/monaSans";
 import { imageAnimation, bodyAnimation } from "../animations/animations";
 import AnimatedWords from "../animations/AnimatedWords";
 import { heroData } from "@/data/HeroSection"; // Importing the data
+import { UI_BOOK_CALL_BUTTON } from "@/data/Globals";
 
 interface HeroSectionProps {
   className?: string;
 }
 
 const HeroSection = ({ className = "" }: HeroSectionProps) => {
+  const renderLinkedTech = (text: string) => {
+    const parts = text.split(/(Next\.js|Tauri)/g);
+
+    return parts.map((part, i) => {
+      if (part === "Next.js") {
+        return (
+          <Link
+            key={`next-${i}`}
+            href="https://nextjs.org"
+            target="_blank"
+            className="underline underline-offset-4 decoration-[#e4ded7]/60 hover:decoration-[#e4ded7]"
+            aria-label="Next.js"
+          >
+            Next.js
+          </Link>
+        );
+      }
+
+      if (part === "Tauri") {
+        return (
+          <Link
+            key={`tauri-${i}`}
+            href="https://tauri.app"
+            target="_blank"
+            className="underline underline-offset-4 decoration-[#e4ded7]/60 hover:decoration-[#e4ded7]"
+            aria-label="Tauri"
+          >
+            Tauri
+          </Link>
+        );
+      }
+
+      return <span key={`t-${i}`}>{part}</span>;
+    });
+  };
+
   return (
     <motion.section
-      className={`relative z-10 flex h-[85vh] w-full items-stretch justify-center bg-[url('/hero.jpg')] bg-cover bg-center py-0 sm:h-[90vh] md:h-[100vh] 3xl:h-[85vh] ${className}`}
+      className={`relative z-10 flex h-[85vh] w-full items-stretch justify-center bg-cover bg-center py-0 sm:h-[90vh] md:h-[100vh] 3xl:h-[85vh] ${className}`}
       id="home"
       initial="initial"
       animate="animate"
+      style={{
+        backgroundImage: `url('${heroData.backgroundImage ?? "/hero.jpg"}')`,
+      }}
     >
-      <motion.div className="absolute left-0 top-0 right-0 bottom-0 h-full w-full bg-[#0E1016] mix-blend-color"></motion.div>
+      <motion.div className="absolute inset-0 h-full w-full bg-[#0E1016]/35" />
 
       <div className="absolute top-10 flex justify-between sm:w-[90%] lg:max-w-[1440px]">
         <div>
           <Link
             href={heroData.callUrl} // Using data from heroData
             target="_blank"
-            aria-label="BOOK A CALL"
+            aria-label={UI_BOOK_CALL_BUTTON}
           >
             <motion.button
               className="hidden rounded-md border-2 border-[#e4ded7] py-2 px-4 text-sm font-semibold text-[#e4ded7] sm:block md:text-base lg:block"
               variants={bodyAnimation}
             >
-              BOOK A CALL
+              {UI_BOOK_CALL_BUTTON}
             </motion.button>
           </Link>
         </div>
@@ -75,37 +115,58 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
               alt="Hero profile photo"
               data-blobity-tooltip="Fine Boy"
               data-blobity-invert="false"
-              className="w-[150px] rounded-2xl grayscale hover:grayscale-0 md:w-[200px] md:rounded-[32px] lg:w-[245px]"
+              className="w-[150px] rounded-2xl md:w-[200px] md:rounded-[32px] lg:w-[245px]"
             />
           </motion.div>
         </div>
       </div>
 
-      <div className="absolute bottom-10 flex items-center justify-center md:bottom-10 lg:w-[90%] lg:max-w-[1440px] lg:justify-between">
+      <div className="absolute bottom-10 flex w-full items-center justify-center md:bottom-10 lg:w-[90%] lg:max-w-[1440px] lg:justify-between">
+        {/* Mobile/tablet: single block */}
         <motion.div
-          className="max-w-[350px] md:max-w-[400px] lg:max-w-[400px]"
+          className="max-w-[350px] md:max-w-[520px] lg:hidden"
           variants={bodyAnimation}
         >
-          <p className="z-50 text-center text-base font-medium text-[#e4ded7] md:text-xl lg:text-left">
-            {heroData.tagline[0]}{" "} {/* Using data from heroData */}
-            <Link
-              href={heroData.koraUrl} // Using data from heroData
-              target="_blank"
-              className="underline underline-offset-2 hover:no-underline"
-              aria-label="Kora Website"
-            >
-              {heroData.tagline[1]} {/* Using data from heroData */}
-            </Link>{" "}
-            {heroData.tagline[2]} {/* Using data from heroData */}
+          <p className="z-50 text-center text-base font-medium text-[#e4ded7] md:text-xl">
+            {heroData.tagline[0]}{" "}
+            {heroData.koraUrl &&
+            !/(Next\.js|Tauri)/.test(heroData.tagline[1]) ? (
+              <Link
+                href={heroData.koraUrl}
+                target="_blank"
+                className="underline underline-offset-4 decoration-[#e4ded7]/60 hover:decoration-[#e4ded7]"
+                aria-label="External link"
+              >
+                {heroData.tagline[1]}
+              </Link>
+            ) : (
+              renderLinkedTech(heroData.tagline[1])
+            )}{" "}
+            {heroData.tagline[2]}
           </p>
         </motion.div>
 
-        <motion.div
-          className="hidden max-w-[500px] lg:block lg:max-w-[420px]"
-          variants={bodyAnimation}
-        >
-          <p className="text-right text-base font-semibold text-[#e4ded7] md:text-xl">
-            {heroData.location} {/* Using data from heroData */}
+        {/* Desktop: split left/right equally */}
+        <motion.div className="hidden lg:block lg:max-w-[520px]" variants={bodyAnimation}>
+          <p className="z-50 text-left text-xl font-medium text-[#e4ded7]">
+            {heroData.tagline[0]}{" "}
+            {heroData.koraUrl && !/(Next\.js|Tauri)/.test(heroData.tagline[1]) ? (
+              <Link
+                href={heroData.koraUrl}
+                target="_blank"
+                className="underline underline-offset-4 decoration-[#e4ded7]/60 hover:decoration-[#e4ded7]"
+                aria-label="External link"
+              >
+                {heroData.tagline[1]}
+              </Link>
+            ) : (
+              renderLinkedTech(heroData.tagline[1])
+            )}
+          </p>
+        </motion.div>
+        <motion.div className="hidden lg:block lg:max-w-[520px]" variants={bodyAnimation}>
+          <p className="z-50 text-right text-xl font-medium text-[#e4ded7]">
+            {heroData.tagline[2]}
           </p>
         </motion.div>
       </div>

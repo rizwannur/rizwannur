@@ -15,7 +15,7 @@ interface SocialLink {
   export const contactData: ContactData = {
     title: "Let's Connect",
     description:
-      "Got a project, business idea, freelance gig, or just want to collaborate? I’m all ears.",
+      "Have a product to build, a brand to refine, or a business process to automate with AI? Tell me what you’re aiming for—I’ll help you get there.",
     email: "rizwannur116@gmail.com", // Change if you'd prefer another address
     calendly: "https://cal.com/rizwannur/30min", // Optional — use your link or remove if not using
     socials: [
@@ -41,7 +41,7 @@ interface SocialLink {
       },
       {
         name: "BLOG",
-        url: "https://blog.rizwannur.xyz",
+        url: "https://blog.rizwannur.com",
         shortName: "BG",
       },
     ],

@@ -17,25 +17,29 @@ interface SkillCategory {
   }
   
   export const aboutData: AboutData = {
-    mainTitle: "I build reliable, elegant systems with a focus on automation and scale.",
+    mainTitle: "I help businesses grow with AI-first product engineering.",
     description: [
-      "I'm a self-taught full-stack developer and tech generalist passionate about building reliable, elegant systems. I specialize in JavaScript, Python, and cloud-native applications with a bias toward automation and scale.",
-      "With a history of remote freelance work, real-world projects, and open-source contributions, I blend creativity with engineering discipline to craft meaningful tech solutions.",
-      "I'm actively seeking long-term freelance opportunities. Let’s build something lean, sharp, and timeless together."
+      "I work with founders and teams to turn messy ideas into clear roadmaps, clean systems, and products that customers actually enjoy using.",
+      "My edge is the blend: product strategy + engineering + design. I build fast, scalable apps (Next.js/TypeScript) and ship desktop experiences with Tauri—while keeping the UX sharp and the codebase maintainable.",
+      "I’m also strong with applied AI: automations, internal tools, and workflow upgrades that save time, reduce overhead, and help you reach your next growth milestone."
     ],
     skills: {
       frontendTools: {
-        title: "Frontend",
-        description: "HTML5, CSS3, JavaScript (ES6+), React, Next.js, Tailwind CSS, Bootstrap, NextAuth, Formik, Git/GitHub."
+        title: "The Toolkit",
+        description:
+          "Next.js, Tauri (Desktop), TypeScript, React, Rust (Basic), Supabase, Vercel, Node.js."
       },
       uiLibraries: {
-        title: "UI Libraries",
-        description: "Material UI, Framer Motion, Lucide Icons, DaisyUI, Chart.js, GSAP (learning)."
+        title: "Aesthetics",
+        description:
+          "Framer Motion, Tailwind CSS, GSAP, Shadcn/ui, Canvas/WebGL, CSS Modules."
       },
       designTools: {
-        title: "Design Tools",
-        description: "Affinity Photo 2, Figma, Canva, Adobe Photoshop (basic), Product Mockups, UI Layout, Color Theory, Typography."
+        title: "Creative",
+        description:
+          "Figma, Rive, Adobe suite, UI/UX Strategy, Prototyping, Brand Identity."
       }
     },
-    musicSectionText: "When I'm working late or thinking deeply, you'll find me looping RnB, lo-fi beats, and old anime OSTs. Ask me for a playlist anytime."
+    musicSectionText:
+      "Late night commits are powered by lo-fi beats, ambient jazz, and heavy doses of caffeine."
   };

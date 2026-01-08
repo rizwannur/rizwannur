@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Syne } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SITE_METADATA } from "@/data/Globals"; // Import from Globals.ts
+import NavBar from "@/components/layout/NavBar";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={`${syne.className} scroll-smooth scrollbar-thin scrollbar-track-[#0E1016] scrollbar-thumb-[#212531]`}
       >
+        <NavBar />
         {children}
         <Analytics />
       </body>

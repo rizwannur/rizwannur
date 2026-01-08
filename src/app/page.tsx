@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 
 // Import components from new structure
 import { HeroSection } from "@/components/sections";
-import { NavBar } from "@/components/layout";
 import { PreLoader } from "@/components/animations";
 import { initialBlobityOptions } from "@/lib/blobity-config";
 
@@ -54,14 +53,12 @@ export default function Home() {
     <>
       <PreLoader />
 
-      <NavBar />
-
       <main className="flex flex-col items-center justify-center">
         <HeroSection />
-        {/*   <WorkSection />     */}
-        {/*   <ReviewsSection />  */}
+        <WorkSection />
+        <ReviewsSection />
         <AboutSection />
-        {/*   <BlogSection />     */}
+        <BlogSection />
         <ContactSection />
         <Footer />
       </main>

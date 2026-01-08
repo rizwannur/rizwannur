@@ -1,11 +1,9 @@
 
 import { StaticImageData } from "next/image";
-import jerry from "../../public/jerry.avif";
-import samuel from "../../public/samuel.avif";
-import olamide from "../../public/olamide.jpeg";
-import umar from "../../public/umar.jpeg";
-import mauro from "../../public/mauro.jpeg";
-import alan from "../../public/alan.jpeg";
+import anas from "../../public/client-image/anas-shaikh.jpg";
+import philip from "../../public/client-image/philip-pellegrino.jpg";
+import emil from "../../public/client-image/emil-ghelmeci.jpg";
+import braeden from "../../public/client-image/braeden-moffat.png";
 
 interface Review {
   name: string;
@@ -21,52 +19,36 @@ export const reviewsDescription =
 
 export const reviews: Review[] = [
   {
-    name: "Samuel Oladokun",
-    role: "Product Designer",
-    company: "Propellent",
-    profileImg: samuel,
+    name: "Anas Shaikh",
+    role: "Founder & Tech Leader",
+    company: "Hexoforge LLC",
+    profileImg: anas,
     testimonial:
-      "Working with Victor was an absolute pleasure. His attention to detail and commitment to quality are second to none. He took my vision and turned it into a stunning reality, exceeding all my expectations. I can't recommend him enough.",
+      "Rizwan is the kind of engineer every founder hopes to find but rarely does. He has an exceptional ability to take vague, evolving ideas and turn them into well-structured, production-ready systems. During our collaboration on the Therapist SaaS and Financial CRM, he consistently demonstrated strong architectural thinking, long-term foresight, and disciplined execution. He didn't just write code—he thought deeply about product logic, scalability, and real user workflows. His technical judgment, ownership mentality, and product intuition made him a core strategic contributor rather than just a developer.",
   },
   {
-    name: "Olamide Olateju",
-    role: "Senior Developer",
-    company: "Tech Solutions",
-    profileImg: olamide,
+    name: "Dr. Philip Pellegrino",
+    role: "Licensed Psychologist",
+    company: "Bethlehem Therapist",
+    profileImg: philip,
     testimonial:
-      "I had the privilege of collaborating with Victor on a project, and I was blown away by his talent and professionalism. He is a true master of his craft, and his passion for design is evident in every aspect of his work. I would jump at the chance to work with him again.",
+      "Rizwan played a critical role in shaping our digital therapist platform into something that genuinely supported clinical work. He showed a rare sensitivity to how therapists actually operate, ensuring progress notes, scheduling, and client management aligned with real-world clinical workflows. He balanced technical implementation with empathy for both providers and clients, which is not easy to do in healthcare software. His attention to detail, responsiveness to feedback, and commitment to quality were evident throughout the project.",
   },
   {
-    name: "Umar",
-    role: "Creative Director",
-    company: "Design Studio",
-    profileImg: umar,
+    name: "Emil Ghelmeci",
+    role: "Chief Executive Officer",
+    company: "Stackably LTD",
+    profileImg: emil,
     testimonial:
-      "Victor is a game-changer. His innovative ideas and creative solutions transformed my project from ordinary to extraordinary. He is a true visionary, and I am so grateful for his contributions. I would recommend him to anyone looking for a top-notch designer.",
+      "Rizwan consistently delivered complex platforms with a level of strategic clarity that is uncommon at his stage. On multiple initiatives, including Therapist and CRM systems, he demonstrated strong system design skills and the ability to anticipate future needs before they became problems. He approached challenges analytically, communicated clearly, and executed with precision. His contributions went beyond development and directly elevated our overall product and business strategy.",
   },
   {
-    name: "Mauro Towsend",
-    role: "CEO",
-    company: "Digital Agency",
-    profileImg: mauro,
+    name: "Braeden Moffat",
+    role: "Chief Project Manager",
+    company: "Stackably LTD",
+    profileImg: braeden,
     testimonial:
-      "I was so impressed with Victor's work. He is a true professional, and his work is simply outstanding. He was able to take my ideas and turn them into a beautiful, functional design that I am absolutely thrilled with. I would recommend him to anyone.",
-  },
-  {
-    name: "Jerry Syre",
-    role: "Business Owner",
-    company: "Local Business",
-    profileImg: jerry,
-    testimonial:
-      "I hired Victor to create a new website for my business, and I couldn't be happier with the results. He was able to capture the essence of my brand and create a site that is both visually appealing and easy to navigate. I would highly recommend him to anyone looking for a talented web designer.",
-  },
-  {
-    name: "Alan Turing",
-    role: "Tech Consultant",
-    company: "Independent",
-    profileImg: alan,
-    testimonial:
-      "I am so grateful to Victor for his hard work and dedication. He went above and beyond to make sure that I was happy with the final product. He is a true professional, and I would recommend him to anyone.",
+      "Working with Rizwan felt like adding a force multiplier to the team. He took open-ended requirements, ambiguity, and partial specifications and transformed them into structured, reliable products. His ability to break down complex problems, take ownership, and deliver consistently made collaboration smooth and effective. Rizwan brings both technical depth and product-minded thinking, which significantly improved the quality and speed of our delivery.",
   },
 ];
 

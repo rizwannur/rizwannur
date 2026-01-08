@@ -31,6 +31,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "media.tenor.com",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.hashnode.com",
+      },
+      {
+        protocol: "https",
+        hostname: "github.com",
+      },
     ],
     // Optimize for high-quality images
     formats: ["image/webp", "image/avif"],
@@ -43,6 +51,16 @@ const nextConfig: NextConfig = {
     // dangerouslyAllowSVG: true,
     // Enable contentDispositionType if needed
     // contentDispositionType: 'attachment',
+  },
+  async rewrites() {
+    return [
+      { source: "/favicon.ico", destination: "/favicons/favicon.ico" },
+      { source: "/favicon-16x16.png", destination: "/favicons/favicon-16x16.png" },
+      { source: "/favicon-32x32.png", destination: "/favicons/favicon-32x32.png" },
+      { source: "/apple-touch-icon.png", destination: "/favicons/apple-touch-icon.png" },
+      { source: "/android-chrome-192x192.png", destination: "/favicons/android-chrome-192x192.png" },
+      { source: "/android-chrome-512x512.png", destination: "/favicons/android-chrome-512x512.png" },
+    ];
   },
   async headers() {
     return [
@@ -71,7 +89,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost:3000", "rizwannur.xyz"],
+      allowedOrigins: ["localhost:3000", "rizwannur.com"],
     },
   },
   typescript: {

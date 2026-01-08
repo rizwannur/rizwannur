@@ -120,6 +120,22 @@
     overflow-y: hidden;
     overscroll-behavior: none;
   }
+
+  /* Hide scrollbars globally (keep scrolling enabled) */
+  * {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge (legacy) */
+  }
+  *::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
   
   /* Typography scale */
   h1 {
@@ -164,5 +180,39 @@
   
   .text-pretty {
     text-wrap: pretty;
+  }
+
+  /* Infinite horizontal marquee (pause on hover) */
+  .marquee {
+    overflow: hidden;
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll var(--marquee-duration, 34s) linear infinite;
+    animation-delay: var(--marquee-delay, 0s);
+    will-change: transform;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  .marquee-reverse .marquee-track {
+    animation-direction: reverse;
+  }
+
+  @keyframes marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+      transform: none;
+    }
   }
 }

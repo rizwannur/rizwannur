@@ -5,8 +5,13 @@ import { monaSans } from "@/app/fonts/monaSans";
 import AnimatedBody from "../animations/AnimatedBody";
 import AnimatedTitle from "../animations/AnimatedTitle";
 import AnimatedWords2 from "../animations/AnimatedWords2";
-import heartIcon from "./../../../public/heart icon.png";
+import heartIcon from "./../../../public/assets/heart icon.png";
 import { contactData } from "@/data/ContactSection"; // Importing the data
+import {
+  UI_BOOK_CALL,
+  UI_OR,
+  UI_SEND_EMAIL,
+} from "@/data/Globals";
 
 interface ContactSectionProps {
   className?: string;
@@ -45,26 +50,26 @@ const ContactSection = ({ className = "" }: ContactSectionProps) => {
               <Link
                 href={`mailto:${contactData.email}?subject=Lets%20work%20together!&amp;body=Hello%2C%20I%20think%20we%20need%20you%20to%20work%20on%2Fcollaborate%20this%20particular%20product...%20Reach%20out%20as%20soon%20as%20you%20can.`} // Using data from contactData
                 target="_blank"
-                aria-label="Send me an email"
+                aria-label={UI_SEND_EMAIL}
                 className="mt-1 w-[147px] flex-1 underline underline-offset-2 hover:no-underline sm:mt-2 sm:w-[170px] md:mt-3 lg:mt-4"
               >
                 <AnimatedBody
-                  text="Send me an email"
+                  text={UI_SEND_EMAIL}
                   className="w-[190px] pr-[40px] md:w-[170px] md:pr-0"
                 />
               </Link>
               <AnimatedBody
-                text="or"
+                text={UI_OR}
                 className="-mb-1 ml-2 inline-block overflow-hidden sm:-mb-2 md:-ml-[8px] md:-mb-3 lg:-mb-4"
               />
               <Link
                 href={contactData.calendly} // Using data from contactData
                 target="_blank"
-                aria-label="Book a call"
+                aria-label={UI_BOOK_CALL}
                 className="mt-1 w-[110px] flex-1 underline underline-offset-2 hover:no-underline sm:mt-2 sm:w-[147px] md:mt-3 md:-ml-[3px] md:w-[120px] lg:mt-4"
               >
                 <AnimatedBody
-                  text="Book a call"
+                  text={UI_BOOK_CALL}
                   className="w-[110px] md:w-[120px]"
                 />
               </Link>

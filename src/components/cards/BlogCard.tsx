@@ -1,4 +1,3 @@
-import { blogProps } from "@/data/blogs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -9,7 +8,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-const BlogCard = ({ title, image, url, date, available, index }: blogProps) => {
+export interface BlogCardProps {
+  title: string;
+  image: string;
+  url: string;
+  date: string;
+  available: boolean;
+  index: number;
+}
+
+const BlogCard = ({ title, image, url, date, available, index }: BlogCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
