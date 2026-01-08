@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+import Image from "next/image";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export type LogoItem =
@@ -340,7 +341,7 @@ export const LogoLoop = React.memo<LogoLoopProps>(
             {item.node}
           </span>
         ) : (
-          <img
+          <Image
             className={cx(
               'h-[var(--logoloop-logoHeight)] w-auto block object-contain',
               '[-webkit-user-drag:none] pointer-events-none',
@@ -350,14 +351,12 @@ export const LogoLoop = React.memo<LogoLoopProps>(
                 'transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/item:scale-120'
             )}
             src={item.src}
-            srcSet={item.srcSet}
             sizes={item.sizes}
-            width={item.width}
-            height={item.height}
+            width={item.width ?? logoHeight}
+            height={item.height ?? logoHeight}
             alt={item.alt ?? ''}
             title={item.title}
             loading="lazy"
-            decoding="async"
             draggable={false}
           />
         );
