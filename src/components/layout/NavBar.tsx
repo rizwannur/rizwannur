@@ -1,9 +1,10 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PhoneCall } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 // Type assertion for FontAwesome icons to fix compatibility issues
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
@@ -15,23 +16,39 @@ import { heroData } from "@/data/HeroSection";
 
 const NavBar: React.FC<NavbarProps> = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const pendingHashRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    if (!pendingHashRef.current) return;
+
+    const targetId = pendingHashRef.current;
+    pendingHashRef.current = null;
+
+    // wait a tick so the home page sections mount
+    setTimeout(() => {
+      const elem = document.getElementById(targetId);
+      elem?.scrollIntoView({ behavior: "smooth" });
+    }, 0);
+  }, [pathname]);
 
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     const hrefAttr = e.currentTarget.getAttribute("href") ?? "";
     if (!hrefAttr.includes("#")) return;
 
-    // Only smooth-scroll on the homepage; otherwise allow normal navigation.
-    if (pathname !== "/") return;
-
     e.preventDefault();
-    // get the href and remove everything before the hash (#)
-    const href = e.currentTarget.href;
-    const targetId = href.replace(/.*\#/, "");
-    // get the element by id and use scrollIntoView
-    const elem = document.getElementById(targetId);
-    elem?.scrollIntoView({
-      behavior: "smooth",
-    });
+    const targetId = hrefAttr.replace(/.*\#/, "");
+
+    if (pathname === "/") {
+      const elem = document.getElementById(targetId);
+      elem?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    // navigate to home first, then smooth-scroll after route change
+    pendingHashRef.current = targetId;
+    router.push(hrefAttr);
   };
 
   return (
