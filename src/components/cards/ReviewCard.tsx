@@ -8,11 +8,6 @@ import { Star } from "lucide-react";
 const ReviewCard = ({ review }: ReviewCardProps) => {
   const { name, role, company, profileImg, testimonial, index = 0 } = review;
 
-  const abbreviateName = (name: string): string => {
-    const [firstName, lastName] = name.split(" ");
-    return lastName ? `${firstName} ${lastName[0]}.` : firstName;
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}

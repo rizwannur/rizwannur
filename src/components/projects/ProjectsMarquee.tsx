@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { DevProject } from "@/lib/types";
+import type { CSSProperties } from "react";
 
 type Props = {
   projects: DevProject[];
@@ -22,6 +23,7 @@ export default function ProjectsMarquee({
   durationSeconds = 26,
 }: Props) {
   const row = padTo(projects, 10);
+  const marqueeStyle = { ["--marquee-duration"]: `${durationSeconds}s` } as CSSProperties;
 
   return (
     <div className={`relative ${className}`}>
@@ -30,7 +32,7 @@ export default function ProjectsMarquee({
 
       <div
         className="marquee marquee-reverse [--marquee-delay:-10s]"
-        style={{ ["--marquee-duration" as any]: `${durationSeconds}s` }}
+        style={marqueeStyle}
       >
         <div className="marquee-track gap-6 py-2">
           {[...row, ...row].map((project, index) => {

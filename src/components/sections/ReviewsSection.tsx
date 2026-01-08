@@ -1,8 +1,6 @@
 import { reviews, reviewsTitle, reviewsDescription } from "@/data/ReviewSection";
 import ReviewCard from "../cards/ReviewCard";
 import { motion } from "framer-motion";
-import Image from "next/image";
-import hireMe from "./../../../public/assets/hiremeoncontra-dark.webp";
 
 interface ReviewsSectionProps {
   className?: string;

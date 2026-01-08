@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useEffect } from "react";
 import useBlobity from "blobity/lib/react/useBlobity";
