@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 
+import { arrayBufferToPngDataUrl } from "@/lib/array-buffer-to-data-url";
+
 export const runtime = "edge";
 
 export const size = {
@@ -95,9 +97,8 @@ export default async function TwitterImage() {
               background: "rgba(255,255,255,0.06)",
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={profileImageArrayBuffer as any}
+              src={arrayBufferToPngDataUrl(profileImageArrayBuffer)}
               width={312}
               height={312}
               alt="Rizwan Nur"
