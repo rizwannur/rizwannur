@@ -5,3 +5,4 @@ export * from './AnimatedWords';
 export * from './AnimatedWords2';
 export * from './animations';
 export { PreLoader } from './PreLoader/PreLoader';
+export { default as ScrollReveal } from './ScrollReveal';

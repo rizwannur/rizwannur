@@ -39,6 +39,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "github.com",
       },
+      {
+        protocol: "https",
+        hostname: "blog.rizwannur.com",
+      },
     ],
     // Optimize for high-quality images
     formats: ["image/webp", "image/avif"],
@@ -69,7 +73,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'self' https://www.youtube.com",
+            value: "frame-ancestors 'self' https://www.youtube.com; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com",
           },
           {
             key: "X-Content-Type-Options",

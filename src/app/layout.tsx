@@ -1,6 +1,6 @@
 import "./globals.css";
 import { ReactNode } from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Syne } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SITE_METADATA } from "@/data/Globals"; // Import from Globals.ts
@@ -12,7 +12,12 @@ const syne = Syne({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-export const metadata: Metadata = SITE_METADATA; // Using the imported constant
+export const metadata: Metadata = SITE_METADATA;
+
+export const viewport: Viewport = {
+  themeColor: "#0E1016",
+  colorScheme: "dark",
+};
 
 type RootLayoutProps = {
   children: ReactNode;

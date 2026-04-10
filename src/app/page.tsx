@@ -52,7 +52,7 @@ export default function Home() {
     <>
       <PreLoader />
 
-      <main className="flex flex-col items-center justify-center">
+      <main className="flex flex-col items-center justify-center overflow-x-hidden">
         <HeroSection />
         <WorkSection />
         <ReviewsSection />

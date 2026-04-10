@@ -50,7 +50,7 @@ const HeroSection = ({ className = "" }: HeroSectionProps) => {
 
   return (
     <motion.section
-      className={`relative z-10 flex h-[85vh] w-full items-stretch justify-center bg-cover bg-center py-0 sm:h-[90vh] md:h-[100vh] 3xl:h-[85vh] ${className}`}
+      className={`relative z-10 flex h-[80vh] w-full items-stretch justify-center bg-cover bg-center py-0 sm:h-[82vh] md:h-[85vh] lg:h-[88vh] 3xl:h-[80vh] ${className}`}
       id="home"
       initial="initial"
       animate="animate"

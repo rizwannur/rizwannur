@@ -13,33 +13,30 @@ interface SkillCategory {
     mainTitle: string;
     description: string[];
     skills: Skills;
-    musicSectionText: string;
   }
   
   export const aboutData: AboutData = {
-    mainTitle: "I help businesses grow with AI-first product engineering.",
+    mainTitle: "I architect systems that ship and scale.",
     description: [
-      "I work with founders and teams to turn messy ideas into clear roadmaps, clean systems, and products that customers actually enjoy using.",
-      "My edge is the blend: product strategy + engineering + design. I build fast, scalable apps (Next.js/TypeScript) and ship desktop experiences with Tauri—while keeping the UX sharp and the codebase maintainable.",
-      "I’m also strong with applied AI: automations, internal tools, and workflow upgrades that save time, reduce overhead, and help you reach your next growth milestone."
+      "Most teams do not need another pair of hands. They need someone who can see the whole system, make the hard technical calls, and keep the build moving. That is the work I like.",
+      "I work across product architecture, backend systems, frontend delivery, APIs, databases, and infrastructure. I design the system, build the critical parts, and make sure the pieces fit before they turn into expensive problems.",
+      "When a project needs more than one builder, I can help shape the team, review the work, and hold the bar on quality. The goal is simple: get to production with software that is stable, scalable, and useful to the business."
     ],
     skills: {
       frontendTools: {
-        title: "The Toolkit",
+        title: "Architecture",
         description:
-          "Next.js, Tauri (Desktop), TypeScript, React, Rust (Basic), Supabase, Vercel, Node.js."
+          "System design, backend services, APIs, databases, infrastructure, Go, Rust, TypeScript, and Next.js."
       },
       uiLibraries: {
-        title: "Aesthetics",
+        title: "Delivery",
         description:
-          "Framer Motion, Tailwind CSS, GSAP, Shadcn/ui, Canvas/WebGL, CSS Modules."
+          "Frontend systems, dashboards, internal tools, workflow automation, and the work needed to get a product safely into production."
       },
       designTools: {
-        title: "Creative",
+        title: "Leadership",
         description:
-          "Figma, Rive, Adobe suite, UI/UX Strategy, Prototyping, Brand Identity."
+          "Technical direction, hiring support, code review, quality control, execution planning, and launch oversight."
       }
-    },
-    musicSectionText:
-      "Late night commits are powered by lo-fi beats, ambient jazz, and heavy doses of caffeine."
+    }
   };

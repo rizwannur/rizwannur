@@ -12,6 +12,7 @@ export interface Project {
   demo: string;
   image: StaticImageData | string;
   available: boolean;
+  youtubeId?: string;
 }
 
 export type DevProject = Project;
@@ -28,30 +29,6 @@ export interface Review {
   profileImg: StaticImageData;
   testimonial: string;
   index?: number;
-}
-
-/**
- * Song related interfaces
- */
-export interface Song {
-  title: string;
-  artist: string;
-  image: StaticImageData | string;
-  link: string;
-}
-
-/**
- * Validates a song object
- * @param song The song to validate
- * @returns True if the song is valid, false otherwise
- */
-export function validateSong(song: Partial<Song>): song is Song {
-  return (
-    typeof song.title === 'string' &&
-    typeof song.artist === 'string' &&
-    !!song.image &&
-    typeof song.link === 'string'
-  );
 }
 
 /**
@@ -92,10 +69,6 @@ export interface ProjectCardProps {
 
 export interface ReviewCardProps {
   review: Review;
-}
-
-export interface SongCardProps {
-  song: Song;
 }
 
 /**

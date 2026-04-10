@@ -19,14 +19,15 @@ interface HeroData {
 
 export const heroData: HeroData = {
   name: "RIZWAN NUR",
-  profileImage: "/profile.png", // Hero headshot (in /public)
+  profileImage: "/hero-pfp.png", // Hero headshot (in /public)
   backgroundImage: "/assets/hero.png", // Optional custom bg image
   tagline: [
-    "Strategic Software Engineer & Creative Technologist.",
-    "I help businesses ship high-performance products and AI workflows (Next.js + Tauri).",
-    "From strategy to UI to automation—clean systems, crisp design, real outcomes.",
+    "Systems architect for products that need to ship.",
+    "I design the system, build the critical path, and keep delivery moving across frontend, backend, APIs, and infrastructure.",
+    "I help teams get to production, hire well when needed, and hold the bar on quality until the product is ready to make money.",
   ],
-  location: "Remote developer based in Dhaka, Bangladesh — serving clients worldwide.",
+  location:
+    "Based in Dhaka, Bangladesh. Working remotely with teams that need strong technical ownership.",
   koraUrl: "", // Leave empty or replace with your most recent company or project site
   callUrl: "https://cal.com/rizwannur/30min", // Optional; update or remove if not used
   socials: [

@@ -62,7 +62,7 @@ const NavBar: React.FC<NavbarProps> = () => {
         <Link
           href={heroData.callUrl}
           target="_blank"
-          aria-label="Book a call"
+          aria-label="Book a strategy call"
           data-blobity-magnetic="false"
         >
           <PhoneCall className="h-4 w-4" />

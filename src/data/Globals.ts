@@ -13,58 +13,54 @@ export const NAV_LINKS = [
 ];
 
 // --- Footer Data ---
-export const FOOTER_DESIGN_TEXT = "Built with ❤️ by";
+export const FOOTER_DESIGN_TEXT = "Built by";
 export const FOOTER_DEVELOPER_URL = "https://github.com/rizwannur";
 export const FOOTER_ARIA_LABEL = "Rafey's GitHub Profile";
 export const FOOTER_DEVELOPER_NAME = "rafey";
 
-// --- UI copy ---
-export const UI_LOADING = "Loading tunes...";
-export const UI_ERROR = "Failed to load songs from YouTube playlist.";
-export const UI_NO_SONGS = "No songs found in the playlist.";
-export const UI_SEND_EMAIL = "Send me an email";
-export const UI_BOOK_CALL = "Book a call";
-export const UI_BOOK_CALL_BUTTON = "BOOK A CALL";
+export const UI_SEND_EMAIL = "Send the brief";
+export const UI_BOOK_CALL = "Book a strategy call";
+export const UI_BOOK_CALL_BUTTON = "BOOK A STRATEGY CALL";
 export const UI_OR = "or";
 
 // --- Layout Metadata ---
 export const SITE_METADATA: Metadata = {
   metadataBase: new URL("https://rizwannur.com"),
   title: {
-    default: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
+    default: "Rizwan Nur | Systems architect for scalable products",
     template: "%s | Rizwan Nur",
   },
   description:
-    "I help businesses plan, build, and upgrade products with AI-first engineering, modern web systems, and brand-aware design. Next.js, TypeScript, Tauri, automation.",
+    "I architect and deliver software systems across product strategy, frontend, backend, APIs, infrastructure, and execution. I help businesses launch software that is stable, scalable, and built to make money.",
   generator: "Next.js",
   applicationName: "Rizwan Nur",
   keywords: [
     "Rizwan Nur",
     "Rafey",
-    "Creative Technologist",
-    "Product Engineer",
+    "Systems Architect",
+    "Software Architect",
+    "Technical Lead",
+    "Product Architecture",
+    "Product Execution",
+    "Scalable Systems",
+    "Backend Systems",
+    "API Design",
+    "Platform Engineering",
     "AI Automation",
-    "AI Tools",
     "Business Systems",
-    "Brand Design",
-    "Tauri Developer",
-    "Next.js Developer",
     "Rust",
+    "Go",
     "React",
-    "Frontend Architecture",
-    "UI/UX Engineering",
-    "Web Development",
-    "Desktop Apps",
+    "Next.js",
     "TypeScript",
-    "Interactive Design",
-    "Motion Graphics",
+    "Frontend Architecture",
+    "Desktop Apps",
+    "Revenue Ready Software",
   ],
   authors: [{ name: "Rizwan Nur", url: "https://rizwannur.com" }],
   creator: "Rizwan Nur",
   publisher: "Rizwan Nur",
   category: "Technology",
-  colorScheme: "dark light",
-  themeColor: "#0E1016",
   manifest: "/site.webmanifest",
   formatDetection: {
     telephone: false,
@@ -72,9 +68,9 @@ export const SITE_METADATA: Metadata = {
     email: false,
   },
   openGraph: {
-    title: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
+    title: "Rizwan Nur | Systems architect for scalable products",
     description:
-      "I help businesses plan, build, and upgrade products with AI-first engineering, modern web systems, and brand-aware design.",
+      "Systems architecture, product execution, frontend, backend, and infrastructure for businesses that need software shipped properly.",
     url: "/",
     siteName: "rizwannur.com",
     images: [
@@ -82,7 +78,7 @@ export const SITE_METADATA: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
+        alt: "Rizwan Nur | Systems architect for scalable products",
       },
     ],
     locale: "en-US",
@@ -90,9 +86,9 @@ export const SITE_METADATA: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rizwan Nur — AI-First Product Engineer & Creative Technologist",
+    title: "Rizwan Nur | Systems architect for scalable products",
     description:
-      "I help businesses plan, build, and upgrade products with AI-first engineering, modern web systems, and brand-aware design.",
+      "I architect and deliver software systems for teams that need strong technical ownership from plan to production.",
     site: "@rafeyum",
     creator: "@rafeyum",
     images: ["/twitter-image"],

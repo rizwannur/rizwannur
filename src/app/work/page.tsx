@@ -7,26 +7,27 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Lock, Pin } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Work — Client Projects",
+  title: "Work | Client systems",
   description:
-    "A curated feed of client work: product engineering, AI automations, and brand-aware design. Repositories are private; demos shared where allowed.",
+    "A selection of client systems across finance, health, operations, and AI. Private repos stay private. Public demos are linked where clients allow it.",
   alternates: { canonical: "/work" },
 };
 
 export default function WorkPage() {
   return (
     <main className="relative z-10 min-h-screen bg-[#0E1016] pt-16 pb-24 text-[#e4ded7]">
-      <div className="mx-auto w-[90%] max-w-[1200px]">
+      <div className="mx-auto w-[90%] max-w-[1440px]">
         <div className="mb-10 flex flex-col gap-4">
           <p className="text-sm font-semibold uppercase tracking-wide text-[#e4ded7]/70">
-            Client Work
+            Client systems
           </p>
           <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
-            Real projects. Real constraints. Clean delivery.
+            Systems built for real businesses.
           </h1>
           <p className="max-w-[900px] text-base font-medium text-[#e4ded7]/80 md:text-lg">
-            Every project here is client work. Repositories are private by
-            default; demos are linked only when clients allow public access.
+            These projects had real constraints, deadlines, users, and revenue
+            goals. Repositories stay private. Public demos are shared only when
+            clients allow it.
           </p>
         </div>
 
@@ -99,17 +100,29 @@ export default function WorkPage() {
                         </div>
 
                         <div className="mt-4 overflow-hidden rounded-xl border border-[#212531]">
-                          <div className="relative aspect-[16/10]">
-                            <Image
-                              src={p.image}
-                              alt={`${p.name} screenshot`}
-                              fill
-                              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                              sizes="(max-width: 768px) 90vw, 760px"
-                              priority={p.id < 2}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0E1016]/55 via-transparent to-transparent" />
-                          </div>
+                          {p.youtubeId ? (
+                            <div className="relative aspect-video w-full">
+                              <iframe
+                                src={`https://www.youtube-nocookie.com/embed/${p.youtubeId}?rel=0&modestbranding=1`}
+                                title={`${p.name} demo video`}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                className="absolute inset-0 h-full w-full"
+                              />
+                            </div>
+                          ) : (
+                            <div className="relative aspect-[16/10]">
+                              <Image
+                                src={p.image}
+                                alt={`${p.name} screenshot`}
+                                fill
+                                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                                sizes="(max-width: 768px) 90vw, 760px"
+                                priority={p.id < 2}
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-[#0E1016]/55 via-transparent to-transparent" />
+                            </div>
+                          )}
                         </div>
 
                         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
@@ -140,9 +153,9 @@ export default function WorkPage() {
                               <Link
                                 href="https://cal.com/rizwannur/30min"
                                 target="_blank"
-                                aria-label="Book a call"
+                                aria-label="Book a strategy call"
                               >
-                                Book a call
+                                Book a strategy call
                               </Link>
                             </Button>
                           </div>
@@ -170,8 +183,9 @@ export default function WorkPage() {
                   Notes
                 </p>
                 <p className="mt-3 text-sm font-medium leading-relaxed text-[#e4ded7]/75">
-                  Client work is often sensitive. If you want a deeper breakdown
-                  (architecture, outcomes, metrics), ask for a case study.
+                  Most client systems include private code, internal workflows,
+                  or sensitive data. If you want the architecture or delivery
+                  breakdown, ask for a case study.
                 </p>
                 <Button
                   asChild

@@ -1,6 +1,7 @@
 import { reviews, reviewsTitle, reviewsDescription } from "@/data/ReviewSection";
 import ReviewCard from "../cards/ReviewCard";
 import { motion } from "framer-motion";
+import ScrollReveal from "@/components/animations/ScrollReveal";
 
 interface ReviewsSectionProps {
   className?: string;
@@ -11,7 +12,6 @@ const ReviewsSection = ({ className = "" }: ReviewsSectionProps) => {
   const rowB = reviews.filter((_, i) => i % 2 === 1);
 
   const shuffle = <T,>(input: T[]) => {
-    // deterministic shuffle to keep render stable
     let seed = 1337;
     const arr = [...input];
     for (let i = arr.length - 1; i > 0; i -= 1) {
@@ -42,43 +42,47 @@ const ReviewsSection = ({ className = "" }: ReviewsSectionProps) => {
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(14,16,22,0.2),rgba(14,16,22,0.85))]" />
       </div>
 
-      <div className="mb-12 w-[90%] max-w-[1250px] text-[#e4ded7]">
-        <h2 className="text-5xl font-bold tracking-tight md:text-6xl">
-          {reviewsTitle}
-        </h2>
-        <p className="mt-4 max-w-[720px] text-sm font-medium text-[#e4ded7]/70 md:text-base">
-          {reviewsDescription}
-        </p>
-      </div>
-      
-      <motion.div className="relative w-[90%] max-w-[1250px]">
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#0E1016] to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#0E1016] to-transparent" />
-
-        <div className="flex flex-col gap-6">
-          <div className="marquee [--marquee-duration:26s] [--marquee-delay:-8s]">
-            <div className="marquee-track gap-6">
-              {[...baseA, ...baseA].map((review, index) => (
-                <div key={`a-${index}`} className="w-[320px] shrink-0">
-                  <ReviewCard review={{ ...review, index }} />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="marquee marquee-reverse [--marquee-duration:31s] [--marquee-delay:-13s]">
-            <div className="marquee-track gap-6">
-              {[...baseB, ...baseB].map((review, index) => (
-                <div key={`b-${index}`} className="w-[320px] shrink-0">
-                  <ReviewCard review={{ ...review, index }} />
-                </div>
-              ))}
-            </div>
-          </div>
+      <ScrollReveal direction="right">
+        <div className="mb-12 w-[90%] mx-auto max-w-[1440px] text-[#e4ded7]">
+          <h2 className="text-5xl font-bold tracking-tight md:text-6xl">
+            {reviewsTitle}
+          </h2>
+          <p className="mt-4 max-w-[720px] text-sm font-medium text-[#e4ded7]/70 md:text-base">
+            {reviewsDescription}
+          </p>
         </div>
-      </motion.div>
+      </ScrollReveal>
 
-      {/* Contra badge hidden for now */}
+      <ScrollReveal direction="right" delay={0.1}>
+        <div className="w-[90%] mx-auto max-w-[1440px]">
+          <motion.div className="relative w-full">
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#0E1016] to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#0E1016] to-transparent" />
+
+            <div className="flex flex-col gap-6">
+              <div className="marquee [--marquee-duration:26s] [--marquee-delay:-8s]">
+                <div className="marquee-track gap-6">
+                  {[...baseA, ...baseA].map((review, index) => (
+                    <div key={`a-${index}`} className="w-[320px] shrink-0">
+                      <ReviewCard review={{ ...review, index }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="marquee marquee-reverse [--marquee-duration:31s] [--marquee-delay:-13s]">
+                <div className="marquee-track gap-6">
+                  {[...baseB, ...baseB].map((review, index) => (
+                    <div key={`b-${index}`} className="w-[320px] shrink-0">
+                      <ReviewCard review={{ ...review, index }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </ScrollReveal>
     </section>
   );
 };

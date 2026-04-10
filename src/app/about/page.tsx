@@ -15,14 +15,14 @@ import {
 export const metadata: Metadata = {
   title: "About — Rizwan Nur",
   description:
-    "AI-first product engineer blending strategy, design, and full-stack development. Experienced in automation, dashboards, SaaS workflows, and brand-aware UI.",
+    "Systems architect working across product architecture, frontend, backend, APIs, infrastructure, and delivery. I help teams ship software that is built to hold up in production.",
   alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {
   return (
     <main className="relative z-10 min-h-screen bg-[#0E1016] pt-16 pb-24 text-[#e4ded7]">
-      <div className="mx-auto w-[90%] max-w-[1200px]">
+      <div className="mx-auto w-[90%] max-w-[1440px]">
         {/* Header */}
         <header className="mb-12 grid gap-8 lg:grid-cols-[1fr_420px]">
           <div>
@@ -33,25 +33,25 @@ export default function AboutPage() {
               Rizwan Nur
             </h1>
             <p className="mt-3 text-base font-semibold text-[#e4ded7]/85 md:text-lg">
-              AI-First Product Engineer · Creative Technologist
+              Systems architect · product execution lead
             </p>
             <p className="mt-6 max-w-[820px] text-base font-medium leading-relaxed text-[#e4ded7]/80 md:text-lg">
-              Product-focused engineer blending strategy, design, and full-stack
-              development to help businesses ship reliable software and upgrade
-              operations with applied AI. Experienced in automation, dashboards,
-              SaaS workflows, and brand-aware UI. Comfortable owning projects
-              end-to-end: discovery → architecture → delivery.
+              I work with founders and teams that need someone to own the
+              system, not just a ticket queue. That means architecture,
+              delivery planning, frontend, backend, APIs, infrastructure, and
+              the technical judgment that keeps a product moving toward
+              production.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-2">
               {[
-                "Product strategy",
+                "Systems architecture",
+                "Product execution",
                 "AI automation",
-                "Dashboards",
-                "SaaS workflows",
+                "Go",
+                "Rust",
                 "Next.js",
-                "Tauri",
-                "Brand-aware UI",
+                "Technical leadership",
               ].map((t) => (
                 <Badge
                   key={t}
@@ -90,9 +90,9 @@ export default function AboutPage() {
                 <Link
                   href="https://cal.com/rizwannur/30min"
                   target="_blank"
-                  aria-label="Book a call"
+                  aria-label="Book a strategy call"
                 >
-                  Book a call
+                  Book a strategy call
                 </Link>
               </Button>
             </div>
@@ -180,9 +180,9 @@ export default function AboutPage() {
                 <Link
                   href="https://cal.com/rizwannur/30min"
                   target="_blank"
-                  aria-label="Book a call"
+                  aria-label="Book a strategy call"
                 >
-                  Book a call
+                  Book a strategy call
                 </Link>
               </Button>
             </div>
@@ -198,20 +198,20 @@ export default function AboutPage() {
             <ol className="mt-5 grid gap-3 md:grid-cols-2">
               {[
                 {
-                  title: "Discovery",
-                  body: "Clarify goals, constraints, users, and success metrics.",
+                  title: "Scope",
+                  body: "Define the business goal, constraints, risk, and what the first real version has to do.",
                 },
                 {
-                  title: "Plan",
-                  body: "Roadmap, architecture, risk calls, and clear milestones.",
+                  title: "Architecture",
+                  body: "Choose the system shape, data model, stack, and delivery path.",
                 },
                 {
-                  title: "Build",
-                  body: "Ship in slices: UI, APIs, automation, performance and DX.",
+                  title: "Execution",
+                  body: "Build the critical path, review work, and keep quality from drifting.",
                 },
                 {
-                  title: "Launch & iterate",
-                  body: "Deploy, monitor, improve based on real usage and feedback.",
+                  title: "Launch",
+                  body: "Ship to production, watch the system, and clean up what real usage exposes.",
                 },
               ].map((s, i) => (
                 <li
@@ -235,15 +235,15 @@ export default function AboutPage() {
               Good fit if you need
             </p>
             <ul className="mt-5 list-disc space-y-2 pl-5 text-sm font-medium text-[#e4ded7]/80">
-              <li>A product roadmap that turns ideas into shippable milestones.</li>
-              <li>AI automation that removes repetitive ops and manual reporting.</li>
-              <li>A clean, scalable Next.js codebase with solid UX and performance.</li>
-              <li>Brand-aware UI that looks premium without slowing down delivery.</li>
+              <li>A product that needs architecture before more code gets written.</li>
+              <li>A system that has to scale without turning into a maintenance mess.</li>
+              <li>Technical leadership across frontend, backend, APIs, and infrastructure.</li>
+              <li>A builder who can step in, ship, and hold the line on quality.</li>
             </ul>
             <div className="mt-5 rounded-xl border border-[#212531] bg-[#212531]/25 p-4">
               <p className="text-sm font-medium text-[#e4ded7]/75">
-                Send a short brief (goal, timeline, constraints). I’ll reply with
-                an approach + next steps.
+                Send a short brief with the goal, timeline, and constraints. I
+                will tell you where I would start and what I would avoid.
               </p>
               <Button
                 asChild
@@ -254,7 +254,7 @@ export default function AboutPage() {
                   href="mailto:rizwannur116@gmail.com?subject=Project%20brief"
                   aria-label="Email a project brief"
                 >
-                  Email a brief
+                  Send the brief
                 </Link>
               </Button>
             </div>
@@ -270,30 +270,31 @@ export default function AboutPage() {
             </p>
             <div className="mt-5 space-y-4 text-sm font-medium leading-relaxed text-[#e4ded7]/80">
               <div>
-                <p className="font-semibold text-[#e4ded7]">Product & delivery</p>
+                <p className="font-semibold text-[#e4ded7]">Architecture & delivery</p>
                 <p className="text-[#e4ded7]/75">
-                  Requirements shaping, roadmap planning, UX/UI thinking, documentation,
-                  stakeholder communication.
+                  System design, product scoping, delivery planning, documentation,
+                  and technical decision making.
                 </p>
               </div>
               <div>
                 <p className="font-semibold text-[#e4ded7]">AI & automation</p>
                 <p className="text-[#e4ded7]/75">
-                  Workflow automation, internal tools, agents/RAG concepts, API integrations,
-                  data pipelines.
+                  Workflow automation, internal tools, API integrations, data
+                  pipelines, and applied AI where it is actually useful.
                 </p>
               </div>
               <div>
                 <p className="font-semibold text-[#e4ded7]">Engineering</p>
                 <p className="text-[#e4ded7]/75">
-                  Next.js/React, TypeScript, Node.js, REST, Supabase, Postgres, auth/roles,
-                  performance & DX.
+                  Next.js, React, TypeScript, Node.js, Go, Rust, REST, Supabase,
+                  Postgres, auth, performance, and DX.
                 </p>
               </div>
               <div>
-                <p className="font-semibold text-[#e4ded7]">Design</p>
+                <p className="font-semibold text-[#e4ded7]">Technical leadership</p>
                 <p className="text-[#e4ded7]/75">
-                  Figma, brand identity support, motion/interaction polish, design systems.
+                  Hiring support, code review, quality control, execution
+                  oversight, and keeping teams aligned on the same system.
                 </p>
               </div>
             </div>
@@ -330,8 +331,8 @@ export default function AboutPage() {
               ))}
             </div>
             <p className="mt-4 text-sm font-medium text-[#e4ded7]/70">
-              I pick tools based on constraints: speed, security, maintainability, and the
-              business outcome—not hype.
+              I choose tools based on constraints, risk, and business fit. The
+              stack matters less than getting the system right.
             </p>
           </section>
         </div>
@@ -458,15 +459,17 @@ export default function AboutPage() {
             </div>
             <div className="mt-6 rounded-xl border border-[#212531] bg-[#212531]/25 p-4">
               <p className="text-sm font-medium text-[#e4ded7]/75">
-                Want to collaborate? Share your goal, timeline, and constraints—I’ll respond with a clear plan and next steps.
+                If you have a brief, timeline, and business goal, send it over.
+                I will tell you what I would build, what I would avoid, and
+                where to start.
               </p>
               <Button
                 asChild
                 variant="outline"
                 className="mt-4 w-full border-[#e4ded7]/20 bg-transparent text-[#e4ded7] hover:bg-[#e4ded7]/10"
               >
-                <Link href="https://cal.com/rizwannur/30min" target="_blank" aria-label="Book a call">
-                  Book a call
+                <Link href="https://cal.com/rizwannur/30min" target="_blank" aria-label="Book a strategy call">
+                  Book a strategy call
                 </Link>
               </Button>
             </div>

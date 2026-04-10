@@ -14,7 +14,7 @@ export const contentType = "image/png";
 export default async function OpenGraphImage() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://rizwannur.com";
 
-  const profileImageResponse = await fetch(new URL("/profile.png", siteUrl), {
+  const profileImageResponse = await fetch(new URL("/hero-pfp.png", siteUrl), {
     // Social crawlers tend to re-request; keep it fresh-ish without being noisy.
     cache: "force-cache",
   }).catch(() => null);
@@ -60,7 +60,7 @@ export default async function OpenGraphImage() {
               whiteSpace: "pre-wrap",
             }}
           >
-            AI-First Product Engineer & Creative Technologist
+            Systems architect for scalable products
           </div>
 
           <div

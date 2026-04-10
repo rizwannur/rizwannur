@@ -13,9 +13,9 @@ interface SocialLink {
   }
   
   export const contactData: ContactData = {
-    title: "Let's Connect",
+    title: "Let's Build",
     description:
-      "Have a product to build, a brand to refine, or a business process to automate with AI? Tell me what you’re aiming for—I’ll help you get there.",
+      "If you need someone who can architect the system, own the technical direction, and help get the product to production, send over the brief. I can step in early, fix a messy middle, or help you close the last mile.",
     email: "rizwannur116@gmail.com", // Change if you'd prefer another address
     calendly: "https://cal.com/rizwannur/30min", // Optional — use your link or remove if not using
     socials: [
