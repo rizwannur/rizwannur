@@ -1,12 +1,36 @@
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import { PageShell } from '@/components/site/PageShell'
 import { BackHomeNav } from '@/components/site/BackHomeNav'
 import { ThoughtRow } from '@/components/site/ThoughtRow'
 import { Footer } from '@/components/site/Footer'
-import { thoughts } from '@/data/thoughts'
+import type { Thought } from '@/data/thoughts'
 
-export const metadata = { title: 'Thoughts' }
+export const metadata = { title: 'Thoughts — Rafey' }
 
-export default function ThoughtsIndex() {
+function formatDate(isoDate: string): string {
+  return new Date(isoDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+}
+
+export default async function ThoughtsIndex() {
+  const payload = await getPayload({ config })
+
+  const { docs } = await payload.find({
+    collection: 'posts',
+    sort: '-date',
+    limit: 100,
+    depth: 0,
+  })
+
+  const thoughtItems: Thought[] = docs.map((item) => ({
+    slug: item.slug,
+    title: item.title,
+    date: formatDate(item.date),
+    readTime: item.readTime,
+    excerpt: item.excerpt,
+    body: [],
+  }))
+
   return (
     <PageShell>
       <BackHomeNav />
@@ -16,7 +40,7 @@ export default function ThoughtsIndex() {
           A collection of thoughts, ideas, and reflections on design, development, and my personal life.
         </p>
         <div className="flex flex-col gap-7">
-          {thoughts.map((t) => (
+          {thoughtItems.map((t) => (
             <ThoughtRow key={t.slug} item={t} />
           ))}
         </div>

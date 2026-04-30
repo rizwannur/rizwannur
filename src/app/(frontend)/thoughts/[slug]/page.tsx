@@ -1,27 +1,63 @@
 import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { RichText } from '@payloadcms/richtext-lexical/react'
 import { PageShell } from '@/components/site/PageShell'
 import { BackHomeNav } from '@/components/site/BackHomeNav'
 import { PrevNext } from '@/components/site/PrevNext'
-import { thoughts } from '@/data/thoughts'
+import type { Media } from '@/payload-types'
 
-export function generateStaticParams() {
-  return thoughts.map((t) => ({ slug: t.slug }))
+export async function generateStaticParams() {
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'posts',
+    limit: 100,
+    depth: 0,
+  })
+  return docs.map((item) => ({ slug: item.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const item = thoughts.find((t) => t.slug === slug)
-  return { title: item?.title ?? 'Thoughts' }
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'posts',
+    where: { slug: { equals: slug } },
+    limit: 1,
+    depth: 0,
+  })
+  const item = docs[0]
+  if (!item) return { title: 'Thoughts' }
+
+  const meta = item.meta as { title?: string; description?: string; image?: Media } | undefined
+
+  return {
+    title: meta?.title || item.title,
+    description: meta?.description || item.excerpt,
+  }
+}
+
+function formatDate(isoDate: string): string {
+  return new Date(isoDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }
 
 export default async function ThoughtDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const item = thoughts.find((t) => t.slug === slug)
-  if (!item) return notFound()
+  const payload = await getPayload({ config })
 
-  const idx = thoughts.findIndex((t) => t.slug === slug)
-  const next = thoughts[idx + 1]
-  const prev = thoughts[idx - 1]
+  const { docs: allDocs } = await payload.find({
+    collection: 'posts',
+    sort: '-date',
+    limit: 100,
+    depth: 0,
+  })
+
+  const idx = allDocs.findIndex((p) => p.slug === slug)
+  if (idx === -1) return notFound()
+
+  const item = allDocs[idx]!
+  const prev = allDocs[idx - 1]
+  const next = allDocs[idx + 1]
 
   return (
     <PageShell>
@@ -30,17 +66,20 @@ export default async function ThoughtDetail({ params }: { params: Promise<{ slug
         <header>
           <h1 className="font-display text-3xl leading-tight">{item.title}</h1>
           <p className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-2">
-            {item.date} <span aria-hidden>•</span> {item.readTime}
+            {formatDate(item.date)} <span aria-hidden>•</span> {item.readTime}
           </p>
         </header>
-        {item.body.map((p, i) => (
-          <p key={i} className="text-[15px] leading-relaxed text-neutral-700 dark:text-neutral-300">
-            {p}
-          </p>
-        ))}
+
+        <div className="prose prose-neutral dark:prose-invert max-w-none text-[15px] leading-relaxed">
+          <RichText data={item.body} />
+        </div>
       </article>
 
-      <PrevNext basePath="/thoughts" prev={prev} next={next} />
+      <PrevNext
+        basePath="/thoughts"
+        prev={prev ? { slug: prev.slug, title: prev.title } : undefined}
+        next={next ? { slug: next.slug, title: next.title } : undefined}
+      />
     </PageShell>
   )
 }
