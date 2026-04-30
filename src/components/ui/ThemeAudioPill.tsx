@@ -2,7 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-import { Moon, Sun, Volume, Volume2, VolumeX } from 'lucide-react'
+import { Moon, Sun, Volume1, Volume2, VolumeX } from 'lucide-react'
 import { useAudio } from '@/components/providers/AudioProvider'
 import { cn } from '@/lib/cn'
 
@@ -27,7 +27,7 @@ export function ThemeAudioPill() {
     document.startViewTransition(() => setTheme(next))
   }
 
-  const VolumeIcon = level === 'muted' ? VolumeX : level === 'low' ? Volume : Volume2
+  const VolumeIcon = level === 'muted' ? VolumeX : level === 'low' ? Volume1 : Volume2
   const volumeLabel =
     level === 'muted' ? 'Background audio off — click to set low volume' :
     level === 'low'   ? 'Background audio at low volume — click for full' :
