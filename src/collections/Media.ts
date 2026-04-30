@@ -4,6 +4,8 @@ export const Media: CollectionConfig = {
   slug: 'media',
   admin: {
     hidden: false,
+    useAsTitle: 'filename',
+    defaultColumns: ['filename', 'alt', 'mimeType', 'updatedAt'],
   },
   access: {
     read: () => true,
