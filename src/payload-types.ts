@@ -756,10 +756,6 @@ export interface Profile {
    * Short label shown in footer, e.g. "BDT"
    */
   timezoneAbbr?: string | null;
-  /**
-   * Your admin account — links this profile to your login.
-   */
-  linkedUser?: (string | null) | User;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -819,7 +815,6 @@ export interface ProfileSelect<T extends boolean = true> {
       };
   timezone?: T;
   timezoneAbbr?: T;
-  linkedUser?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

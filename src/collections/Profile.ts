@@ -151,15 +151,5 @@ export const Profile: GlobalConfig = {
         description: 'Short label shown in footer, e.g. "BDT"',
       },
     },
-    // ── Link to admin account ─────────────────────────────────────────────────
-    {
-      name: 'linkedUser',
-      type: 'relationship',
-      relationTo: 'users',
-      admin: {
-        position: 'sidebar',
-        description: 'Your admin account — links this profile to your login.',
-      },
-    },
   ],
 }
