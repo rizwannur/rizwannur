@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { AdminViewServerProps } from 'payload'
 import { Gutter } from '@payloadcms/ui'
 import { parseRange, RANGE_LABELS } from '@/lib/analytics/range'
@@ -51,7 +52,22 @@ export default async function AnalyticsView({ initPageResult }: AdminViewServerP
   return (
     <Gutter>
       <header style={headerStyle}>
-        <h1 style={{ margin: 0, fontSize: 22 }}>Analytics — {RANGE_LABELS[range]}</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Link
+            href="/admin"
+            style={{
+              fontSize: 13,
+              padding: '6px 10px',
+              borderRadius: 6,
+              border: '1px solid var(--theme-elevation-150)',
+              textDecoration: 'none',
+              color: 'var(--theme-text)',
+            }}
+          >
+            ← Dashboard
+          </Link>
+          <h1 style={{ margin: 0, fontSize: 22 }}>Analytics — {RANGE_LABELS[range]}</h1>
+        </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <RangeSelector value={range} />
           <a

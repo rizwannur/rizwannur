@@ -47,7 +47,17 @@ export function Timeseries({
           ))}
         </div>
       </header>
-      <div style={{ height: 320, border: '1px solid var(--theme-elevation-150)', borderRadius: 8, padding: 12 }}>
+      <div
+        style={{
+          width: '100%',
+          height: 320,
+          minWidth: 0,
+          border: '1px solid var(--theme-elevation-150)',
+          borderRadius: 8,
+          padding: 12,
+          boxSizing: 'border-box',
+        }}
+      >
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={formatted}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--theme-elevation-100)" />

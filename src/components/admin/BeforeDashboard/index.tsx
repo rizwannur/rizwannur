@@ -66,8 +66,15 @@ export default async function BeforeDashboard({
         <RangeSelector value={range} />
       </header>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12, marginBottom: 12 }}>
-        <div style={cardStyle}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)',
+          gap: 12,
+          marginBottom: 12,
+        }}
+      >
+        <div style={{ ...cardStyle, minWidth: 0 }}>
           <ChartClient data={timeseries} />
         </div>
         <div style={{ display: 'grid', gridTemplateRows: 'repeat(4, 1fr)', gap: 8 }}>
@@ -96,7 +103,7 @@ export default async function BeforeDashboard({
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 12 }}>
         <div style={cardStyle}>
           <h3 style={{ margin: '0 0 8px', fontSize: 13 }}>Top countries</h3>
           {countries.length === 0 ? (
