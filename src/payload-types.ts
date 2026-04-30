@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     work: Work;
     posts: Post;
+    craft: Craft;
     search: Search;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -83,6 +84,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     work: WorkSelect<false> | WorkSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    craft: CraftSelect<false> | CraftSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -292,6 +294,46 @@ export interface Post {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "craft".
+ */
+export interface Craft {
+  id: number;
+  title: string;
+  /**
+   * URL-safe identifier. Auto-filled from title on first save.
+   */
+  slug: string;
+  /**
+   * Display date, e.g. "Apr 2026"
+   */
+  date: string;
+  /**
+   * One-line summary shown on craft cards
+   */
+  description: string;
+  /**
+   * Optional cover image for the craft item
+   */
+  cover?: (number | null) | Media;
+  /**
+   * Optional credit for the craft item
+   */
+  credit?: {
+    name?: string | null;
+    /**
+     * Optional link for the credit
+     */
+    href?: string | null;
+  };
+  /**
+   * Sort order — lower numbers appear first (1 = top)
+   */
+  order: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This is a collection of automatically created search results. These results are used by the global site search and will be updated automatically as documents in the CMS are created or updated.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -352,6 +394,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'craft';
+        value: number | Craft;
       } | null)
     | ({
         relationTo: 'search';
@@ -488,6 +534,26 @@ export interface PostsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "craft_select".
+ */
+export interface CraftSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  date?: T;
+  description?: T;
+  cover?: T;
+  credit?:
+    | T
+    | {
+        name?: T;
+        href?: T;
+      };
+  order?: T;
   updatedAt?: T;
   createdAt?: T;
 }
