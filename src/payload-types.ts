@@ -72,6 +72,7 @@ export interface Config {
     work: Work;
     posts: Post;
     craft: Craft;
+    pageviews: Pageview;
     search: Search;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -85,6 +86,7 @@ export interface Config {
     work: WorkSelect<false> | WorkSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     craft: CraftSelect<false> | CraftSelect<true>;
+    pageviews: PageviewsSelect<false> | PageviewsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -205,6 +207,10 @@ export interface Work {
    */
   description: string;
   /**
+   * Tech stack entries e.g. Next.js, Tailwind
+   */
+  tech?: string[] | null;
+  /**
    * Full project writeup
    */
   body: {
@@ -267,6 +273,14 @@ export interface Post {
    * Shown on the index page and homepage preview
    */
   excerpt: string;
+  /**
+   * Optional cover image shown at the top of the post and used as default OG image
+   */
+  coverImage?: (number | null) | Media;
+  /**
+   * Topic tags e.g. nextjs, performance
+   */
+  tags?: string[] | null;
   body: {
     root: {
       type: string;
@@ -292,6 +306,7 @@ export interface Post {
   };
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -313,6 +328,10 @@ export interface Craft {
    */
   description: string;
   /**
+   * Topic tags e.g. animation, button
+   */
+  tags?: string[] | null;
+  /**
    * Optional cover image for the craft item
    */
   cover?: (number | null) | Media;
@@ -330,6 +349,27 @@ export interface Craft {
    * Sort order — lower numbers appear first (1 = top)
    */
   order: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Self-hosted pageview log. Surfaced via the analytics view.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pageviews".
+ */
+export interface Pageview {
+  id: number;
+  path: string;
+  country?: string | null;
+  city?: string | null;
+  region?: string | null;
+  device: 'desktop' | 'mobile' | 'tablet' | 'bot';
+  browser?: string | null;
+  os?: string | null;
+  referrer?: string | null;
+  ipHash: string;
+  userAgent?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -398,6 +438,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'craft';
         value: number | Craft;
+      } | null)
+    | ({
+        relationTo: 'pageviews';
+        value: number | Pageview;
       } | null)
     | ({
         relationTo: 'search';
@@ -497,6 +541,7 @@ export interface WorkSelect<T extends boolean = true> {
   date?: T;
   href?: T;
   description?: T;
+  tech?: T;
   body?: T;
   images?:
     | T
@@ -526,6 +571,8 @@ export interface PostsSelect<T extends boolean = true> {
   date?: T;
   readTime?: T;
   excerpt?: T;
+  coverImage?: T;
+  tags?: T;
   body?: T;
   meta?:
     | T
@@ -536,6 +583,7 @@ export interface PostsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -546,6 +594,7 @@ export interface CraftSelect<T extends boolean = true> {
   slug?: T;
   date?: T;
   description?: T;
+  tags?: T;
   cover?: T;
   credit?:
     | T
@@ -554,6 +603,24 @@ export interface CraftSelect<T extends boolean = true> {
         href?: T;
       };
   order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pageviews_select".
+ */
+export interface PageviewsSelect<T extends boolean = true> {
+  path?: T;
+  country?: T;
+  city?: T;
+  region?: T;
+  device?: T;
+  browser?: T;
+  os?: T;
+  referrer?: T;
+  ipHash?: T;
+  userAgent?: T;
   updatedAt?: T;
   createdAt?: T;
 }

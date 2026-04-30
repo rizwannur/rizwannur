@@ -15,6 +15,7 @@ import { Work } from './collections/Work'
 import { Posts } from './collections/Posts'
 import { Craft } from './collections/Craft'
 import { Profile } from './collections/Profile'
+import { Pageviews } from './collections/Pageviews'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,7 +27,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Work, Posts, Craft],
+  collections: [Users, Media, Work, Posts, Craft, Pageviews],
   globals: [Profile],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
