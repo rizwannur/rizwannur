@@ -1,39 +1,23 @@
-'use client'
-
-import { useEffect, useState } from 'react'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import { CompanyLink } from './CompanyLink'
-import { profile } from '@/data/profile'
+import { FooterClock } from './FooterClock'
 
-function formatTime(tz: string) {
-  try {
-    return new Intl.DateTimeFormat('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-      timeZone: tz,
-    }).format(new Date())
-  } catch {
-    return new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).format(new Date())
-  }
-}
+export async function Footer() {
+  const payload = await getPayload({ config })
+  const profile = await payload.findGlobal({ slug: 'profile', depth: 0 })
 
-export function Footer() {
-  const [time, setTime] = useState(() => formatTime(profile.timezone))
-  useEffect(() => {
-    const id = setInterval(() => setTime(formatTime(profile.timezone)), 30_000)
-    return () => clearInterval(id)
-  }, [])
   const year = new Date().getFullYear()
+  const shortName = profile.shortName ?? 'Rafey'
+  const bookCall = profile.bookCall ?? '#'
+  const timezone = profile.timezone ?? 'Asia/Dhaka'
+  const timezoneAbbr = profile.timezoneAbbr ?? 'BDT'
 
   return (
     <footer className="flex items-center justify-between text-[13px] text-black/70 dark:text-white/70 pt-6">
-      <p className="text-black/50 dark:text-white/50">© {year} {profile.shortName}</p>
-      <CompanyLink name="Start a project" href={profile.bookCall} brand="#292929" logo="/portfolio/logos/cal.svg" />
-      <p suppressHydrationWarning className="text-black/50 dark:text-white/50">
-        <time>{time.toLowerCase()}</time>
-        <span aria-hidden> • </span>
-        {profile.timezoneAbbr}
-      </p>
+      <p className="text-black/50 dark:text-white/50">© {year} {shortName}</p>
+      <CompanyLink name="Start a project" href={bookCall} brand="#292929" logo="/portfolio/logos/cal.svg" />
+      <FooterClock timezone={timezone} timezoneAbbr={timezoneAbbr} />
     </footer>
   )
 }

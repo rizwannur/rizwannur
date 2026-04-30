@@ -71,7 +71,6 @@ export interface Config {
     media: Media;
     work: Work;
     posts: Post;
-    redirects: Redirect;
     search: Search;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -84,7 +83,6 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     work: WorkSelect<false> | WorkSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
-    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -95,8 +93,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    profile: Profile;
+  };
+  globalsSelect: {
+    profile: ProfileSelect<false> | ProfileSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -184,7 +186,10 @@ export interface Work {
    * e.g. "Marketing Website"
    */
   subtitle: string;
-  cover: number | Media;
+  /**
+   * Leave empty to auto-generate from the live site URL
+   */
+  cover?: (number | null) | Media;
   /**
    * Display date, e.g. "Mar 2026"
    */
@@ -287,30 +292,6 @@ export interface Post {
   createdAt: string;
 }
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects".
- */
-export interface Redirect {
-  id: number;
-  from: string;
-  to?: {
-    type?: ('reference' | 'custom') | null;
-    reference?:
-      | ({
-          relationTo: 'work';
-          value: number | Work;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
-    url?: string | null;
-  };
-  type: '301' | '302';
-  updatedAt: string;
-  createdAt: string;
-}
-/**
  * This is a collection of automatically created search results. These results are used by the global site search and will be updated automatically as documents in the CMS are created or updated.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -371,10 +352,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
-      } | null)
-    | ({
-        relationTo: 'redirects';
-        value: number | Redirect;
       } | null)
     | ({
         relationTo: 'search';
@@ -516,23 +493,6 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects_select".
- */
-export interface RedirectsSelect<T extends boolean = true> {
-  from?: T;
-  to?:
-    | T
-    | {
-        type?: T;
-        reference?: T;
-        url?: T;
-      };
-  type?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "search_select".
  */
 export interface SearchSelect<T extends boolean = true> {
@@ -581,6 +541,155 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "profile".
+ */
+export interface Profile {
+  id: number;
+  /**
+   * e.g. "Rafey" — shown in browser tab and avatar
+   */
+  shortName: string;
+  /**
+   * e.g. "Rizwan Nur Rafey" — shown when name is expanded
+   */
+  fullName: string;
+  /**
+   * Subtitle below your name
+   */
+  role: string;
+  /**
+   * Profile photo. Leave empty to use the default /rafey.png.
+   */
+  avatar?: (number | null) | Media;
+  /**
+   * Large serif italic text at the top of the page
+   */
+  headline: string;
+  intro?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  recent: {
+    lead?: string | null;
+    company: {
+      name: string;
+      href: string;
+      /**
+       * Brand hex color, e.g. #5B3FFF
+       */
+      brand?: string | null;
+    };
+    tail?: string | null;
+  };
+  past?: {
+    lead?: string | null;
+    companies?:
+      | {
+          name: string;
+          href: string;
+          brand?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    tail?: string | null;
+  };
+  searching?: string | null;
+  /**
+   * Shown in the bordered availability box
+   */
+  availability?: string | null;
+  /**
+   * Cal.com booking URL
+   */
+  bookCall?: string | null;
+  socials?:
+    | {
+        label: string;
+        href: string;
+        kind: 'twitter' | 'instagram' | 'github' | 'linkedin' | 'resume' | 'mail';
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * IANA timezone, e.g. "Asia/Dhaka"
+   */
+  timezone?: string | null;
+  /**
+   * Short label shown in footer, e.g. "BDT"
+   */
+  timezoneAbbr?: string | null;
+  /**
+   * Your admin account — links this profile to your login.
+   */
+  linkedUser?: (number | null) | User;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "profile_select".
+ */
+export interface ProfileSelect<T extends boolean = true> {
+  shortName?: T;
+  fullName?: T;
+  role?: T;
+  avatar?: T;
+  headline?: T;
+  intro?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  recent?:
+    | T
+    | {
+        lead?: T;
+        company?:
+          | T
+          | {
+              name?: T;
+              href?: T;
+              brand?: T;
+            };
+        tail?: T;
+      };
+  past?:
+    | T
+    | {
+        lead?: T;
+        companies?:
+          | T
+          | {
+              name?: T;
+              href?: T;
+              brand?: T;
+              id?: T;
+            };
+        tail?: T;
+      };
+  searching?: T;
+  availability?: T;
+  bookCall?: T;
+  socials?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        kind?: T;
+        id?: T;
+      };
+  timezone?: T;
+  timezoneAbbr?: T;
+  linkedUser?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

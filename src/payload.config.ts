@@ -13,6 +13,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Work } from './collections/Work'
 import { Posts } from './collections/Posts'
+import { Profile } from './globals/Profile'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -25,6 +26,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Work, Posts],
+  globals: [Profile],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -78,6 +80,7 @@ export default buildConfig({
         media: true,
       },
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
+      addRandomSuffix: true,
     }),
   ],
 })

@@ -49,6 +49,77 @@ async function createMedia(
   return media.id as number
 }
 
+async function seedProfile(payload: Awaited<ReturnType<typeof getPayload>>) {
+  console.log('Seeding profile...')
+
+  const avatarPath = path.resolve(__dirname, '../public/rafey.png')
+  let avatarId: number | undefined
+  if (fs.existsSync(avatarPath)) {
+    const data = fs.readFileSync(avatarPath)
+    const media = await payload.create({
+      collection: 'media',
+      data: { alt: 'Rafey profile photo' },
+      file: { data, mimetype: 'image/png', name: 'rafey.png', size: data.length },
+    })
+    avatarId = media.id as number
+  }
+
+  await payload.updateGlobal({
+    slug: 'profile',
+    data: {
+      shortName: 'Rafey',
+      fullName: 'Rizwan Nur Rafey',
+      role: 'Systems Architect | Multi-Platform Systems',
+      avatar: avatarId,
+      headline:
+        'I architect software that takes you from idea to production — stable, scalable, and earning revenue.',
+      intro: [
+        {
+          text: "I'm Rizwan Nur Rafey, a systems architect from Dhaka, Bangladesh. I design systems, ship critical infrastructure, and own delivery across frontend, backend, APIs, and infra.",
+        },
+        {
+          text: "Most teams don't need another pair of hands — they need someone who can see the whole system, make the hard technical calls, and keep the build moving. That's the work I take on.",
+        },
+      ],
+      recent: {
+        lead: 'Most recently I shipped',
+        company: { name: 'StoryXen', href: 'https://storyxen.com', brand: '#5B3FFF' },
+        tail: ' — production planning software for independent film, with a fast marketing site and dashboard built to launch.',
+      },
+      past: {
+        lead: 'Past work includes',
+        companies: [
+          { name: 'Auraa', href: '#', brand: '#9333EA' },
+          { name: 'PsycheConnect', href: '#', brand: '#10B981' },
+          { name: 'RoofAI', href: '#', brand: '#F97316' },
+          { name: 'Trusted Financing', href: '#', brand: '#1E40AF' },
+        ],
+        tail: '.',
+      },
+      searching:
+        "If you have a vague, evolving idea and need someone to turn it into a production-ready system, I take on a small number of freelance and embedded engagements each quarter. Let's talk.",
+      availability:
+        'Based in Dhaka, Bangladesh (GMT+6). I work well with US clients: 9 AM in New York is 7 PM for me, so morning calls in the US are easy to schedule.',
+      bookCall: 'https://cal.com/rizwannur',
+      timezone: 'Asia/Dhaka',
+      timezoneAbbr: 'BDT',
+      socials: [
+        { label: 'Twitter', href: 'https://x.com/rafeyum', kind: 'twitter' },
+        { label: 'Instagram', href: 'https://instagram.com/rafeyum', kind: 'instagram' },
+        { label: 'GitHub', href: 'https://github.com/rizwannur', kind: 'github' },
+        { label: 'LinkedIn', href: 'https://linkedin.com/in/rizwannur', kind: 'linkedin' },
+        {
+          label: 'Resume',
+          href: 'https://docs.google.com/document/d/15W39xx3tRk7Cdbk690ODD9yLBJv9xZvq/edit',
+          kind: 'resume',
+        },
+        { label: 'Mail', href: 'mailto:rizwannur116@gmail.com', kind: 'mail' },
+      ],
+    },
+  })
+  console.log('  Profile seeded ✓')
+}
+
 async function seed() {
   const payload = await getPayload({ config })
 
@@ -245,7 +316,9 @@ async function seed() {
     console.log(' ✓')
   }
 
-  console.log('\nDone! Seeded 7 work items and 4 posts.')
+  await seedProfile(payload)
+
+  console.log('\nDone! Seeded 7 work items, 4 posts, and profile.')
   process.exit(0)
 }
 

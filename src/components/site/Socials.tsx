@@ -2,7 +2,6 @@
 
 import { FileText, Globe, Mail, Phone } from 'lucide-react'
 import { useAudio } from './AudioProvider'
-import { profile } from '@/data/profile'
 
 const baseSvg = 'size-3.5'
 
@@ -45,11 +44,19 @@ const ICONS = {
   website: () => <Globe className={baseSvg} />,
 } as const
 
-export function Socials() {
+type SocialKind = keyof typeof ICONS
+
+type Social = {
+  label: string
+  href: string
+  kind: SocialKind
+}
+
+export function Socials({ socials }: { socials: Social[] }) {
   const { playClick } = useAudio()
   return (
     <div className="flex flex-wrap gap-2">
-      {profile.socials.map((s) => {
+      {socials.map((s) => {
         const Icon = ICONS[s.kind]
         return (
           <a

@@ -2,7 +2,8 @@ import React from 'react'
 import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google'
 import { ThemeProvider } from './ThemeProvider'
 import { AudioProvider } from '@/components/site/AudioProvider'
-import { profile } from '@/data/profile'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import './styles.css'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist', display: 'swap' })
@@ -15,9 +16,21 @@ const instrument = Instrument_Serif({
   display: 'swap',
 })
 
-export const metadata = {
-  title: `${profile.shortName} — ${profile.role}`,
-  description: profile.intro[0],
+export async function generateMetadata() {
+  try {
+    const payload = await getPayload({ config })
+    const profile = await payload.findGlobal({ slug: 'profile', depth: 0 })
+    const firstIntro = (profile.intro ?? [])[0]?.text ?? ''
+    return {
+      title: `${profile.shortName} — ${profile.role}`,
+      description: firstIntro,
+    }
+  } catch {
+    return {
+      title: 'Rafey',
+      description: '',
+    }
+  }
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {

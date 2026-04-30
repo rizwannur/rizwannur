@@ -9,7 +9,6 @@ import { ThoughtRow } from '@/components/site/ThoughtRow'
 import { ViewAll } from '@/components/site/ViewAll'
 import { Footer } from '@/components/site/Footer'
 import { CompanyLink } from '@/components/site/CompanyLink'
-import { profile } from '@/data/profile'
 import type { Work } from '@/data/work'
 import type { Thought } from '@/data/thoughts'
 import type { Media } from '@/payload-types'
@@ -22,19 +21,36 @@ function formatDate(isoDate: string): string {
 export default async function HomePage() {
   const payload = await getPayload({ config })
 
-  const { docs: workDocs } = await payload.find({
-    collection: 'work',
-    sort: 'order',
-    limit: 6,
-    depth: 1,
-  })
+  const [profileDoc, { docs: workDocs }, { docs: postDocs }] = await Promise.all([
+    payload.findGlobal({ slug: 'profile', depth: 1 }),
+    payload.find({ collection: 'work', sort: 'order', limit: 6, depth: 1 }),
+    payload.find({ collection: 'posts', sort: '-date', limit: 4, depth: 0 }),
+  ])
 
-  const { docs: postDocs } = await payload.find({
-    collection: 'posts',
-    sort: '-date',
-    limit: 4,
-    depth: 0,
-  })
+  const avatar =
+    typeof profileDoc.avatar === 'object' && profileDoc.avatar?.url
+      ? profileDoc.avatar.url
+      : '/rafey.png'
+
+  const socials = (profileDoc.socials ?? []).map((s) => ({
+    label: s.label,
+    href: s.href,
+    kind: s.kind as 'twitter' | 'instagram' | 'github' | 'linkedin' | 'resume' | 'mail',
+  }))
+
+  const recentCompany = {
+    name: profileDoc.recent?.company?.name ?? '',
+    href: profileDoc.recent?.company?.href ?? '',
+    brand: profileDoc.recent?.company?.brand ?? undefined,
+  }
+
+  const pastCompanies = (profileDoc.past?.companies ?? []).map((c) => ({
+    name: c.name ?? '',
+    href: c.href ?? '',
+    brand: c.brand ?? undefined,
+  }))
+
+  const introParagraphs = (profileDoc.intro ?? []).map((i) => i.text)
 
   const workItems: Work[] = workDocs.map((item) => {
     const uploadedUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
@@ -62,38 +78,43 @@ export default async function HomePage() {
 
   return (
     <PageShell>
-      <Header />
+      <Header
+        avatar={avatar}
+        shortName={profileDoc.shortName}
+        fullName={profileDoc.fullName}
+        role={profileDoc.role}
+      />
 
       {/* Intro */}
       <section className="space-y-5 text-[15px] leading-relaxed text-neutral-700 dark:text-neutral-300">
         <p className="font-display text-3xl leading-tight text-black dark:text-white md:text-4xl">
-          {profile.headline}
+          {profileDoc.headline}
         </p>
-        {profile.intro.map((p, i) => (
+        {introParagraphs.map((p, i) => (
           <p key={i}>{p}</p>
         ))}
         <p>
-          {profile.recent.lead}{' '}
-          <CompanyLink {...profile.recent.company} />
-          {profile.recent.tail}
+          {profileDoc.recent?.lead}{' '}
+          <CompanyLink {...recentCompany} />
+          {profileDoc.recent?.tail}
         </p>
         <p>
-          {profile.past.lead}
-          {profile.past.companies.map((c, j) => (
+          {profileDoc.past?.lead}
+          {pastCompanies.map((c, j) => (
             <span key={c.name}>
-              {j === 0 ? ' ' : j === profile.past.companies.length - 1 ? ', and ' : ', '}
+              {j === 0 ? ' ' : j === pastCompanies.length - 1 ? ', and ' : ', '}
               <CompanyLink {...c} />
             </span>
           ))}
-          {profile.past.tail}
+          {profileDoc.past?.tail}
         </p>
-        <p>{profile.searching}</p>
+        <p>{profileDoc.searching}</p>
         <p className="rounded-2xl border border-black/8 bg-black/[0.03] p-4 text-[14px] text-neutral-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-300">
-          {profile.availability}
+          {profileDoc.availability}
         </p>
 
         <div className="pt-2">
-          <Socials />
+          <Socials socials={socials} />
         </div>
       </section>
 

@@ -3,13 +3,19 @@
 import Image from 'next/image'
 import { AnimatePresence, motion, MotionConfig } from 'motion/react'
 import { useState } from 'react'
-import { profile } from '@/data/profile'
 import { useAudio } from './AudioProvider'
+
+type NameToggleProps = {
+  avatar: string
+  shortName: string
+  fullName: string
+  role: string
+}
 
 const ease = [0.32, 0.72, 0.0, 1] as const
 const layoutTransition = { duration: 0.42, ease }
 
-export function NameToggle() {
+export function NameToggle({ avatar, shortName, fullName, role }: NameToggleProps) {
   const [expanded, setExpanded] = useState(false)
   const { playClick } = useAudio()
 
@@ -28,8 +34,8 @@ export function NameToggle() {
           className="rounded-full size-12 overflow-hidden bg-black/10 dark:bg-white/10 border border-black/5 dark:border-white/5 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-black/30 dark:focus-visible:ring-white/40"
         >
           <Image
-            src={profile.avatar}
-            alt={profile.shortName}
+            src={avatar}
+            alt={shortName}
             width={330}
             height={330}
             priority
@@ -60,7 +66,7 @@ export function NameToggle() {
                     transition={{ duration: 0.42, ease }}
                     className="overflow-hidden whitespace-nowrap inline-block"
                   >
-                    {profile.shortName}
+                    {shortName}
                   </motion.span>
                 ) : (
                   <motion.span
@@ -72,14 +78,14 @@ export function NameToggle() {
                     transition={{ duration: 0.42, ease }}
                     className="overflow-hidden whitespace-nowrap inline-block"
                   >
-                    {profile.fullName}
+                    {fullName}
                   </motion.span>
                 )}
               </AnimatePresence>
             </button>
           </motion.h1>
           <motion.p layout="position" className="text-[13px] text-neutral-500 dark:text-neutral-400 font-medium">
-            {profile.role}
+            {role}
           </motion.p>
         </motion.div>
       </div>
