@@ -40,6 +40,18 @@ export default buildConfig({
   globals: [Profile],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
+  cors: [
+    'http://localhost:3000',
+    'https://rizwannur.com',
+    'https://www.rizwannur.com',
+    'https://rizwannur.xyz',
+  ],
+  csrf: [
+    'http://localhost:3000',
+    'https://rizwannur.com',
+    'https://www.rizwannur.com',
+    'https://rizwannur.xyz',
+  ],
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
