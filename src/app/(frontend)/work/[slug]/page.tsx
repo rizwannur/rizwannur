@@ -9,6 +9,7 @@ import { PageShell } from '@/components/site/PageShell'
 import { BackHomeNav } from '@/components/site/BackHomeNav'
 import { PrevNext } from '@/components/site/PrevNext'
 import type { Media } from '@/payload-types'
+import { microlinkScreenshot } from '@/lib/microlink'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config })
@@ -32,7 +33,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const item = docs[0]
   if (!item) return { title: 'Work' }
 
-  const coverUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
+  const uploadedUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
+  const coverUrl = uploadedUrl || (item.href ? microlinkScreenshot(item.href) : '')
   const meta = item.meta as { title?: string; description?: string; image?: Media } | undefined
 
   return {
@@ -66,7 +68,8 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
   const prev = allDocs[idx - 1]
   const next = allDocs[idx + 1]
 
-  const coverUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
+  const uploadedCoverUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
+  const coverUrl = uploadedCoverUrl || (item.href ? microlinkScreenshot(item.href) : '')
 
   const galleryImages =
     item.images?.map((img) => ({
@@ -115,7 +118,7 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
           </div>
         )}
 
-        <div className="prose prose-neutral dark:prose-invert max-w-none text-[15px] leading-relaxed">
+        <div className="rich-text">
           <RichText data={item.body} />
         </div>
 

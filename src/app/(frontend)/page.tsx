@@ -13,6 +13,7 @@ import { profile } from '@/data/profile'
 import type { Work } from '@/data/work'
 import type { Thought } from '@/data/thoughts'
 import type { Media } from '@/payload-types'
+import { microlinkScreenshot } from '@/lib/microlink'
 
 function formatDate(isoDate: string): string {
   return new Date(isoDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
@@ -35,16 +36,20 @@ export default async function HomePage() {
     depth: 0,
   })
 
-  const workItems: Work[] = workDocs.map((item) => ({
-    slug: item.slug,
-    title: item.title,
-    subtitle: item.subtitle,
-    cover: typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : '',
-    date: item.date,
-    href: item.href ?? undefined,
-    description: item.description,
-    body: [],
-  }))
+  const workItems: Work[] = workDocs.map((item) => {
+    const uploadedUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
+    const cover = uploadedUrl || (item.href ? microlinkScreenshot(item.href) : '')
+    return {
+      slug: item.slug,
+      title: item.title,
+      subtitle: item.subtitle,
+      cover,
+      date: item.date,
+      href: item.href ?? undefined,
+      description: item.description,
+      body: [],
+    }
+  })
 
   const thoughtItems: Thought[] = postDocs.map((item) => ({
     slug: item.slug,

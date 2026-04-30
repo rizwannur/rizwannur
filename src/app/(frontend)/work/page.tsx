@@ -6,6 +6,7 @@ import { WorkGrid } from '@/components/site/WorkGrid'
 import { Footer } from '@/components/site/Footer'
 import type { Work } from '@/data/work'
 import type { Media } from '@/payload-types'
+import { microlinkScreenshot } from '@/lib/microlink'
 
 export const metadata = { title: 'Work — Rafey' }
 
@@ -19,16 +20,20 @@ export default async function WorkIndex() {
     depth: 1,
   })
 
-  const workItems: Work[] = docs.map((item) => ({
-    slug: item.slug,
-    title: item.title,
-    subtitle: item.subtitle,
-    cover: typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : '',
-    date: item.date,
-    href: item.href ?? undefined,
-    description: item.description,
-    body: [],
-  }))
+  const workItems: Work[] = docs.map((item) => {
+    const uploadedUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
+    const cover = uploadedUrl || (item.href ? microlinkScreenshot(item.href) : '')
+    return {
+      slug: item.slug,
+      title: item.title,
+      subtitle: item.subtitle,
+      cover,
+      date: item.date,
+      href: item.href ?? undefined,
+      description: item.description,
+      body: [],
+    }
+  })
 
   return (
     <PageShell>

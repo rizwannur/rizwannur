@@ -49,13 +49,17 @@ export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 
               className="flex flex-col gap-3 w-full p-1 bg-white dark:bg-white/5 border border-black/10 dark:border-white/8 rounded-[10px] hover:border-black/20 dark:hover:border-white/10 transition-colors"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
-                <Image
-                  src={item.cover}
-                  alt={`${item.title} project cover`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 320px"
-                  className="object-cover"
-                />
+                {item.cover ? (
+                  <Image
+                    src={item.cover}
+                    alt={`${item.title} project cover`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 320px"
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900" />
+                )}
                 {item.href && previewed.has(i) && (
                   <motion.div
                     aria-hidden

@@ -50,7 +50,9 @@ export const Work: CollectionConfig = {
       name: 'cover',
       type: 'upload',
       relationTo: 'media',
-      required: true,
+      admin: {
+        description: 'Leave empty to auto-generate from the live site URL',
+      },
     },
     {
       name: 'date',

@@ -70,7 +70,7 @@ export default async function ThoughtDetail({ params }: { params: Promise<{ slug
           </p>
         </header>
 
-        <div className="prose prose-neutral dark:prose-invert max-w-none text-[15px] leading-relaxed">
+        <div className="rich-text">
           <RichText data={item.body} />
         </div>
       </article>
