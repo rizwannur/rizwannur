@@ -4,11 +4,14 @@ type Props = SVGProps<SVGSVGElement> & {
   bars: 0 | 2 | 4
 }
 
+// 4 concentric quarter-circle arcs centered at (12, 12), spanning -45° to +45°.
+// Each arc starts at top-right and sweeps clockwise to bottom-right.
+// dy = r * sqrt(2), startX = 12 + r * cos(45°), startY = 12 - r * sin(45°)
 const ARCS = [
-  'M15.5 9.5a3.5 3.5 0 0 1 0 5',
-  'M17.5 7.5a6.5 6.5 0 0 1 0 9',
-  'M19.5 5.5a9.5 9.5 0 0 1 0 13',
-  'M21.5 3.5a12.5 12.5 0 0 1 0 17',
+  { d: 'M14.12 9.88 a3 3 0 0 1 0 4.24', sw: 1.8 },
+  { d: 'M15.89 8.11 a5.5 5.5 0 0 1 0 7.78', sw: 1.7 },
+  { d: 'M17.66 6.34 a8 8 0 0 1 0 11.31', sw: 1.6 },
+  { d: 'M19.42 4.58 a10.5 10.5 0 0 1 0 14.85', sw: 1.5 },
 ] as const
 
 export function VolumeIcon({ bars, ...rest }: Props) {
@@ -19,19 +22,21 @@ export function VolumeIcon({ bars, ...rest }: Props) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2}
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
       {...rest}
     >
-      <path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" />
+      <path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" stroke="none" />
       {muted ? (
         <>
           <line x1="22" y1="9" x2="16" y2="15" />
           <line x1="16" y1="9" x2="22" y2="15" />
         </>
       ) : (
-        ARCS.slice(0, bars).map((d, i) => <path key={i} d={d} />)
+        ARCS.slice(0, bars).map((arc, i) => (
+          <path key={i} d={arc.d} strokeWidth={arc.sw} fill="none" />
+        ))
       )}
     </svg>
   )
