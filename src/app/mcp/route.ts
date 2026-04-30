@@ -3,12 +3,15 @@ import { timingSafeEqual } from 'node:crypto'
 import { registerTools } from '@/lib/mcp/tools'
 import { rateLimit } from '@/lib/analytics/rateLimit'
 
+// Single-endpoint mount at /mcp. mcp-handler's basePath convention adds
+// `/mcp` to whatever you pass, so basePath '' makes its streamable HTTP
+// endpoint resolve to `/mcp` — exactly what this route file serves.
 const mcpHandler = createMcpHandler(
   async (server) => {
     await registerTools(server)
   },
   {},
-  { basePath: '/api' },
+  { basePath: '' },
 )
 
 function getClientIp(req: Request): string {
