@@ -34,7 +34,25 @@ async function loadProfile() {
   }
 }
 
-async function loadAvatar(remoteUrl: string | null): Promise<string> {
+async function loadLocalCandidate(): Promise<{ data: string; mime: string } | null> {
+  const candidates = [
+    ['og-pfp.jpg', 'image/jpeg'],
+    ['og-pfp.jpeg', 'image/jpeg'],
+    ['og-pfp.png', 'image/png'],
+    ['og-pfp.webp', 'image/webp'],
+    ['portfolio/og-pfp.jpg', 'image/jpeg'],
+    ['portfolio/hero-pfp.png', 'image/png'],
+  ] as const
+  for (const [rel, mime] of candidates) {
+    try {
+      const buf = await readFile(path.join(process.cwd(), 'public', rel))
+      return { data: `data:${mime};base64,${buf.toString('base64')}`, mime }
+    } catch {}
+  }
+  return null
+}
+
+async function loadHeroImage(remoteUrl: string | null): Promise<string> {
   if (remoteUrl && /^https?:\/\//.test(remoteUrl)) {
     try {
       const res = await fetch(remoteUrl)
@@ -45,15 +63,14 @@ async function loadAvatar(remoteUrl: string | null): Promise<string> {
       }
     } catch {}
   }
-  const buf = await readFile(path.join(process.cwd(), 'public', 'portfolio', 'hero-pfp.png'))
-  return `data:image/png;base64,${buf.toString('base64')}`
+  const local = await loadLocalCandidate()
+  if (local) return local.data
+  return ''
 }
 
 export default async function OpenGraphImage() {
   const profile = await loadProfile()
-  const avatar = await loadAvatar(profile.avatarUrl)
-  const description =
-    profile.intro.length > 180 ? profile.intro.slice(0, 177).trimEnd() + '…' : profile.intro
+  const photo = await loadHeroImage(profile.avatarUrl)
 
   return new ImageResponse(
     (
@@ -62,52 +79,72 @@ export default async function OpenGraphImage() {
           width: '100%',
           height: '100%',
           display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          padding: '80px',
-          background: 'linear-gradient(135deg, #fdf6ef 0%, #f6c8a8 55%, #e89272 100%)',
+          position: 'relative',
+          background: '#0b0a14',
+          color: '#fff',
           fontFamily: 'serif',
-          color: '#2a1810',
+          overflow: 'hidden',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+        {photo && (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={avatar}
-            width={120}
-            height={120}
-            style={{ borderRadius: 60, objectFit: 'cover', border: '4px solid #2a1810' }}
+            src={photo}
+            alt=""
+            width={1200}
+            height={630}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center 25%',
+            }}
           />
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ fontSize: 36, fontWeight: 600, letterSpacing: -1 }}>
+        )}
+
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'linear-gradient(90deg, rgba(11,10,20,0.92) 0%, rgba(11,10,20,0.65) 38%, rgba(11,10,20,0.05) 65%, rgba(11,10,20,0) 100%)',
+          }}
+        />
+
+        <div
+          style={{
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: '72px 80px',
+            width: '100%',
+          }}
+        >
+          <div style={{ fontSize: 24, opacity: 0.85, letterSpacing: 1, textTransform: 'uppercase' }}>
+            rizwannur.com
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 720 }}>
+            <div
+              style={{
+                fontStyle: 'italic',
+                fontSize: 96,
+                lineHeight: 1,
+                letterSpacing: -3,
+                fontWeight: 400,
+              }}
+            >
               {profile.fullName}
             </div>
-            <div style={{ fontSize: 26, opacity: 0.75, marginTop: 4 }}>{profile.role}</div>
+            <div style={{ fontSize: 36, opacity: 0.92, fontWeight: 500 }}>{profile.role}</div>
           </div>
-        </div>
 
-        <div
-          style={{
-            fontStyle: 'italic',
-            fontSize: 64,
-            lineHeight: 1.15,
-            letterSpacing: -2,
-            maxWidth: 1000,
-          }}
-        >
-          {description || `${profile.fullName} — ${profile.role}.`}
-        </div>
-
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            fontSize: 22,
-            opacity: 0.7,
-          }}
-        >
-          <span>rizwannur.xyz</span>
-          <span style={{ fontStyle: 'italic' }}>@{profile.shortName.toLowerCase()}</span>
+          <div style={{ fontSize: 22, opacity: 0.7, fontStyle: 'italic' }}>
+            @{profile.shortName.toLowerCase()}
+          </div>
         </div>
       </div>
     ),
