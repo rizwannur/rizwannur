@@ -1,0 +1,52 @@
+import type { AdminViewServerProps } from 'payload'
+import { Gutter } from '@payloadcms/ui'
+import { parseRange, RANGE_LABELS } from '@/lib/analytics/range'
+import { RangeSelector } from './RangeSelector'
+
+const headerStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: 16,
+}
+
+export default async function AnalyticsView({ initPageResult }: AdminViewServerProps) {
+  const params = initPageResult?.req?.query as Record<string, string | undefined> | undefined
+  const range = parseRange(params?.range)
+
+  const vercelTeam = process.env.NEXT_PUBLIC_VERCEL_TEAM_SLUG ?? ''
+  const vercelProject = process.env.NEXT_PUBLIC_VERCEL_PROJECT_NAME ?? ''
+  const vercelHref =
+    vercelTeam && vercelProject
+      ? `https://vercel.com/${vercelTeam}/${vercelProject}/analytics`
+      : 'https://vercel.com/dashboard'
+
+  return (
+    <Gutter>
+      <header style={headerStyle}>
+        <h1 style={{ margin: 0, fontSize: 22 }}>Analytics — {RANGE_LABELS[range]}</h1>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <RangeSelector value={range} />
+          <a
+            href={vercelHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: 12,
+              padding: '6px 10px',
+              borderRadius: 6,
+              border: '1px solid var(--theme-elevation-150)',
+              textDecoration: 'none',
+            }}
+          >
+            Open in Vercel ↗
+          </a>
+        </div>
+      </header>
+
+      <p style={{ opacity: 0.7, fontSize: 13 }}>
+        Sections will populate as you wire them up.
+      </p>
+    </Gutter>
+  )
+}

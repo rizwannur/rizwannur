@@ -28,6 +28,12 @@ export default buildConfig({
     },
     components: {
       beforeDashboard: ['/components/admin/BeforeDashboard/index'],
+      views: {
+        analytics: {
+          Component: '/components/admin/AnalyticsView/index',
+          path: '/analytics',
+        },
+      },
     },
   },
   collections: [Users, Media, Work, Posts, Craft, Pageviews],
