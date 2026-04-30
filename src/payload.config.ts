@@ -1,4 +1,4 @@
-import { postgresAdapter } from '@payloadcms/db-postgres'
+import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchPlugin } from '@payloadcms/plugin-search'
@@ -43,11 +43,8 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URL || '',
-    },
-    migrationDir: path.resolve(dirname, 'lib/migrations'),
+  db: mongooseAdapter({
+    url: process.env.MONGODB_URI || process.env.DATABASE_URI || '',
   }),
   email: nodemailerAdapter({
     defaultFromAddress: 'noreply@example.com',

@@ -94,7 +94,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   fallbackLocale: null;
   globals: {
@@ -136,7 +136,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -161,7 +161,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -180,7 +180,7 @@ export interface Media {
  * via the `definition` "work".
  */
 export interface Work {
-  id: number;
+  id: string;
   title: string;
   /**
    * URL-safe identifier. Auto-filled from title on first save.
@@ -193,7 +193,7 @@ export interface Work {
   /**
    * Leave empty to auto-generate from the live site URL
    */
-  cover?: (number | null) | Media;
+  cover?: (string | null) | Media;
   /**
    * Display date, e.g. "Mar 2026"
    */
@@ -233,7 +233,7 @@ export interface Work {
    */
   images?:
     | {
-        image: number | Media;
+        image: string | Media;
         caption?: string | null;
         id?: string | null;
       }[]
@@ -248,7 +248,7 @@ export interface Work {
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
+    image?: (string | null) | Media;
   };
   updatedAt: string;
   createdAt: string;
@@ -258,7 +258,7 @@ export interface Work {
  * via the `definition` "posts".
  */
 export interface Post {
-  id: number;
+  id: string;
   title: string;
   /**
    * URL-safe identifier. Auto-filled from title on first save.
@@ -276,7 +276,7 @@ export interface Post {
   /**
    * Optional cover image shown at the top of the post and used as default OG image
    */
-  coverImage?: (number | null) | Media;
+  coverImage?: (string | null) | Media;
   /**
    * Topic tags e.g. nextjs, performance
    */
@@ -302,7 +302,7 @@ export interface Post {
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
+    image?: (string | null) | Media;
   };
   updatedAt: string;
   createdAt: string;
@@ -313,7 +313,7 @@ export interface Post {
  * via the `definition` "craft".
  */
 export interface Craft {
-  id: number;
+  id: string;
   title: string;
   /**
    * URL-safe identifier. Auto-filled from title on first save.
@@ -334,7 +334,7 @@ export interface Craft {
   /**
    * Optional cover image for the craft item
    */
-  cover?: (number | null) | Media;
+  cover?: (string | null) | Media;
   /**
    * Optional credit for the craft item
    */
@@ -359,7 +359,7 @@ export interface Craft {
  * via the `definition` "pageviews".
  */
 export interface Pageview {
-  id: number;
+  id: string;
   path: string;
   country?: string | null;
   city?: string | null;
@@ -380,17 +380,17 @@ export interface Pageview {
  * via the `definition` "search".
  */
 export interface Search {
-  id: number;
+  id: string;
   title?: string | null;
   priority?: number | null;
   doc:
     | {
         relationTo: 'work';
-        value: number | Work;
+        value: string | Work;
       }
     | {
         relationTo: 'posts';
-        value: number | Post;
+        value: string | Post;
       };
   updatedAt: string;
   createdAt: string;
@@ -400,7 +400,7 @@ export interface Search {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
+  id: string;
   key: string;
   data:
     | {
@@ -417,40 +417,40 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'work';
-        value: number | Work;
+        value: string | Work;
       } | null)
     | ({
         relationTo: 'posts';
-        value: number | Post;
+        value: string | Post;
       } | null)
     | ({
         relationTo: 'craft';
-        value: number | Craft;
+        value: string | Craft;
       } | null)
     | ({
         relationTo: 'pageviews';
-        value: number | Pageview;
+        value: string | Pageview;
       } | null)
     | ({
         relationTo: 'search';
-        value: number | Search;
+        value: string | Search;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -460,10 +460,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -483,7 +483,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -680,7 +680,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "profile".
  */
 export interface Profile {
-  id: number;
+  id: string;
   /**
    * e.g. "Rafey" — shown in browser tab and avatar
    */
@@ -696,7 +696,7 @@ export interface Profile {
   /**
    * Profile photo. Leave empty to use the default /rafey.png.
    */
-  avatar?: (number | null) | Media;
+  avatar?: (string | null) | Media;
   /**
    * Large serif italic text at the top of the page
    */
@@ -759,7 +759,7 @@ export interface Profile {
   /**
    * Your admin account — links this profile to your login.
    */
-  linkedUser?: (number | null) | User;
+  linkedUser?: (string | null) | User;
   updatedAt?: string | null;
   createdAt?: string | null;
 }

@@ -106,6 +106,7 @@ export default async function OpenGraphImage() {
 
         <div
           style={{
+            display: 'flex',
             position: 'absolute',
             inset: 0,
             background:
@@ -123,13 +124,14 @@ export default async function OpenGraphImage() {
             width: '100%',
           }}
         >
-          <div style={{ fontSize: 24, opacity: 0.85, letterSpacing: 1, textTransform: 'uppercase' }}>
+          <div style={{ display: 'flex', fontSize: 24, opacity: 0.85, letterSpacing: 1, textTransform: 'uppercase' }}>
             rizwannur.com
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 720 }}>
             <div
               style={{
+                display: 'flex',
                 fontStyle: 'italic',
                 fontSize: 96,
                 lineHeight: 1,
@@ -139,10 +141,12 @@ export default async function OpenGraphImage() {
             >
               {profile.fullName}
             </div>
-            <div style={{ fontSize: 36, opacity: 0.92, fontWeight: 500 }}>{profile.role}</div>
+            <div style={{ display: 'flex', fontSize: 36, opacity: 0.92, fontWeight: 500 }}>
+              {profile.role}
+            </div>
           </div>
 
-          <div style={{ fontSize: 22, opacity: 0.7, fontStyle: 'italic' }}>
+          <div style={{ display: 'flex', fontSize: 22, opacity: 0.7, fontStyle: 'italic' }}>
             @{profile.shortName.toLowerCase()}
           </div>
         </div>

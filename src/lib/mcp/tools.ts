@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { markdownToLexical, lexicalToMarkdown } from './lexical'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mediaRef(m: any): { id: number; url: string; alt: string | null } | null {
+function mediaRef(m: any): { id: string; url: string; alt: string | null } | null {
   if (!m || typeof m !== 'object') return null
   return { id: m.id, url: m.url, alt: m.alt ?? null }
 }
@@ -543,14 +543,14 @@ export async function registerTools(server: any) {
         images: z
           .array(
             z.object({
-              mediaId: z.number().int().describe('Media file id'),
+              mediaId: z.string().describe('Media file id'),
               caption: z.string().optional().describe('Optional caption shown beneath the image'),
             }),
           )
           .describe('Ordered list of gallery images. Pass [] to clear.'),
       },
     },
-    async ({ id, images }: { id: string; images: { mediaId: number; caption?: string }[] }) => {
+    async ({ id, images }: { id: string; images: { mediaId: string; caption?: string }[] }) => {
       const item = (await payload.update({
         collection: 'work',
         id,
