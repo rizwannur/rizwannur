@@ -19,10 +19,23 @@ export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'date', 'readTime'],
+    defaultColumns: ['title', 'date', 'readTime', '_status'],
+  },
+  versions: {
+    drafts: {
+      autosave: { interval: 800 },
+    },
   },
   access: {
-    read: () => true,
+    read: ({ req }) => {
+      if (req.user) return true
+      return {
+        or: [
+          { _status: { equals: 'published' } },
+          { _status: { exists: false } },
+        ],
+      }
+    },
   },
   fields: [
     {
@@ -80,6 +93,22 @@ export const Posts: CollectionConfig = {
       required: true,
       admin: {
         description: 'Shown on the index page and homepage preview',
+      },
+    },
+    {
+      name: 'coverImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Optional cover image shown at the top of the post and used as default OG image',
+      },
+    },
+    {
+      name: 'tags',
+      type: 'text',
+      hasMany: true,
+      admin: {
+        description: 'Topic tags e.g. nextjs, performance',
       },
     },
     {

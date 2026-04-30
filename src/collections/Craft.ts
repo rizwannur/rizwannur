@@ -56,6 +56,14 @@ export const Craft: CollectionConfig = {
       },
     },
     {
+      name: 'tags',
+      type: 'text',
+      hasMany: true,
+      admin: {
+        description: 'Topic tags e.g. animation, button',
+      },
+    },
+    {
       name: 'cover',
       type: 'upload',
       relationTo: 'media',

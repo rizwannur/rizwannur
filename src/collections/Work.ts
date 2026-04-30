@@ -95,6 +95,14 @@ export const Work: CollectionConfig = {
       },
     },
     {
+      name: 'tech',
+      type: 'text',
+      hasMany: true,
+      admin: {
+        description: 'Tech stack entries e.g. Next.js, Tailwind',
+      },
+    },
+    {
       name: 'body',
       type: 'richText',
       required: true,

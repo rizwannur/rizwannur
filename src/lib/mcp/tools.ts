@@ -3,6 +3,12 @@ import config from '@payload-config'
 import { z } from 'zod'
 import { markdownToLexical, lexicalToMarkdown } from './lexical'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mediaRef(m: any): { id: number; url: string; alt: string | null } | null {
+  if (!m || typeof m !== 'object') return null
+  return { id: m.id, url: m.url, alt: m.alt ?? null }
+}
+
 // McpServer type is inferred from mcp-handler — no explicit import needed
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function registerTools(server: any) {
@@ -19,16 +25,30 @@ export async function registerTools(server: any) {
       inputSchema: {
         limit: z.number().int().min(1).max(100).default(20).describe('Max results to return (default 20)'),
         page: z.number().int().min(1).default(1).describe('Page number for pagination (default 1)'),
+        search: z.string().optional().describe('Case-insensitive substring match against title and excerpt'),
+        from: z.string().optional().describe('ISO date — only include posts on or after this date'),
+        to: z.string().optional().describe('ISO date — only include posts on or before this date'),
+        tag: z.string().optional().describe('Filter by tag (exact match)'),
       },
     },
-    async ({ limit, page }: { limit: number; page: number }) => {
+    async ({ limit, page, search, from, to, tag }: { limit: number; page: number; search?: string; from?: string; to?: string; tag?: string }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const where: any = {}
+      if (search) where.or = [{ title: { contains: search } }, { excerpt: { contains: search } }]
+      if (from || to) {
+        where.date = {}
+        if (from) where.date.greater_than_equal = from
+        if (to) where.date.less_than_equal = to
+      }
+      if (tag) where.tags = { contains: tag }
       const { docs, totalDocs } = await payload.find({
         collection: 'posts',
         sort: '-date',
         limit,
         page,
-        depth: 0,
+        depth: 1,
         overrideAccess: true,
+        ...(Object.keys(where).length ? { where } : {}),
       })
       return {
         content: [
@@ -45,6 +65,9 @@ export async function registerTools(server: any) {
                   date: p.date,
                   readTime: p.readTime,
                   excerpt: p.excerpt,
+                  tags: p.tags ?? [],
+                  coverImage: mediaRef(p.coverImage),
+                  status: p._status ?? 'published',
                 })),
               },
               null,
@@ -71,7 +94,7 @@ export async function registerTools(server: any) {
         collection: 'posts',
         where: { slug: { equals: slug } },
         limit: 1,
-        depth: 0,
+        depth: 1,
         overrideAccess: true,
       })
       if (!docs[0]) {
@@ -90,6 +113,16 @@ export async function registerTools(server: any) {
                 date: p.date,
                 readTime: p.readTime,
                 excerpt: p.excerpt,
+                tags: p.tags ?? [],
+                coverImage: mediaRef(p.coverImage),
+                status: p._status ?? 'published',
+                seo: p.meta
+                  ? {
+                      title: p.meta.title ?? null,
+                      description: p.meta.description ?? null,
+                      image: mediaRef(p.meta.image),
+                    }
+                  : null,
                 body: await lexicalToMarkdown(p.body),
               },
               null,
@@ -114,19 +147,41 @@ export async function registerTools(server: any) {
         readTime: z.string().describe('Estimated read time, e.g. "5 min read"'),
         date: z.string().optional().describe('ISO date string e.g. "2026-04-30T00:00:00.000Z". Defaults to today.'),
         slug: z.string().optional().describe('URL-safe slug e.g. "my-post-title". Auto-generated from title if omitted.'),
+        tags: z.array(z.string()).optional().describe('Topic tags e.g. ["nextjs","performance"]'),
+        coverImage: z.number().int().optional().describe('Media file id for the post cover image — get ids from list_media.'),
+        status: z.enum(['draft', 'published']).optional().describe('Defaults to "published". Use "draft" to save without publishing.'),
+        seo: z
+          .object({
+            title: z.string().optional().describe('SEO meta title — defaults to post title if omitted'),
+            description: z.string().optional().describe('SEO meta description — defaults to excerpt if omitted'),
+            image: z.number().int().optional().describe('Media id for OG/Twitter image — defaults to coverImage if omitted'),
+          })
+          .optional()
+          .describe('Optional SEO overrides for meta tags and social cards'),
       },
     },
-    async ({ title, excerpt, body, readTime, date, slug }: any) => {
+    async ({ title, excerpt, body, readTime, date, slug, tags, coverImage, status, seo }: any) => {
       const post = (await payload.create({
         collection: 'posts',
         overrideAccess: true,
-        draft: false,
+        draft: status === 'draft',
         data: {
           title,
           excerpt,
           readTime,
           date: date ?? new Date().toISOString(),
           ...(slug ? { slug } : {}),
+          ...(tags ? { tags } : {}),
+          ...(coverImage !== undefined ? { coverImage } : {}),
+          ...(seo
+            ? {
+                meta: {
+                  ...(seo.title !== undefined ? { title: seo.title } : {}),
+                  ...(seo.description !== undefined ? { description: seo.description } : {}),
+                  ...(seo.image !== undefined ? { image: seo.image } : {}),
+                },
+              }
+            : {}),
           body: (await markdownToLexical(body)) as any,
         },
       } as any)) as any
@@ -154,17 +209,38 @@ export async function registerTools(server: any) {
         body: z.string().optional().describe('Updated body written in Markdown'),
         readTime: z.string().optional().describe('Updated read time e.g. "6 min read"'),
         date: z.string().optional().describe('Updated ISO date string'),
+        tags: z.array(z.string()).optional().describe('Replace tags with this list. Pass [] to clear.'),
+        coverImage: z.number().int().nullable().optional().describe('Media id for cover image. Pass null to clear.'),
+        status: z.enum(['draft', 'published']).optional().describe('Switch between draft and published'),
+        seo: z
+          .object({
+            title: z.string().optional(),
+            description: z.string().optional(),
+            image: z.number().int().nullable().optional(),
+          })
+          .optional()
+          .describe('Partial SEO update — only provided keys are changed'),
       },
     },
-    async ({ id, title, excerpt, body, readTime, date }: any) => {
+    async ({ id, title, excerpt, body, readTime, date, tags, coverImage, status, seo }: any) => {
       const data: Record<string, unknown> = {}
       if (title !== undefined) data.title = title
       if (excerpt !== undefined) data.excerpt = excerpt
       if (readTime !== undefined) data.readTime = readTime
       if (date !== undefined) data.date = date
+      if (tags !== undefined) data.tags = tags
+      if (coverImage !== undefined) data.coverImage = coverImage
       if (body !== undefined) data.body = await markdownToLexical(body)
+      if (seo !== undefined) {
+        const seoData: Record<string, unknown> = {}
+        if (seo.title !== undefined) seoData.title = seo.title
+        if (seo.description !== undefined) seoData.description = seo.description
+        if (seo.image !== undefined) seoData.image = seo.image
+        data.meta = seoData
+      }
+      if (status !== undefined) data._status = status
 
-      const post = (await payload.update({ collection: 'posts', id, overrideAccess: true, data })) as any
+      const post = (await payload.update({ collection: 'posts', id, overrideAccess: true, draft: status === 'draft', data })) as any
       return {
         content: [
           {
@@ -199,32 +275,53 @@ export async function registerTools(server: any) {
     {
       title: 'List Work',
       description:
-        'List all work/project items sorted by display order ascending (lower order = higher on the page). Returns id, slug, title, subtitle, description, date, href, order. Use this to browse projects, find ids before editing, or check existing order values before adding a new item.',
-      inputSchema: {},
+        'List work/project items sorted by display order ascending (lower order = higher on the page). Returns id, slug, title, subtitle, description, date, href, order, cover, tech. Supports search and pagination. Use this to browse projects, find ids before editing, or check existing order values before adding a new item.',
+      inputSchema: {
+        limit: z.number().int().min(1).max(100).default(50).describe('Max results to return (default 50)'),
+        page: z.number().int().min(1).default(1).describe('Page number (default 1)'),
+        search: z.string().optional().describe('Case-insensitive substring match against title, subtitle, description'),
+        tech: z.string().optional().describe('Filter by tech stack entry (exact match)'),
+      },
     },
-    async () => {
-      const { docs } = await payload.find({
+    async ({ limit, page, search, tech }: { limit: number; page: number; search?: string; tech?: string }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const where: any = {}
+      if (search) where.or = [
+        { title: { contains: search } },
+        { subtitle: { contains: search } },
+        { description: { contains: search } },
+      ]
+      if (tech) where.tech = { contains: tech }
+      const { docs, totalDocs } = await payload.find({
         collection: 'work',
         sort: 'order',
-        limit: 100,
-        depth: 0,
+        limit,
+        page,
+        depth: 1,
         overrideAccess: true,
+        ...(Object.keys(where).length ? { where } : {}),
       })
       return {
         content: [
           {
             type: 'text' as const,
             text: JSON.stringify(
-              docs.map((w: any) => ({
-                id: w.id,
-                slug: w.slug,
-                title: w.title,
-                subtitle: w.subtitle,
-                description: w.description,
-                date: w.date,
-                href: w.href,
-                order: w.order,
-              })),
+              {
+                total: totalDocs,
+                page,
+                items: docs.map((w: any) => ({
+                  id: w.id,
+                  slug: w.slug,
+                  title: w.title,
+                  subtitle: w.subtitle,
+                  description: w.description,
+                  date: w.date,
+                  href: w.href,
+                  order: w.order,
+                  tech: w.tech ?? [],
+                  cover: mediaRef(w.cover),
+                })),
+              },
               null,
               2,
             ),
@@ -249,7 +346,7 @@ export async function registerTools(server: any) {
         collection: 'work',
         where: { slug: { equals: slug } },
         limit: 1,
-        depth: 0,
+        depth: 1,
         overrideAccess: true,
       })
       if (!docs[0]) {
@@ -270,6 +367,21 @@ export async function registerTools(server: any) {
                 date: w.date,
                 href: w.href,
                 order: w.order,
+                tech: w.tech ?? [],
+                cover: mediaRef(w.cover),
+                images: Array.isArray(w.images)
+                  ? w.images.map((it: any) => ({
+                      media: mediaRef(it.image),
+                      caption: it.caption ?? null,
+                    }))
+                  : [],
+                seo: w.meta
+                  ? {
+                      title: w.meta.title ?? null,
+                      description: w.meta.description ?? null,
+                      image: mediaRef(w.meta.image),
+                    }
+                  : null,
                 body: await lexicalToMarkdown(w.body),
               },
               null,
@@ -297,9 +409,18 @@ export async function registerTools(server: any) {
         href: z.string().optional().describe('Live site URL e.g. "https://example.com"'),
         slug: z.string().optional().describe('URL slug. Auto-generated from title if omitted.'),
         cover: z.number().int().optional().describe('Media file id for the cover image — get ids from list_media.'),
+        tech: z.array(z.string()).optional().describe('Tech stack entries e.g. ["Next.js","Tailwind"]'),
+        seo: z
+          .object({
+            title: z.string().optional().describe('SEO meta title — defaults to project title if omitted'),
+            description: z.string().optional().describe('SEO meta description — defaults to description if omitted'),
+            image: z.number().int().optional().describe('Media id for OG/Twitter image — defaults to cover if omitted'),
+          })
+          .optional()
+          .describe('Optional SEO overrides for meta tags and social cards'),
       },
     },
-    async ({ title, subtitle, description, body, date, order, href, slug, cover }: any) => {
+    async ({ title, subtitle, description, body, date, order, href, slug, cover, tech, seo }: any) => {
       const item = (await payload.create({
         collection: 'work',
         overrideAccess: true,
@@ -313,6 +434,16 @@ export async function registerTools(server: any) {
           ...(href ? { href } : {}),
           ...(slug ? { slug } : {}),
           ...(cover !== undefined ? { cover } : {}),
+          ...(tech ? { tech } : {}),
+          ...(seo
+            ? {
+                meta: {
+                  ...(seo.title !== undefined ? { title: seo.title } : {}),
+                  ...(seo.description !== undefined ? { description: seo.description } : {}),
+                  ...(seo.image !== undefined ? { image: seo.image } : {}),
+                },
+              }
+            : {}),
           body: (await markdownToLexical(body)) as any,
         },
       } as any)) as any
@@ -342,10 +473,19 @@ export async function registerTools(server: any) {
         date: z.string().optional().describe('Updated display date e.g. "Mar 2026"'),
         order: z.number().int().optional().describe('Updated display order — lower = higher on page'),
         href: z.string().optional().describe('Updated live site URL'),
-        cover: z.number().int().optional().describe('Media file id for the cover image — get ids from list_media.'),
+        cover: z.number().int().nullable().optional().describe('Media file id for the cover image. Pass null to clear.'),
+        tech: z.array(z.string()).optional().describe('Replace tech stack entries with this list. Pass [] to clear.'),
+        seo: z
+          .object({
+            title: z.string().optional(),
+            description: z.string().optional(),
+            image: z.number().int().nullable().optional(),
+          })
+          .optional()
+          .describe('Partial SEO update — only provided keys are changed'),
       },
     },
-    async ({ id, title, subtitle, description, body, date, order, href, cover }: any) => {
+    async ({ id, title, subtitle, description, body, date, order, href, cover, tech, seo }: any) => {
       const data: Record<string, unknown> = {}
       if (title !== undefined) data.title = title
       if (subtitle !== undefined) data.subtitle = subtitle
@@ -354,7 +494,15 @@ export async function registerTools(server: any) {
       if (order !== undefined) data.order = order
       if (href !== undefined) data.href = href
       if (cover !== undefined) data.cover = cover
+      if (tech !== undefined) data.tech = tech
       if (body !== undefined) data.body = (await markdownToLexical(body)) as any
+      if (seo !== undefined) {
+        const seoData: Record<string, unknown> = {}
+        if (seo.title !== undefined) seoData.title = seo.title
+        if (seo.description !== undefined) seoData.description = seo.description
+        if (seo.image !== undefined) seoData.image = seo.image
+        data.meta = seoData
+      }
 
       const item = (await payload.update({ collection: 'work', id, overrideAccess: true, data })) as any
       return {
@@ -384,6 +532,47 @@ export async function registerTools(server: any) {
     },
   )
 
+  server.registerTool(
+    'set_work_images',
+    {
+      title: 'Set Work Gallery',
+      description:
+        'Replace the gallery images on a work item. Pass an array of {mediaId, caption?} in display order. Empty array clears the gallery. Atomic replace — existing entries are dropped. Use list_media to get mediaIds.',
+      inputSchema: {
+        id: z.string().describe('Work item id — get this from list_work'),
+        images: z
+          .array(
+            z.object({
+              mediaId: z.number().int().describe('Media file id'),
+              caption: z.string().optional().describe('Optional caption shown beneath the image'),
+            }),
+          )
+          .describe('Ordered list of gallery images. Pass [] to clear.'),
+      },
+    },
+    async ({ id, images }: { id: string; images: { mediaId: number; caption?: string }[] }) => {
+      const item = (await payload.update({
+        collection: 'work',
+        id,
+        overrideAccess: true,
+        data: {
+          images: images.map(({ mediaId, caption }) => ({
+            image: mediaId,
+            ...(caption !== undefined ? { caption } : {}),
+          })),
+        },
+      })) as any
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify({ id: item.id, slug: item.slug, count: item.images?.length ?? 0 }, null, 2),
+          },
+        ],
+      }
+    },
+  )
+
   // ─── CRAFT ──────────────────────────────────────────────────────────────
 
   server.registerTool(
@@ -391,30 +580,47 @@ export async function registerTools(server: any) {
     {
       title: 'List Craft',
       description:
-        'List all craft items (small UI experiments — components, animations, micro-interactions) sorted by display order ascending. Returns id, slug, title, date, description, order. Use to browse items or find an id before editing.',
-      inputSchema: {},
+        'List craft items (small UI experiments — components, animations, micro-interactions) sorted by display order ascending. Returns id, slug, title, date, description, order, cover, tags. Supports search and pagination. Use to browse items or find an id before editing.',
+      inputSchema: {
+        limit: z.number().int().min(1).max(100).default(50).describe('Max results (default 50)'),
+        page: z.number().int().min(1).default(1).describe('Page (default 1)'),
+        search: z.string().optional().describe('Case-insensitive substring match against title and description'),
+        tag: z.string().optional().describe('Filter by tag (exact match)'),
+      },
     },
-    async () => {
-      const { docs } = await payload.find({
+    async ({ limit, page, search, tag }: { limit: number; page: number; search?: string; tag?: string }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const where: any = {}
+      if (search) where.or = [{ title: { contains: search } }, { description: { contains: search } }]
+      if (tag) where.tags = { contains: tag }
+      const { docs, totalDocs } = await payload.find({
         collection: 'craft',
         sort: 'order',
-        limit: 100,
-        depth: 0,
+        limit,
+        page,
+        depth: 1,
         overrideAccess: true,
+        ...(Object.keys(where).length ? { where } : {}),
       })
       return {
         content: [
           {
             type: 'text' as const,
             text: JSON.stringify(
-              docs.map((c: any) => ({
-                id: c.id,
-                slug: c.slug,
-                title: c.title,
-                date: c.date,
-                description: c.description,
-                order: c.order,
-              })),
+              {
+                total: totalDocs,
+                page,
+                items: docs.map((c: any) => ({
+                  id: c.id,
+                  slug: c.slug,
+                  title: c.title,
+                  date: c.date,
+                  description: c.description,
+                  order: c.order,
+                  tags: c.tags ?? [],
+                  cover: mediaRef(c.cover),
+                })),
+              },
               null,
               2,
             ),
@@ -439,7 +645,7 @@ export async function registerTools(server: any) {
         collection: 'craft',
         where: { slug: { equals: slug } },
         limit: 1,
-        depth: 0,
+        depth: 1,
         overrideAccess: true,
       })
       if (!docs[0]) {
@@ -458,6 +664,8 @@ export async function registerTools(server: any) {
                 date: c.date,
                 description: c.description,
                 order: c.order,
+                tags: c.tags ?? [],
+                cover: mediaRef(c.cover),
                 credit: c.credit?.name ? { name: c.credit.name, href: c.credit.href ?? null } : null,
               },
               null,
@@ -482,6 +690,7 @@ export async function registerTools(server: any) {
         order: z.number().int().optional().describe('Display order — lower = higher on page. Default 99. Check list_craft for existing values.'),
         slug: z.string().optional().describe('URL slug. Auto-generated from title if omitted.'),
         cover: z.number().int().optional().describe('Media file id for the cover image — get ids from list_media.'),
+        tags: z.array(z.string()).optional().describe('Topic tags e.g. ["animation","button"]'),
         credit: z
           .object({
             name: z.string().describe('Name of the person or source to credit'),
@@ -491,7 +700,7 @@ export async function registerTools(server: any) {
           .describe('Optional attribution if the experiment is inspired by or based on someone else\'s work'),
       },
     },
-    async ({ title, description, date, order, slug, cover, credit }: any) => {
+    async ({ title, description, date, order, slug, cover, tags, credit }: any) => {
       const item = (await payload.create({
         collection: 'craft',
         overrideAccess: true,
@@ -503,6 +712,7 @@ export async function registerTools(server: any) {
           order: order ?? 99,
           ...(slug ? { slug } : {}),
           ...(cover !== undefined ? { cover } : {}),
+          ...(tags ? { tags } : {}),
           ...(credit ? { credit } : {}),
         },
       } as any)) as any
@@ -529,7 +739,8 @@ export async function registerTools(server: any) {
         description: z.string().optional().describe('Updated one-sentence description'),
         date: z.string().optional().describe('Updated display date e.g. "Apr 2026"'),
         order: z.number().int().optional().describe('Updated display order — lower = higher on page'),
-        cover: z.number().int().optional().describe('Media file id for the cover image — get ids from list_media.'),
+        cover: z.number().int().nullable().optional().describe('Media file id for the cover image. Pass null to clear.'),
+        tags: z.array(z.string()).optional().describe('Replace tags with this list. Pass [] to clear.'),
         credit: z
           .object({
             name: z.string(),
@@ -539,13 +750,14 @@ export async function registerTools(server: any) {
           .describe('Updated attribution'),
       },
     },
-    async ({ id, title, description, date, order, cover, credit }: any) => {
+    async ({ id, title, description, date, order, cover, tags, credit }: any) => {
       const data: Record<string, unknown> = {}
       if (title !== undefined) data.title = title
       if (description !== undefined) data.description = description
       if (date !== undefined) data.date = date
       if (order !== undefined) data.order = order
       if (cover !== undefined) data.cover = cover
+      if (tags !== undefined) data.tags = tags
       if (credit !== undefined) data.credit = credit
 
       const item = (await payload.update({ collection: 'craft', id, overrideAccess: true, data })) as any
@@ -637,30 +849,47 @@ export async function registerTools(server: any) {
     {
       title: 'List Media',
       description:
-        'List all uploaded media files. Returns id, filename, url, alt, mimeType for each file. Use the id as a cover field in create_work / update_work / create_craft / update_craft, or embed in post/work body using ![media:<id>](). To upload a new image from a URL, use upload_media instead.',
+        'List uploaded media files. Returns id, filename, url, alt, mimeType, width, height, filesize, createdAt, updatedAt. Sorted newest-first. Supports search by filename/alt and pagination. Use the id as a cover field in create_work / update_work / create_craft / update_craft, or embed in body using ![media:<id>](). To upload a new image from a URL, use upload_media instead.',
       inputSchema: {
         limit: z.number().int().min(1).max(100).default(20).describe('Max results (default 20)'),
+        page: z.number().int().min(1).default(1).describe('Page number (default 1)'),
+        search: z.string().optional().describe('Case-insensitive substring match against filename and alt text'),
       },
     },
-    async ({ limit }: { limit: number }) => {
-      const { docs } = await payload.find({
+    async ({ limit, page, search }: { limit: number; page: number; search?: string }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const where: any = {}
+      if (search) where.or = [{ filename: { contains: search } }, { alt: { contains: search } }]
+      const { docs, totalDocs } = await payload.find({
         collection: 'media',
+        sort: '-createdAt',
         limit,
+        page,
         depth: 0,
         overrideAccess: true,
+        ...(Object.keys(where).length ? { where } : {}),
       })
       return {
         content: [
           {
             type: 'text' as const,
             text: JSON.stringify(
-              docs.map((m: any) => ({
-                id: m.id,
-                filename: m.filename,
-                url: m.url,
-                alt: m.alt,
-                mimeType: m.mimeType,
-              })),
+              {
+                total: totalDocs,
+                page,
+                items: docs.map((m: any) => ({
+                  id: m.id,
+                  filename: m.filename,
+                  url: m.url,
+                  alt: m.alt,
+                  mimeType: m.mimeType,
+                  width: m.width ?? null,
+                  height: m.height ?? null,
+                  filesize: m.filesize ?? null,
+                  createdAt: m.createdAt,
+                  updatedAt: m.updatedAt,
+                })),
+              },
               null,
               2,
             ),
