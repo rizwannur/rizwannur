@@ -1,9 +1,10 @@
 import type { AdminViewServerProps } from 'payload'
 import { Gutter } from '@payloadcms/ui'
 import { parseRange, RANGE_LABELS } from '@/lib/analytics/range'
-import { getTimeseries } from '@/lib/analytics/aggregate'
+import { getTimeseries, getTopCountries, getTopCities } from '@/lib/analytics/aggregate'
 import { RangeSelector } from './RangeSelector'
 import { Timeseries } from './Timeseries'
+import { GeoTables } from './GeoTables'
 
 const headerStyle: React.CSSProperties = {
   display: 'flex',
@@ -17,6 +18,11 @@ export default async function AnalyticsView({ initPageResult }: AdminViewServerP
   const range = parseRange(params?.range)
 
   const timeseries = await getTimeseries(range)
+
+  const [countries, cities] = await Promise.all([
+    getTopCountries(range, 25),
+    getTopCities(range, 25),
+  ])
 
   const vercelTeam = process.env.NEXT_PUBLIC_VERCEL_TEAM_SLUG ?? ''
   const vercelProject = process.env.NEXT_PUBLIC_VERCEL_PROJECT_NAME ?? ''
@@ -49,6 +55,7 @@ export default async function AnalyticsView({ initPageResult }: AdminViewServerP
       </header>
 
       <Timeseries data={timeseries} />
+      <GeoTables countries={countries} cities={cities} />
     </Gutter>
   )
 }
