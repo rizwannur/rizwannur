@@ -1,7 +1,9 @@
 import type { AdminViewServerProps } from 'payload'
 import { Gutter } from '@payloadcms/ui'
 import { parseRange, RANGE_LABELS } from '@/lib/analytics/range'
+import { getTimeseries } from '@/lib/analytics/aggregate'
 import { RangeSelector } from './RangeSelector'
+import { Timeseries } from './Timeseries'
 
 const headerStyle: React.CSSProperties = {
   display: 'flex',
@@ -13,6 +15,8 @@ const headerStyle: React.CSSProperties = {
 export default async function AnalyticsView({ initPageResult }: AdminViewServerProps) {
   const params = initPageResult?.req?.query as Record<string, string | undefined> | undefined
   const range = parseRange(params?.range)
+
+  const timeseries = await getTimeseries(range)
 
   const vercelTeam = process.env.NEXT_PUBLIC_VERCEL_TEAM_SLUG ?? ''
   const vercelProject = process.env.NEXT_PUBLIC_VERCEL_PROJECT_NAME ?? ''
@@ -44,9 +48,7 @@ export default async function AnalyticsView({ initPageResult }: AdminViewServerP
         </div>
       </header>
 
-      <p style={{ opacity: 0.7, fontSize: 13 }}>
-        Sections will populate as you wire them up.
-      </p>
+      <Timeseries data={timeseries} />
     </Gutter>
   )
 }
