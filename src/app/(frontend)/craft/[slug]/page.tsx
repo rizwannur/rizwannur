@@ -4,7 +4,7 @@ import config from '@payload-config'
 import { PageShell } from '@/components/layout/PageShell'
 import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { PrevNext } from '@/components/ui/PrevNext'
-import type { Craft } from '@/data/craft'
+import type { Craft } from '@/lib/types/craft'
 import type { Media } from '@/payload-types'
 
 export async function generateStaticParams() {

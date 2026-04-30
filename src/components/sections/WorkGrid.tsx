@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 import { useAudio } from '@/components/providers/AudioProvider'
-import type { Work } from '@/data/work'
+import type { Work } from '@/lib/types/work'
 import { microlinkScreenshot } from '@/lib/microlink'
 
 export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 2 }) {

@@ -5,7 +5,7 @@ import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { ThoughtRow } from '@/components/sections/ThoughtRow'
 import { Footer } from '@/components/layout/Footer'
 import { SearchInput } from '@/components/ui/SearchInput'
-import type { Thought } from '@/data/thoughts'
+import type { Thought } from '@/lib/types/thoughts'
 
 export const metadata = { title: 'Thoughts — Rafey' }
 

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 import { useAudio } from '@/components/providers/AudioProvider'
-import type { Craft } from '@/data/craft'
+import type { Craft } from '@/lib/types/craft'
 
 export function CraftGrid({ items, columns = 2 }: { items: Craft[]; columns?: 1 | 2 }) {
   const [hovered, setHovered] = useState<number | null>(null)

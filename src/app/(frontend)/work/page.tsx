@@ -5,7 +5,7 @@ import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { WorkGrid } from '@/components/sections/WorkGrid'
 import { Footer } from '@/components/layout/Footer'
 import { SearchInput } from '@/components/ui/SearchInput'
-import type { Work } from '@/data/work'
+import type { Work } from '@/lib/types/work'
 import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
 

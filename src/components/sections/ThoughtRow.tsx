@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useAudio } from '@/components/providers/AudioProvider'
-import type { Thought } from '@/data/thoughts'
+import type { Thought } from '@/lib/types/thoughts'
 
 export function ThoughtRow({ item }: { item: Thought }) {
   const { playClick } = useAudio()

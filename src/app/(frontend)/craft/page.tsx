@@ -4,7 +4,7 @@ import { PageShell } from '@/components/layout/PageShell'
 import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { CraftGrid } from '@/components/sections/CraftGrid'
 import { Footer } from '@/components/layout/Footer'
-import type { Craft } from '@/data/craft'
+import type { Craft } from '@/lib/types/craft'
 import type { Media } from '@/payload-types'
 
 export const metadata = { title: 'Craft' }
