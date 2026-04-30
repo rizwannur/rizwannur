@@ -1,11 +1,28 @@
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { RichText } from '@payloadcms/richtext-lexical/react'
+import { RichText, type JSXConvertersFunction } from '@payloadcms/richtext-lexical/react'
 import { PageShell } from '@/components/layout/PageShell'
 import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { PrevNext } from '@/components/ui/PrevNext'
 import type { Media } from '@/payload-types'
+
+type CodeBlockNode = { fields?: { code?: string; language?: string } }
+
+const richTextConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
+  ...defaultConverters,
+  blocks: {
+    code: ({ node }: { node: CodeBlockNode }) => {
+      const code = node.fields?.code ?? ''
+      const language = node.fields?.language ?? ''
+      return (
+        <pre className="rich-code-block" data-language={language || undefined}>
+          <code>{code}</code>
+        </pre>
+      )
+    },
+  },
+})
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config })
@@ -71,7 +88,7 @@ export default async function ThoughtDetail({ params }: { params: Promise<{ slug
         </header>
 
         <div className="rich-text">
-          <RichText data={item.body} />
+          <RichText data={item.body} converters={richTextConverters} />
         </div>
       </article>
 
