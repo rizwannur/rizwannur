@@ -2,29 +2,77 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ExternalLink } from 'lucide-react'
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { RichText } from '@payloadcms/richtext-lexical/react'
 import { PageShell } from '@/components/site/PageShell'
 import { BackHomeNav } from '@/components/site/BackHomeNav'
 import { PrevNext } from '@/components/site/PrevNext'
-import { work } from '@/data/work'
+import type { Media } from '@/payload-types'
 
-export function generateStaticParams() {
-  return work.map((w) => ({ slug: w.slug }))
+export async function generateStaticParams() {
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'work',
+    limit: 100,
+    depth: 0,
+  })
+  return docs.map((item) => ({ slug: item.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const item = work.find((w) => w.slug === slug)
-  return { title: item ? `${item.title} — ${item.subtitle}` : 'Work' }
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'work',
+    where: { slug: { equals: slug } },
+    limit: 1,
+    depth: 1,
+  })
+  const item = docs[0]
+  if (!item) return { title: 'Work' }
+
+  const coverUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
+  const meta = item.meta as { title?: string; description?: string; image?: Media } | undefined
+
+  return {
+    title: meta?.title || `${item.title} — ${item.subtitle}`,
+    description: meta?.description || item.description,
+    openGraph: {
+      images: meta?.image?.url
+        ? [{ url: meta.image.url }]
+        : coverUrl
+          ? [{ url: coverUrl }]
+          : [],
+    },
+  }
 }
 
 export default async function WorkDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const item = work.find((w) => w.slug === slug)
-  if (!item) return notFound()
+  const payload = await getPayload({ config })
 
-  const idx = work.findIndex((w) => w.slug === slug)
-  const next = work[idx + 1]
-  const prev = work[idx - 1]
+  const { docs: allDocs } = await payload.find({
+    collection: 'work',
+    sort: 'order',
+    limit: 100,
+    depth: 1,
+  })
+
+  const idx = allDocs.findIndex((w) => w.slug === slug)
+  if (idx === -1) return notFound()
+
+  const item = allDocs[idx]!
+  const prev = allDocs[idx - 1]
+  const next = allDocs[idx + 1]
+
+  const coverUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
+
+  const galleryImages =
+    item.images?.map((img) => ({
+      src: typeof img.image === 'object' ? ((img.image as Media).url ?? '') : '',
+      caption: img.caption ?? undefined,
+    })) ?? []
 
   return (
     <PageShell>
@@ -50,19 +98,28 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
           )}
         </div>
 
-        <p className="text-[15px] leading-relaxed text-neutral-700 dark:text-neutral-300">{item.description}</p>
+        <p className="text-[15px] leading-relaxed text-neutral-700 dark:text-neutral-300">
+          {item.description}
+        </p>
 
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl ring-1 ring-black/5 dark:ring-white/10 bg-black/5 dark:bg-white/5">
-          <Image src={item.cover} alt={`${item.title} cover image`} fill sizes="669px" className="object-cover" priority />
+        {coverUrl && (
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl ring-1 ring-black/5 dark:ring-white/10 bg-black/5 dark:bg-white/5">
+            <Image
+              src={coverUrl}
+              alt={`${item.title} cover image`}
+              fill
+              sizes="669px"
+              className="object-cover"
+              priority
+            />
+          </div>
+        )}
+
+        <div className="prose prose-neutral dark:prose-invert max-w-none text-[15px] leading-relaxed">
+          <RichText data={item.body} />
         </div>
 
-        {item.body.map((p, i) => (
-          <p key={i} className="text-[15px] leading-relaxed text-neutral-700 dark:text-neutral-300">
-            {p}
-          </p>
-        ))}
-
-        {item.images?.map((img, i) => (
+        {galleryImages.map((img, i) => (
           <figure key={i} className="flex flex-col gap-2">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl ring-1 ring-black/5 dark:ring-white/10">
               <Image src={img.src} alt={img.caption ?? ''} fill sizes="669px" className="object-cover" />
@@ -76,7 +133,11 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
         ))}
       </article>
 
-      <PrevNext basePath="/work" prev={prev} next={next} />
+      <PrevNext
+        basePath="/work"
+        prev={prev ? { slug: prev.slug, title: prev.title } : undefined}
+        next={next ? { slug: next.slug, title: next.title } : undefined}
+      />
     </PageShell>
   )
 }
