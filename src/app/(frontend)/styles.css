@@ -103,8 +103,20 @@
   & :not(pre) > code {
     @apply font-mono text-[13px] bg-black/[0.06] dark:bg-white/[0.08] rounded px-1.5 py-0.5 text-neutral-800 dark:text-neutral-200;
   }
-  /* code blocks */
-  & pre {
+  /* code blocks (Shiki-rendered) */
+  & .rich-code-block {
+    @apply rounded-xl my-6 overflow-hidden border border-black/8 dark:border-white/10;
+  }
+  & .rich-code-block pre.shiki {
+    @apply font-mono text-[13px] leading-relaxed p-4 m-0 overflow-x-auto;
+    background-color: var(--shiki-light-bg);
+  }
+  & .rich-code-block pre.shiki,
+  & .rich-code-block pre.shiki span {
+    color: var(--shiki-light);
+  }
+  /* code blocks fallback (legacy raw <pre>) */
+  & pre:not(.shiki) {
     @apply rounded-xl p-4 mb-6 mt-2 overflow-x-auto bg-neutral-950 dark:bg-black/70 border border-white/8;
     & code {
       @apply font-mono text-[13px] leading-relaxed text-neutral-200 bg-transparent p-0;
@@ -126,4 +138,13 @@
   & > *:last-child {
     margin-bottom: 0;
   }
+}
+
+/* Shiki dual-theme: switch tokens + bg when html.dark */
+html.dark .rich-code-block pre.shiki {
+  background-color: var(--shiki-dark-bg);
+}
+html.dark .rich-code-block pre.shiki,
+html.dark .rich-code-block pre.shiki span {
+  color: var(--shiki-dark);
 }

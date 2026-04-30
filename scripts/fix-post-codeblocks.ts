@@ -15,12 +15,12 @@ let updated = 0
 let skipped = 0
 
 for (const post of docs) {
-  const markdown = await lexicalToMarkdown(post.body)
+  const markdown = await lexicalToMarkdown(post.body, { collection: 'posts', field: 'body' })
   if (!/```/.test(markdown)) {
     skipped += 1
     continue
   }
-  const newBody = await markdownToLexical(markdown)
+  const newBody = await markdownToLexical(markdown, { collection: 'posts', field: 'body' })
   const root = newBody.root as unknown as { children: { type: string }[] }
   const hasBlock = root.children.some((c) => c.type === 'block')
   if (!hasBlock) {

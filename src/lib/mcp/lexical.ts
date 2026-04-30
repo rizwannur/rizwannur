@@ -5,88 +5,102 @@ import {
 } from '@payloadcms/richtext-lexical'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import payloadConfig from '@payload-config'
+import type { CollectionSlug, RichTextField, SanitizedConfig } from 'payload'
 
-type EditorConfig = Awaited<ReturnType<typeof editorConfigFactory.default>>
+type EditorConfig = ReturnType<typeof editorConfigFactory.fromField>
 
-let cachedConfig: EditorConfig | null = null
+const cache = new Map<string, EditorConfig>()
 
-async function getEditorConfig(): Promise<EditorConfig> {
-  if (!cachedConfig) {
-    cachedConfig = await editorConfigFactory.default({ config: await payloadConfig })
-  }
-  return cachedConfig
+async function getFieldEditorConfig(
+  collection: CollectionSlug,
+  fieldName: string,
+): Promise<EditorConfig> {
+  const key = `${collection}.${fieldName}`
+  const cached = cache.get(key)
+  if (cached) return cached
+
+  const cfg = (await payloadConfig) as SanitizedConfig
+  const coll = cfg.collections.find((c) => c.slug === collection)
+  if (!coll) throw new Error(`Collection ${collection} not found`)
+  const field = coll.fields.find(
+    (f) => 'name' in f && (f as { name?: string }).name === fieldName,
+  ) as RichTextField | undefined
+  if (!field) throw new Error(`Field ${fieldName} not found on ${collection}`)
+
+  const editorConfig = editorConfigFactory.fromField({ field })
+  cache.set(key, editorConfig)
+  return editorConfig
 }
 
-const PLACEHOLDER_PREFIX = '__CODEBLOCK_'
-const PLACEHOLDER_SUFFIX = '__'
-const FENCE_RE = /```([a-zA-Z0-9_+-]*)\n([\s\S]*?)```/g
-
-type SerializedCodeBlock = {
-  type: 'block'
-  version: 2
-  format: ''
-  fields: {
-    blockType: 'code'
-    code: string
-    language: string
-  }
+const ALLOWED_LANGUAGES = new Set([
+  'plaintext',
+  'js',
+  'ts',
+  'tsx',
+  'jsx',
+  'css',
+  'html',
+  'json',
+  'bash',
+  'sh',
+  'md',
+  'sql',
+  'py',
+  'go',
+  'rust',
+  'yaml',
+])
+const LANGUAGE_ALIASES: Record<string, string> = {
+  javascript: 'js',
+  typescript: 'ts',
+  shell: 'sh',
+  zsh: 'sh',
+  python: 'py',
+  golang: 'go',
+  rs: 'rust',
+  yml: 'yaml',
+  markdown: 'md',
+  text: 'plaintext',
+  txt: 'plaintext',
 }
 
-type RootChild = { type: string; children?: { type: string; text?: string }[] }
+function normalizeLanguage(lang: string): string {
+  const lower = (lang || '').toLowerCase()
+  if (!lower) return 'plaintext'
+  const aliased = LANGUAGE_ALIASES[lower] ?? lower
+  return ALLOWED_LANGUAGES.has(aliased) ? aliased : 'plaintext'
+}
 
-export async function markdownToLexical(markdown: string): Promise<SerializedEditorState> {
-  const codeBlocks: { language: string; code: string }[] = []
-  const stripped = markdown.replace(FENCE_RE, (_, lang: string, code: string) => {
-    const idx = codeBlocks.length
-    codeBlocks.push({
-      language: (lang || 'plaintext').toLowerCase(),
-      code: code.replace(/\s+$/, ''),
-    })
-    return `${PLACEHOLDER_PREFIX}${idx}${PLACEHOLDER_SUFFIX}`
+const FENCE_HEADER_RE = /^([ \t]*)```([a-zA-Z0-9_+-]+)[ \t]*$/gm
+
+type CodeBlockField = { fields?: { blockType?: string; language?: string } }
+
+export type FieldRef = { collection: CollectionSlug; field: string }
+
+export async function markdownToLexical(
+  markdown: string,
+  ref: FieldRef,
+): Promise<SerializedEditorState> {
+  const sanitized = markdown.replace(FENCE_HEADER_RE, (_match, indent: string, lang: string) => {
+    return `${indent}\`\`\`${normalizeLanguage(lang)}`
   })
 
-  const editorConfig = await getEditorConfig()
-  const result = await convertMarkdownToLexical({ markdown: stripped, editorConfig })
+  const editorConfig = await getFieldEditorConfig(ref.collection, ref.field)
+  const result = await convertMarkdownToLexical({ markdown: sanitized, editorConfig })
 
-  if (codeBlocks.length === 0) return result
-
-  const root = result.root as unknown as { children: RootChild[] }
-  const next: RootChild[] = []
-  const placeholderRe = new RegExp(`^${PLACEHOLDER_PREFIX}(\\d+)${PLACEHOLDER_SUFFIX}$`)
-
+  const root = result.root as unknown as { children: CodeBlockField[] }
   for (const node of root.children) {
-    if (
-      node.type === 'paragraph' &&
-      node.children?.length === 1 &&
-      node.children[0]?.type === 'text' &&
-      typeof node.children[0].text === 'string'
-    ) {
-      const match = placeholderRe.exec(node.children[0].text.trim())
-      if (match) {
-        const idx = Number(match[1])
-        const blk = codeBlocks[idx]
-        if (blk) {
-          const codeBlockNode: SerializedCodeBlock = {
-            type: 'block',
-            version: 2,
-            format: '',
-            fields: { blockType: 'code', code: blk.code, language: blk.language },
-          }
-          next.push(codeBlockNode as unknown as RootChild)
-          continue
-        }
-      }
+    if (node?.fields?.blockType === 'code') {
+      node.fields.language = normalizeLanguage(node.fields.language ?? '')
     }
-    next.push(node)
   }
 
-  root.children = next
   return result
 }
 
-export async function lexicalToMarkdown(data: unknown): Promise<string> {
+export async function lexicalToMarkdown(data: unknown, ref: FieldRef): Promise<string> {
   if (!data) return ''
-  const editorConfig = await getEditorConfig()
+  const editorConfig = await getFieldEditorConfig(ref.collection, ref.field)
   return convertLexicalToMarkdown({
     data: data as SerializedEditorState,
     editorConfig,

@@ -5,6 +5,7 @@ import { RichText, type JSXConvertersFunction } from '@payloadcms/richtext-lexic
 import { PageShell } from '@/components/layout/PageShell'
 import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { PrevNext } from '@/components/ui/PrevNext'
+import { CodeBlock } from '@/components/CodeBlock'
 import type { Media } from '@/payload-types'
 
 type CodeBlockNode = { fields?: { code?: string; language?: string } }
@@ -12,15 +13,9 @@ type CodeBlockNode = { fields?: { code?: string; language?: string } }
 const richTextConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
   blocks: {
-    code: ({ node }: { node: CodeBlockNode }) => {
-      const code = node.fields?.code ?? ''
-      const language = node.fields?.language ?? ''
-      return (
-        <pre className="rich-code-block" data-language={language || undefined}>
-          <code>{code}</code>
-        </pre>
-      )
-    },
+    Code: ({ node }: { node: CodeBlockNode }) => (
+      <CodeBlock code={node.fields?.code ?? ''} language={node.fields?.language ?? ''} />
+    ),
   },
 })
 

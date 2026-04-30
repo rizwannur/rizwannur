@@ -123,7 +123,7 @@ export async function registerTools(server: any) {
                       image: mediaRef(p.meta.image),
                     }
                   : null,
-                body: await lexicalToMarkdown(p.body),
+                body: await lexicalToMarkdown(p.body, { collection: 'posts', field: 'body' }),
               },
               null,
               2,
@@ -182,7 +182,7 @@ export async function registerTools(server: any) {
                 },
               }
             : {}),
-          body: (await markdownToLexical(body)) as any,
+          body: (await markdownToLexical(body, { collection: 'posts', field: 'body' })) as any,
         },
       } as any)) as any
       return {
@@ -230,7 +230,7 @@ export async function registerTools(server: any) {
       if (date !== undefined) data.date = date
       if (tags !== undefined) data.tags = tags
       if (coverImage !== undefined) data.coverImage = coverImage
-      if (body !== undefined) data.body = await markdownToLexical(body)
+      if (body !== undefined) data.body = await markdownToLexical(body, { collection: 'posts', field: 'body' })
       if (seo !== undefined) {
         const seoData: Record<string, unknown> = {}
         if (seo.title !== undefined) seoData.title = seo.title
@@ -382,7 +382,7 @@ export async function registerTools(server: any) {
                       image: mediaRef(w.meta.image),
                     }
                   : null,
-                body: await lexicalToMarkdown(w.body),
+                body: await lexicalToMarkdown(w.body, { collection: 'work', field: 'body' }),
               },
               null,
               2,
@@ -444,7 +444,7 @@ export async function registerTools(server: any) {
                 },
               }
             : {}),
-          body: (await markdownToLexical(body)) as any,
+          body: (await markdownToLexical(body, { collection: 'work', field: 'body' })) as any,
         },
       } as any)) as any
       return {
@@ -495,7 +495,7 @@ export async function registerTools(server: any) {
       if (href !== undefined) data.href = href
       if (cover !== undefined) data.cover = cover
       if (tech !== undefined) data.tech = tech
-      if (body !== undefined) data.body = (await markdownToLexical(body)) as any
+      if (body !== undefined) data.body = (await markdownToLexical(body, { collection: 'work', field: 'body' })) as any
       if (seo !== undefined) {
         const seoData: Record<string, unknown> = {}
         if (seo.title !== undefined) seoData.title = seo.title
