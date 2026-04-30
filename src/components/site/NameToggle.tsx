@@ -38,37 +38,45 @@ export function NameToggle() {
         </motion.button>
 
         <motion.div layout="position" className="flex flex-col">
-          <motion.h1
-            layout
-            className="font-display text-2xl leading-[1.1] text-black dark:text-white flex flex-wrap gap-x-2 items-baseline"
-          >
-            <AnimatePresence initial={false} mode="popLayout">
-              {!expanded ? (
-                <motion.span
-                  key="collapsed"
-                  layout="position"
-                  initial={{ opacity: 0, filter: 'blur(6px)', x: -8, width: 0 }}
-                  animate={{ opacity: 1, filter: 'blur(0px)', x: 0, width: 'auto' }}
-                  exit={{ opacity: 0, filter: 'blur(6px)', x: -8, width: 0 }}
-                  transition={{ duration: 0.42, ease }}
-                  className="overflow-hidden whitespace-nowrap inline-block"
-                >
-                  {profile.firstName}
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="expanded"
-                  layout="position"
-                  initial={{ opacity: 0, filter: 'blur(6px)', x: -8, width: 0 }}
-                  animate={{ opacity: 1, filter: 'blur(0px)', x: 0, width: 'auto' }}
-                  exit={{ opacity: 0, filter: 'blur(6px)', x: -8, width: 0 }}
-                  transition={{ duration: 0.42, ease }}
-                  className="overflow-hidden whitespace-nowrap inline-block"
-                >
-                  {profile.fullName}
-                </motion.span>
-              )}
-            </AnimatePresence>
+          <motion.h1 layout className="m-0">
+            <button
+              type="button"
+              aria-expanded={expanded}
+              aria-label={expanded ? 'Show short name' : 'Show full name'}
+              onClick={() => {
+                playClick()
+                setExpanded((v) => !v)
+              }}
+              className="font-display text-2xl leading-[1.1] text-black dark:text-white flex flex-wrap gap-x-2 items-baseline text-left bg-transparent border-0 p-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-black/30 dark:focus-visible:ring-white/40 rounded-sm"
+            >
+              <AnimatePresence initial={false} mode="popLayout">
+                {!expanded ? (
+                  <motion.span
+                    key="collapsed"
+                    layout="position"
+                    initial={{ opacity: 0, filter: 'blur(6px)', x: -8, width: 0 }}
+                    animate={{ opacity: 1, filter: 'blur(0px)', x: 0, width: 'auto' }}
+                    exit={{ opacity: 0, filter: 'blur(6px)', x: -8, width: 0 }}
+                    transition={{ duration: 0.42, ease }}
+                    className="overflow-hidden whitespace-nowrap inline-block"
+                  >
+                    {profile.shortName}
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="expanded"
+                    layout="position"
+                    initial={{ opacity: 0, filter: 'blur(6px)', x: -8, width: 0 }}
+                    animate={{ opacity: 1, filter: 'blur(0px)', x: 0, width: 'auto' }}
+                    exit={{ opacity: 0, filter: 'blur(6px)', x: -8, width: 0 }}
+                    transition={{ duration: 0.42, ease }}
+                    className="overflow-hidden whitespace-nowrap inline-block"
+                  >
+                    {profile.fullName}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
           </motion.h1>
           <motion.p layout="position" className="text-[13px] text-neutral-500 dark:text-neutral-400 font-medium">
             {profile.role}

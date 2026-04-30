@@ -30,13 +30,13 @@ export function CompanyLink({ name, href, brand, logo }: CompanyLinkProps) {
       onBlur={() => setHovered(false)}
     >
       <motion.span
-        animate={{
-          paddingLeft: hovered ? 18 : 0,
-          color: hovered && brand ? brand : 'currentColor',
-        }}
+        animate={{ paddingLeft: hovered ? 18 : 0 }}
         transition={{ type: 'spring', stiffness: 380, damping: 30 }}
         className="font-medium text-black/85 dark:text-white/85 inline-flex items-center relative group underline underline-offset-2 transition-colors"
-        style={{ textDecorationColor: hovered ? 'transparent' : undefined }}
+        style={{
+          color: hovered && brand ? brand : undefined,
+          textDecorationColor: hovered ? 'transparent' : undefined,
+        }}
       >
         <motion.span
           aria-hidden

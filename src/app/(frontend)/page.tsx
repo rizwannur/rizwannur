@@ -3,7 +3,7 @@ import { Header } from '@/components/site/Header'
 import { Socials } from '@/components/site/Socials'
 import { SectionHeading } from '@/components/site/SectionHeading'
 import { WorkGrid } from '@/components/site/WorkGrid'
-import { CraftGrid } from '@/components/site/CraftGrid'
+// import { CraftGrid } from '@/components/site/CraftGrid'
 import { ThoughtRow } from '@/components/site/ThoughtRow'
 import { ViewAll } from '@/components/site/ViewAll'
 import { Footer } from '@/components/site/Footer'
@@ -11,7 +11,7 @@ import { CompanyLink } from '@/components/site/CompanyLink'
 import { profile } from '@/data/profile'
 import { work } from '@/data/work'
 import { thoughts } from '@/data/thoughts'
-import { craft } from '@/data/craft'
+// import { craft } from '@/data/craft'
 
 export default function HomePage() {
   return (
@@ -70,11 +70,11 @@ export default function HomePage() {
       </section>
 
       {/* Craft */}
-      <section>
+      {/* <section>
         <SectionHeading>Craft</SectionHeading>
         <CraftGrid items={craft.slice(0, 6)} />
         <ViewAll href="/craft" />
-      </section>
+      </section> */}
 
       <Footer />
     </PageShell>

@@ -6,10 +6,15 @@ import { motion } from 'motion/react'
 import { useState } from 'react'
 import { useAudio } from './AudioProvider'
 import type { Work } from '@/data/work'
+import { microlinkScreenshot } from '@/lib/microlink'
 
 export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 2 }) {
   const [hovered, setHovered] = useState<number | null>(null)
+  const [previewed, setPreviewed] = useState<Set<number>>(() => new Set())
   const { playClick } = useAudio()
+
+  const markPreviewed = (i: number) =>
+    setPreviewed((prev) => (prev.has(i) ? prev : new Set(prev).add(i)))
 
   return (
     <div
@@ -24,8 +29,14 @@ export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 
             key={item.slug}
             href={`/work/${item.slug}`}
             onClick={() => playClick()}
-            onMouseEnter={() => setHovered(i)}
-            onFocus={() => setHovered(i)}
+            onMouseEnter={() => {
+              setHovered(i)
+              if (item.href) markPreviewed(i)
+            }}
+            onFocus={() => {
+              setHovered(i)
+              if (item.href) markPreviewed(i)
+            }}
             onBlur={() => setHovered(null)}
             aria-label={`${item.title} ${item.subtitle}`}
             className={`block cursor-pointer pt-2.5 pb-2.5 [&:first-child]:pt-0 [&:last-child]:pb-0 ${
@@ -45,6 +56,25 @@ export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 
                   sizes="(max-width: 768px) 100vw, 320px"
                   className="object-cover"
                 />
+                {item.href && previewed.has(i) && (
+                  <motion.div
+                    aria-hidden
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: isHovered ? 1 : 0 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={microlinkScreenshot(item.href)}
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, 320px"
+                      className="object-cover"
+                      loading="lazy"
+                      unoptimized
+                    />
+                  </motion.div>
+                )}
               </div>
               <div className="px-2 pb-1 pt-1">
                 <div className="text-[15px] font-medium text-neutral-900 dark:text-white">{item.title}</div>

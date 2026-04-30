@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
       { pathname: '/_next/static/**' },
       { pathname: '/**' },
     ],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'api.microlink.io' },
+      { protocol: 'https', hostname: '**.microlink.io' },
+    ],
   },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {

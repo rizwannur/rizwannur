@@ -1,6 +1,6 @@
 'use client'
 
-import { Globe, Mail, Phone, Sparkles } from 'lucide-react'
+import { FileText, Globe, Mail, Phone } from 'lucide-react'
 import { useAudio } from './AudioProvider'
 import { profile } from '@/data/profile'
 
@@ -26,11 +26,20 @@ const GithubIcon = () => (
   </svg>
 )
 
+const InstagramIcon = () => (
+  <svg viewBox="0 0 24 24" className={baseSvg} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <rect x="2" y="2" width="20" height="20" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none" />
+  </svg>
+)
+
 const ICONS = {
-  contra: () => <Sparkles className={baseSvg} />,
   twitter: TwitterIcon,
+  instagram: InstagramIcon,
   linkedin: LinkedinIcon,
   github: GithubIcon,
+  resume: () => <FileText className={baseSvg} />,
   mail: () => <Mail className={baseSvg} />,
   phone: () => <Phone className={baseSvg} />,
   website: () => <Globe className={baseSvg} />,
