@@ -6,18 +6,20 @@ import {
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import payloadConfig from '@payload-config'
 
-let cachedConfig: unknown = null
+type EditorConfig = Awaited<ReturnType<typeof editorConfigFactory.default>>
 
-async function getEditorConfig(): Promise<unknown> {
+let cachedConfig: EditorConfig | null = null
+
+async function getEditorConfig(): Promise<EditorConfig> {
   if (!cachedConfig) {
-    cachedConfig = await editorConfigFactory.default({ config: payloadConfig as any })
+    cachedConfig = await editorConfigFactory.default({ config: await payloadConfig })
   }
   return cachedConfig
 }
 
 export async function markdownToLexical(markdown: string): Promise<SerializedEditorState> {
   const editorConfig = await getEditorConfig()
-  return convertMarkdownToLexical({ markdown, editorConfig: editorConfig as any })
+  return convertMarkdownToLexical({ markdown, editorConfig })
 }
 
 export async function lexicalToMarkdown(data: unknown): Promise<string> {
@@ -25,6 +27,6 @@ export async function lexicalToMarkdown(data: unknown): Promise<string> {
   const editorConfig = await getEditorConfig()
   return convertLexicalToMarkdown({
     data: data as SerializedEditorState,
-    editorConfig: editorConfig as any,
+    editorConfig,
   })
 }
