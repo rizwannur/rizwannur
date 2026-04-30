@@ -20,10 +20,6 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: '**.public.blob.vercel-storage.com' },
     ],
   },
-  async redirects() {
-    const { redirects: getRedirects } = await import('./src/redirects')
-    return getRedirects()
-  },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
