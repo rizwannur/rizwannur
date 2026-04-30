@@ -36,11 +36,10 @@ async function loadProfile() {
 
 async function loadLocalCandidate(): Promise<{ data: string; mime: string } | null> {
   const candidates = [
-    ['og-pfp.jpg', 'image/jpeg'],
-    ['og-pfp.jpeg', 'image/jpeg'],
+    ['rafey.png', 'image/png'],
+    ['rafey.jpg', 'image/jpeg'],
     ['og-pfp.png', 'image/png'],
-    ['og-pfp.webp', 'image/webp'],
-    ['portfolio/og-pfp.jpg', 'image/jpeg'],
+    ['og-pfp.jpg', 'image/jpeg'],
     ['portfolio/hero-pfp.png', 'image/png'],
   ] as const
   for (const [rel, mime] of candidates) {

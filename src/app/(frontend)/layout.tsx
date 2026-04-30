@@ -118,7 +118,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     '@type': 'Person',
     name: fullName,
     url: siteUrl,
-    image: avatarUrl ?? `${siteUrl}/portfolio/hero-pfp.png`,
+    image: avatarUrl ?? `${siteUrl}/rafey.png`,
     jobTitle: role,
     description,
     sameAs,
