@@ -10,6 +10,7 @@ import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
 
 export const metadata = { title: 'Work — Rafey' }
+export const revalidate = 60
 
 import type { Work as PayloadWork } from '@/payload-types'
 

@@ -68,6 +68,16 @@ export async function generateMetadata(): Promise<Metadata> {
         firstName: fullName.split(' ')[0],
         lastName: fullName.split(' ').slice(1).join(' ') || undefined,
         username: twitterUser,
+        images: [
+          {
+            url: `${siteUrl}/opengraph-image`,
+            secureUrl: `${siteUrl}/opengraph-image`,
+            width: 1200,
+            height: 630,
+            alt: `${fullName} — ${profile.role}`,
+            type: 'image/png',
+          },
+        ],
       },
       twitter: {
         card: 'summary_large_image',
@@ -75,6 +85,7 @@ export async function generateMetadata(): Promise<Metadata> {
         description,
         creator: twitterUser ? `@${twitterUser}` : undefined,
         site: twitterUser ? `@${twitterUser}` : undefined,
+        images: [`${siteUrl}/twitter-image`],
       },
       robots: {
         index: true,

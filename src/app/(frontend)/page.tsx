@@ -16,6 +16,8 @@ import type { Craft } from '@/lib/types/craft'
 import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
 
+export const revalidate = 60
+
 function formatDate(isoDate: string): string {
   return new Date(isoDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }

@@ -11,6 +11,9 @@ import { PrevNext } from '@/components/ui/PrevNext'
 import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
 
+export const revalidate = 60
+export const dynamicParams = true
+
 export async function generateStaticParams() {
   const payload = await getPayload({ config })
   const { docs } = await payload.find({

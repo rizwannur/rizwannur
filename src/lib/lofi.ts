@@ -161,6 +161,50 @@ export function createLofi(): LofiHandle {
   return { start, stop, setVolume, ctx }
 }
 
+export function playClick(ctx: AudioContext, volume: number) {
+  if (volume <= 0) return
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {})
+  const now = ctx.currentTime
+  const osc = ctx.createOscillator()
+  osc.type = 'square'
+  osc.frequency.setValueAtTime(1800, now)
+  osc.frequency.exponentialRampToValueAtTime(900, now + 0.04)
+  const filter = ctx.createBiquadFilter()
+  filter.type = 'bandpass'
+  filter.frequency.value = 2200
+  filter.Q.value = 4
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(0, now)
+  g.gain.linearRampToValueAtTime(volume, now + 0.002)
+  g.gain.exponentialRampToValueAtTime(0.0001, now + 0.06)
+  osc.connect(filter).connect(g).connect(ctx.destination)
+  osc.start(now)
+  osc.stop(now + 0.08)
+}
+
+export function playSweep(ctx: AudioContext, volume: number) {
+  if (volume <= 0) return
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {})
+  const now = ctx.currentTime
+  const dur = 0.35
+  const osc = ctx.createOscillator()
+  osc.type = 'sine'
+  osc.frequency.setValueAtTime(220, now)
+  osc.frequency.exponentialRampToValueAtTime(1320, now + dur)
+  const filter = ctx.createBiquadFilter()
+  filter.type = 'lowpass'
+  filter.frequency.setValueAtTime(800, now)
+  filter.frequency.exponentialRampToValueAtTime(4000, now + dur)
+  filter.Q.value = 1.2
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(0, now)
+  g.gain.linearRampToValueAtTime(volume * 0.6, now + 0.04)
+  g.gain.exponentialRampToValueAtTime(0.0001, now + dur)
+  osc.connect(filter).connect(g).connect(ctx.destination)
+  osc.start(now)
+  osc.stop(now + dur + 0.05)
+}
+
 function makeNoiseBuffer(ctx: AudioContext, seconds: number): AudioBuffer {
   const length = Math.floor(ctx.sampleRate * seconds)
   const buffer = ctx.createBuffer(1, length, ctx.sampleRate)

@@ -1,9 +1,13 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateProfile } from '@/lib/revalidate'
 
 export const Profile: GlobalConfig = {
   slug: 'profile',
   admin: {
     group: 'Site',
+  },
+  hooks: {
+    afterChange: [() => { revalidateProfile() }],
   },
   fields: [
     // ── Identity ──────────────────────────────────────────────────────────────

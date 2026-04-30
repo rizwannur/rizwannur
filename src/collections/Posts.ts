@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateSection } from '@/lib/revalidate'
 import {
   BoldFeature,
   BlocksFeature,
@@ -25,6 +26,10 @@ export const Posts: CollectionConfig = {
     drafts: {
       autosave: { interval: 800 },
     },
+  },
+  hooks: {
+    afterChange: [() => { revalidateSection('thoughts') }],
+    afterDelete: [() => { revalidateSection('thoughts') }],
   },
   access: {
     read: ({ req }) => {

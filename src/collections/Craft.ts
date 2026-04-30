@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateSection } from '@/lib/revalidate'
 
 export const Craft: CollectionConfig = {
   slug: 'craft',
@@ -8,6 +9,10 @@ export const Craft: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [() => { revalidateSection('craft') }],
+    afterDelete: [() => { revalidateSection('craft') }],
   },
   fields: [
     {

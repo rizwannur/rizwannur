@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateSection } from '@/lib/revalidate'
 import {
   BoldFeature,
   BlocksFeature,
@@ -23,6 +24,10 @@ export const Work: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [() => { revalidateSection('work') }],
+    afterDelete: [() => { revalidateSection('work') }],
   },
   fields: [
     {

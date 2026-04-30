@@ -8,6 +8,7 @@ import { SearchInput } from '@/components/ui/SearchInput'
 import type { Thought } from '@/lib/types/thoughts'
 
 export const metadata = { title: 'Thoughts — Rafey' }
+export const revalidate = 60
 
 function formatDate(isoDate: string): string {
   return new Date(isoDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })

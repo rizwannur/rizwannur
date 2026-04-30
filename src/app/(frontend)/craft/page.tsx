@@ -8,6 +8,7 @@ import type { Craft } from '@/lib/types/craft'
 import type { Media } from '@/payload-types'
 
 export const metadata = { title: 'Craft' }
+export const revalidate = 60
 
 export default async function CraftIndex() {
   const payload = await getPayload({ config })
