@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useAudio } from './AudioProvider'
+import { useAudio } from '@/components/providers/AudioProvider'
 
 export function ViewAll({ href }: { href: string }) {
   const { playClick } = useAudio()

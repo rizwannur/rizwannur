@@ -1,6 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { CompanyLink } from './CompanyLink'
+import { CompanyLink } from '@/components/ui/CompanyLink'
 import { FooterClock } from './FooterClock'
 
 export async function Footer() {

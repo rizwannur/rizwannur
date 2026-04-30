@@ -2,11 +2,10 @@
 
 import Link from 'next/link'
 import { Home, Reply } from 'lucide-react'
-import { ThemeAudioPill } from './ThemeAudioPill'
-import { useAudio } from './AudioProvider'
+import { ThemeAudioPill } from '@/components/ui/ThemeAudioPill'
+import { useAudio } from '@/components/providers/AudioProvider'
 
 export type BackHomeNavProps = {
-  /** Path of the parent index (e.g. '/work', '/thoughts', '/craft'). Omit on parent index pages. */
   parent?: string
 }
 

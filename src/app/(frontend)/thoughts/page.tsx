@@ -1,9 +1,9 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { PageShell } from '@/components/site/PageShell'
-import { BackHomeNav } from '@/components/site/BackHomeNav'
-import { ThoughtRow } from '@/components/site/ThoughtRow'
-import { Footer } from '@/components/site/Footer'
+import { PageShell } from '@/components/layout/PageShell'
+import { BackHomeNav } from '@/components/layout/BackHomeNav'
+import { ThoughtRow } from '@/components/sections/ThoughtRow'
+import { Footer } from '@/components/layout/Footer'
 import type { Thought } from '@/data/thoughts'
 
 export const metadata = { title: 'Thoughts — Rafey' }

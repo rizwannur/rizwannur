@@ -1,7 +1,7 @@
 import React from 'react'
 import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google'
 import { ThemeProvider } from './ThemeProvider'
-import { AudioProvider } from '@/components/site/AudioProvider'
+import { AudioProvider } from '@/components/providers/AudioProvider'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import './styles.css'

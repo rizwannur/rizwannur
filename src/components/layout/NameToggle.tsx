@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { AnimatePresence, motion, MotionConfig } from 'motion/react'
 import { useState } from 'react'
-import { useAudio } from './AudioProvider'
+import { useAudio } from '@/components/providers/AudioProvider'
 
 type NameToggleProps = {
   avatar: string
@@ -26,21 +26,11 @@ export function NameToggle({ avatar, shortName, fullName, role }: NameToggleProp
           type="button"
           aria-label={expanded ? 'Hide full name' : 'Show full name'}
           aria-pressed={expanded}
-          onClick={() => {
-            playClick()
-            setExpanded((v) => !v)
-          }}
+          onClick={() => { playClick(); setExpanded((v) => !v) }}
           whileTap={{ scale: 0.96 }}
           className="rounded-full size-12 overflow-hidden bg-black/10 dark:bg-white/10 border border-black/5 dark:border-white/5 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-black/30 dark:focus-visible:ring-white/40"
         >
-          <Image
-            src={avatar}
-            alt={shortName}
-            width={330}
-            height={330}
-            priority
-            className="size-full object-cover"
-          />
+          <Image src={avatar} alt={shortName || 'Profile'} width={330} height={330} priority className="size-full object-cover" />
         </motion.button>
 
         <motion.div layout="position" className="flex flex-col">
@@ -49,10 +39,7 @@ export function NameToggle({ avatar, shortName, fullName, role }: NameToggleProp
               type="button"
               aria-expanded={expanded}
               aria-label={expanded ? 'Show short name' : 'Show full name'}
-              onClick={() => {
-                playClick()
-                setExpanded((v) => !v)
-              }}
+              onClick={() => { playClick(); setExpanded((v) => !v) }}
               className="font-display text-2xl leading-[1.1] text-black dark:text-white flex flex-wrap gap-x-2 items-baseline text-left bg-transparent border-0 p-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-black/30 dark:focus-visible:ring-white/40 rounded-sm"
             >
               <AnimatePresence initial={false} mode="popLayout">

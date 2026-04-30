@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
-import { PageShell } from '@/components/site/PageShell'
-import { BackHomeNav } from '@/components/site/BackHomeNav'
-import { PrevNext } from '@/components/site/PrevNext'
+import { PageShell } from '@/components/layout/PageShell'
+import { BackHomeNav } from '@/components/layout/BackHomeNav'
+import { PrevNext } from '@/components/ui/PrevNext'
 import { craft } from '@/data/craft'
 
 export function generateStaticParams() {

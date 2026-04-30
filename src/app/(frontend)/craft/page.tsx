@@ -1,7 +1,7 @@
-import { PageShell } from '@/components/site/PageShell'
-import { BackHomeNav } from '@/components/site/BackHomeNav'
-import { CraftGrid } from '@/components/site/CraftGrid'
-import { Footer } from '@/components/site/Footer'
+import { PageShell } from '@/components/layout/PageShell'
+import { BackHomeNav } from '@/components/layout/BackHomeNav'
+import { CraftGrid } from '@/components/sections/CraftGrid'
+import { Footer } from '@/components/layout/Footer'
 import { craft } from '@/data/craft'
 
 export const metadata = { title: 'Craft' }

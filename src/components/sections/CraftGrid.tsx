@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'motion/react'
 import { useState } from 'react'
-import { useAudio } from './AudioProvider'
+import { useAudio } from '@/components/providers/AudioProvider'
 import type { Craft } from '@/data/craft'
 
 export function CraftGrid({ items, columns = 2 }: { items: Craft[]; columns?: 1 | 2 }) {
@@ -28,9 +28,7 @@ export function CraftGrid({ items, columns = 2 }: { items: Craft[]; columns?: 1 
             onFocus={() => setHovered(i)}
             onBlur={() => setHovered(null)}
             className={`block cursor-pointer pt-2.5 pb-2.5 [&:first-child]:pt-0 [&:last-child]:pb-0 ${
-              columns === 2
-                ? 'md:[&:nth-child(odd)]:pr-2.5 md:[&:nth-child(even)]:pl-2.5 md:pt-0 md:pb-0 md:[&:nth-child(-n+2)]:pt-0 md:[&:nth-last-child(-n+2)]:pb-0'
-                : ''
+              columns === 2 ? 'md:[&:nth-child(odd)]:pr-2.5 md:[&:nth-child(even)]:pl-2.5 md:pt-0 md:pb-0 md:[&:nth-child(-n+2)]:pt-0 md:[&:nth-last-child(-n+2)]:pb-0' : ''
             }`}
           >
             <motion.div
@@ -58,12 +56,7 @@ export function CraftGrid({ items, columns = 2 }: { items: Craft[]; columns?: 1 
 }
 
 function CraftPlaceholder({ title }: { title: string }) {
-  const initials = title
-    .split(' ')
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase()
+  const initials = title.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase()
   return (
     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neutral-100 to-neutral-50 dark:from-neutral-800 dark:to-neutral-900">
       <div className="font-display text-3xl text-neutral-400 dark:text-neutral-600">{initials}</div>

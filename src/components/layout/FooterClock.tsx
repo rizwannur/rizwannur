@@ -5,17 +5,10 @@ import { useEffect, useState } from 'react'
 function formatTime(tz: string) {
   try {
     return new Intl.DateTimeFormat('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-      timeZone: tz,
+      hour: 'numeric', minute: '2-digit', hour12: true, timeZone: tz,
     }).format(new Date())
   } catch {
-    return new Intl.DateTimeFormat('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-    }).format(new Date())
+    return new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).format(new Date())
   }
 }
 

@@ -2,9 +2,9 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { PageShell } from '@/components/site/PageShell'
-import { BackHomeNav } from '@/components/site/BackHomeNav'
-import { PrevNext } from '@/components/site/PrevNext'
+import { PageShell } from '@/components/layout/PageShell'
+import { BackHomeNav } from '@/components/layout/BackHomeNav'
+import { PrevNext } from '@/components/ui/PrevNext'
 import type { Media } from '@/payload-types'
 
 export async function generateStaticParams() {

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'motion/react'
 import { useState } from 'react'
-import { useAudio } from './AudioProvider'
+import { useAudio } from '@/components/providers/AudioProvider'
 import type { Work } from '@/data/work'
 import { microlinkScreenshot } from '@/lib/microlink'
 
@@ -29,14 +29,8 @@ export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 
             key={item.slug}
             href={`/work/${item.slug}`}
             onClick={() => playClick()}
-            onMouseEnter={() => {
-              setHovered(i)
-              if (item.href) markPreviewed(i)
-            }}
-            onFocus={() => {
-              setHovered(i)
-              if (item.href) markPreviewed(i)
-            }}
+            onMouseEnter={() => { setHovered(i); if (item.href) markPreviewed(i) }}
+            onFocus={() => { setHovered(i); if (item.href) markPreviewed(i) }}
             onBlur={() => setHovered(null)}
             aria-label={`${item.title} ${item.subtitle}`}
             className={`block cursor-pointer pt-2.5 pb-2.5 [&:first-child]:pt-0 [&:last-child]:pb-0 ${

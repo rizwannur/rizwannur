@@ -1,5 +1,5 @@
 import { NameToggle } from './NameToggle'
-import { ThemeAudioPill } from './ThemeAudioPill'
+import { ThemeAudioPill } from '@/components/ui/ThemeAudioPill'
 
 type HeaderProps = {
   avatar: string
