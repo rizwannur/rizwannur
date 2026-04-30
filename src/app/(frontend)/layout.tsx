@@ -1,4 +1,7 @@
 import React from 'react'
+import { Suspense } from 'react'
+import { Analytics } from '@vercel/analytics/react'
+import { Track } from '@/components/site/Track'
 import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google'
 import { ThemeProvider } from './ThemeProvider'
 import { AudioProvider } from '@/components/providers/AudioProvider'
@@ -42,6 +45,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
         <ThemeProvider>
           <AudioProvider>{children}</AudioProvider>
         </ThemeProvider>
+        <Suspense fallback={null}>
+          <Track />
+        </Suspense>
+        <Analytics />
       </body>
     </html>
   )
