@@ -9,13 +9,15 @@ const mcpHandler = createMcpHandler(
   { basePath: '/api' },
 )
 
-function withAuth(handler: (req: Request) => Promise<Response>) {
-  return async (req: Request): Promise<Response> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function withAuth(handler: (req: Request, context?: any) => Promise<Response>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return async (req: Request, context?: any): Promise<Response> => {
     const token = req.headers.get('authorization')?.replace('Bearer ', '').trim()
     if (!token || token !== process.env.MCP_SECRET) {
       return new Response('Unauthorized', { status: 401 })
     }
-    return handler(req)
+    return handler(req, context)
   }
 }
 
