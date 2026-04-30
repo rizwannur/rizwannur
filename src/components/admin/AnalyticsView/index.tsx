@@ -1,13 +1,14 @@
 import type { AdminViewServerProps } from 'payload'
 import { Gutter } from '@payloadcms/ui'
 import { parseRange, RANGE_LABELS } from '@/lib/analytics/range'
-import { getTimeseries, getTopCountries, getTopCities, getDeviceSplit, getBrowserSplit, getOsSplit, getTopPages, getTopReferrers } from '@/lib/analytics/aggregate'
+import { getTimeseries, getTopCountries, getTopCities, getDeviceSplit, getBrowserSplit, getOsSplit, getTopPages, getTopReferrers, getRecentEvents } from '@/lib/analytics/aggregate'
 import { RangeSelector } from './RangeSelector'
 import { Timeseries } from './Timeseries'
 import { GeoTables } from './GeoTables'
 import { DeviceCharts } from './DeviceCharts'
 import { TopPages } from './TopPages'
 import { TopReferrers } from './TopReferrers'
+import { RecentEvents } from './RecentEvents'
 
 const headerStyle: React.CSSProperties = {
   display: 'flex',
@@ -19,6 +20,8 @@ const headerStyle: React.CSSProperties = {
 export default async function AnalyticsView({ initPageResult }: AdminViewServerProps) {
   const params = initPageResult?.req?.query as Record<string, string | undefined> | undefined
   const range = parseRange(params?.range)
+  const pageSize = 50
+  const pageNum = Math.max(1, Number(params?.page) || 1)
 
   const timeseries = await getTimeseries(range)
 
@@ -36,6 +39,7 @@ export default async function AnalyticsView({ initPageResult }: AdminViewServerP
   const pages = await getTopPages(range, 25)
 
   const referrers = await getTopReferrers(range, 25)
+  const events = await getRecentEvents(range, pageNum, pageSize)
 
   const vercelTeam = process.env.NEXT_PUBLIC_VERCEL_TEAM_SLUG ?? ''
   const vercelProject = process.env.NEXT_PUBLIC_VERCEL_PROJECT_NAME ?? ''
@@ -72,6 +76,13 @@ export default async function AnalyticsView({ initPageResult }: AdminViewServerP
       <DeviceCharts devices={devices} browsers={browsers} os={os} />
       <TopPages pages={pages} />
       <TopReferrers referrers={referrers} />
+      <RecentEvents
+        rows={events.rows}
+        total={events.total}
+        page={pageNum}
+        pageSize={pageSize}
+        range={range}
+      />
     </Gutter>
   )
 }
