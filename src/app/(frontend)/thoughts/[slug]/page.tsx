@@ -49,7 +49,7 @@ export default async function ThoughtDetail({ params }: { params: Promise<{ slug
     collection: 'posts',
     sort: '-date',
     limit: 100,
-    depth: 0,
+    depth: 1,
   })
 
   const idx = allDocs.findIndex((p) => p.slug === slug)

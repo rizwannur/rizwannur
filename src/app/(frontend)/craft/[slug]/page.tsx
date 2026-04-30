@@ -1,27 +1,50 @@
 import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import { PageShell } from '@/components/layout/PageShell'
 import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { PrevNext } from '@/components/ui/PrevNext'
-import { craft } from '@/data/craft'
+import type { Craft } from '@/data/craft'
+import type { Media } from '@/payload-types'
 
-export function generateStaticParams() {
-  return craft.map((c) => ({ slug: c.slug }))
+export async function generateStaticParams() {
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({ collection: 'craft', sort: 'order', limit: 0 })
+  return docs.map((c) => ({ slug: c.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const item = craft.find((c) => c.slug === slug)
-  return { title: item?.title ?? 'Craft' }
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({ collection: 'craft', where: { slug: { equals: slug } }, limit: 1 })
+  return { title: docs[0]?.title ?? 'Craft' }
 }
 
 export default async function CraftDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const item = craft.find((c) => c.slug === slug)
-  if (!item) return notFound()
+  const payload = await getPayload({ config })
 
-  const idx = craft.findIndex((c) => c.slug === slug)
-  const next = craft[idx + 1]
-  const prev = craft[idx - 1]
+  const { docs: allDocs } = await payload.find({ collection: 'craft', sort: 'order', limit: 0, depth: 1 })
+  const idx = allDocs.findIndex((c) => c.slug === slug)
+  if (idx === -1) return notFound()
+
+  const doc = allDocs[idx]
+  const item: Craft = {
+    slug: doc.slug,
+    title: doc.title,
+    date: doc.date,
+    description: doc.description,
+    cover: typeof doc.cover === 'object' ? ((doc.cover as Media).url ?? undefined) : undefined,
+    credit:
+      doc.credit?.name
+        ? { name: doc.credit.name, href: doc.credit.href ?? undefined }
+        : undefined,
+  }
+
+  const prevDoc = allDocs[idx - 1]
+  const nextDoc = allDocs[idx + 1]
+  const prev = prevDoc ? { slug: prevDoc.slug, title: prevDoc.title } : undefined
+  const next = nextDoc ? { slug: nextDoc.slug, title: nextDoc.title } : undefined
 
   return (
     <PageShell>

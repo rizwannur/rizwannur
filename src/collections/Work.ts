@@ -1,4 +1,19 @@
 import type { CollectionConfig } from 'payload'
+import {
+  BoldFeature,
+  BlocksFeature,
+  CodeBlock,
+  FixedToolbarFeature,
+  HeadingFeature,
+  InlineToolbarFeature,
+  ItalicFeature,
+  LinkFeature,
+  OrderedListFeature,
+  UnderlineFeature,
+  UnorderedListFeature,
+  UploadFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
 
 export const Work: CollectionConfig = {
   slug: 'work',
@@ -83,6 +98,41 @@ export const Work: CollectionConfig = {
       name: 'body',
       type: 'richText',
       required: true,
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => [
+          ...rootFeatures,
+          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
+          BoldFeature(),
+          ItalicFeature(),
+          UnderlineFeature(),
+          OrderedListFeature(),
+          UnorderedListFeature(),
+          LinkFeature(),
+          UploadFeature({
+            collections: {
+              media: {
+                fields: [{ name: 'caption', type: 'text' }],
+              },
+            },
+          }),
+          BlocksFeature({
+            blocks: [
+              CodeBlock({
+                defaultLanguage: 'ts',
+                languages: {
+                  plaintext: 'Plain Text',
+                  js: 'JavaScript',
+                  ts: 'TypeScript',
+                  tsx: 'TSX',
+                  jsx: 'JSX',
+                },
+              }),
+            ],
+          }),
+          FixedToolbarFeature(),
+          InlineToolbarFeature(),
+        ],
+      }),
       admin: {
         description: 'Full project writeup',
       },

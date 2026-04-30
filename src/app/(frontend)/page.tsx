@@ -5,12 +5,14 @@ import { Header } from '@/components/layout/Header'
 import { Socials } from '@/components/ui/Socials'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { WorkGrid } from '@/components/sections/WorkGrid'
+import { CraftGrid } from '@/components/sections/CraftGrid'
 import { ThoughtRow } from '@/components/sections/ThoughtRow'
 import { ViewAll } from '@/components/ui/ViewAll'
 import { Footer } from '@/components/layout/Footer'
 import { CompanyLink } from '@/components/ui/CompanyLink'
 import type { Work } from '@/data/work'
 import type { Thought } from '@/data/thoughts'
+import type { Craft } from '@/data/craft'
 import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
 
@@ -21,10 +23,11 @@ function formatDate(isoDate: string): string {
 export default async function HomePage() {
   const payload = await getPayload({ config })
 
-  const [profileDoc, { docs: workDocs }, { docs: postDocs }] = await Promise.all([
+  const [profileDoc, { docs: workDocs }, { docs: postDocs }, { docs: craftDocs }] = await Promise.all([
     payload.findGlobal({ slug: 'profile', depth: 1 }),
     payload.find({ collection: 'work', sort: 'order', limit: 6, depth: 1 }),
     payload.find({ collection: 'posts', sort: '-date', limit: 4, depth: 0 }),
+    payload.find({ collection: 'craft', sort: 'order', limit: 6, depth: 1 }),
   ])
 
   const avatar =
@@ -66,6 +69,18 @@ export default async function HomePage() {
       body: [],
     }
   })
+
+  const craftItems: Craft[] = craftDocs.map((item) => ({
+    slug: item.slug,
+    title: item.title,
+    date: item.date,
+    description: item.description,
+    cover: typeof item.cover === 'object' ? ((item.cover as Media).url ?? undefined) : undefined,
+    credit:
+      item.credit?.name
+        ? { name: item.credit.name, href: item.credit.href ?? undefined }
+        : undefined,
+  }))
 
   const thoughtItems: Thought[] = postDocs.map((item) => ({
     slug: item.slug,
@@ -124,6 +139,15 @@ export default async function HomePage() {
         <WorkGrid items={workItems} />
         <ViewAll href="/work" />
       </section>
+
+      {/* Craft */}
+      {craftItems.length > 0 && (
+        <section>
+          <SectionHeading>Craft</SectionHeading>
+          <CraftGrid items={craftItems} />
+          <ViewAll href="/craft" />
+        </section>
+      )}
 
       {/* Thoughts */}
       <section>

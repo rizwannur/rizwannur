@@ -13,6 +13,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Work } from './collections/Work'
 import { Posts } from './collections/Posts'
+import { Craft } from './collections/Craft'
 import { Profile } from './globals/Profile'
 
 const filename = fileURLToPath(import.meta.url)
@@ -25,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Work, Posts],
+  collections: [Users, Media, Work, Posts, Craft],
   globals: [Profile],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -36,6 +37,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    migrationDir: path.resolve(dirname, 'lib/migrations'),
   }),
   email: nodemailerAdapter({
     defaultFromAddress: 'noreply@example.com',
