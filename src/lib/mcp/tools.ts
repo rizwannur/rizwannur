@@ -286,7 +286,7 @@ export async function registerTools(server: any) {
     {
       title: 'Create Work Item',
       description:
-        'Add a new project to the work section. subtitle is a short type descriptor like "Marketing Website" or "iOS App". description is the one-liner shown on project cards — keep it to ~15 words. body is the full project writeup in Markdown. href is the live site URL. order controls position — lower = higher on the page; call list_work first to see existing order values and pick a sensible number.',
+        'Add a new project to the work section. subtitle is a short type descriptor like "Marketing Website" or "iOS App". description is the one-liner shown on project cards — keep it to ~15 words. body is the full project writeup in Markdown. href is the live site URL. order controls position — lower = higher on the page; call list_work first to see existing order values and pick a sensible number. cover is a media file id from list_media. Gallery images (images field) must be managed through the Payload admin UI.',
       inputSchema: {
         title: z.string().describe('Project title'),
         subtitle: z.string().describe('Short type descriptor e.g. "Marketing Website", "iOS App", "Brand Identity"'),
@@ -296,9 +296,10 @@ export async function registerTools(server: any) {
         order: z.number().int().optional().describe('Display order — lower = higher on page. Default 99. Check list_work for existing values.'),
         href: z.string().optional().describe('Live site URL e.g. "https://example.com"'),
         slug: z.string().optional().describe('URL slug. Auto-generated from title if omitted.'),
+        cover: z.number().int().optional().describe('Media file id for the cover image — get ids from list_media.'),
       },
     },
-    async ({ title, subtitle, description, body, date, order, href, slug }: any) => {
+    async ({ title, subtitle, description, body, date, order, href, slug, cover }: any) => {
       const item = (await payload.create({
         collection: 'work',
         overrideAccess: true,
@@ -311,6 +312,7 @@ export async function registerTools(server: any) {
           order: order ?? 99,
           ...(href ? { href } : {}),
           ...(slug ? { slug } : {}),
+          ...(cover !== undefined ? { cover } : {}),
           body: (await markdownToLexical(body)) as any,
         },
       } as any)) as any
@@ -330,19 +332,20 @@ export async function registerTools(server: any) {
     {
       title: 'Update Work Item',
       description:
-        'Update an existing work item by id. Only fields you provide are changed — omit anything to leave it untouched. Pass body as Markdown to update the writeup. Get the id from list_work first.',
+        'Update an existing work item by id. Only fields you provide are changed — omit anything to leave it untouched. Pass body as Markdown to update the writeup. Pass a media file id as cover to set the cover image. Get the id from list_work first. Gallery images (images field) must be managed through the Payload admin UI.',
       inputSchema: {
         id: z.string().describe('Work item id — get this from list_work'),
-        title: z.string().optional(),
-        subtitle: z.string().optional(),
-        description: z.string().optional(),
+        title: z.string().optional().describe('Updated project title'),
+        subtitle: z.string().optional().describe('Updated subtitle e.g. "Marketing Website"'),
+        description: z.string().optional().describe('Updated one-liner for project cards'),
         body: z.string().optional().describe('Updated writeup in Markdown'),
-        date: z.string().optional(),
-        order: z.number().int().optional(),
-        href: z.string().optional(),
+        date: z.string().optional().describe('Updated display date e.g. "Mar 2026"'),
+        order: z.number().int().optional().describe('Updated display order — lower = higher on page'),
+        href: z.string().optional().describe('Updated live site URL'),
+        cover: z.number().int().optional().describe('Media file id for the cover image — get ids from list_media.'),
       },
     },
-    async ({ id, title, subtitle, description, body, date, order, href }: any) => {
+    async ({ id, title, subtitle, description, body, date, order, href, cover }: any) => {
       const data: Record<string, unknown> = {}
       if (title !== undefined) data.title = title
       if (subtitle !== undefined) data.subtitle = subtitle
@@ -350,6 +353,7 @@ export async function registerTools(server: any) {
       if (date !== undefined) data.date = date
       if (order !== undefined) data.order = order
       if (href !== undefined) data.href = href
+      if (cover !== undefined) data.cover = cover
       if (body !== undefined) data.body = (await markdownToLexical(body)) as any
 
       const item = (await payload.update({ collection: 'work', id, overrideAccess: true, data })) as any
@@ -470,13 +474,14 @@ export async function registerTools(server: any) {
     {
       title: 'Create Craft Item',
       description:
-        'Add a new craft item. These are small focused UI experiments — keep description to one punchy sentence that describes what makes it interesting. order controls position on the page — call list_craft first to see existing order values.',
+        'Add a new craft item. These are small focused UI experiments — keep description to one punchy sentence that describes what makes it interesting. order controls position on the page — call list_craft first to see existing order values. cover is a media file id from list_media.',
       inputSchema: {
         title: z.string().describe('Craft item title e.g. "Magnetic Button"'),
         description: z.string().describe('One punchy sentence describing the experiment e.g. "A button that pulls the cursor toward it with a subtle magnetic effect."'),
         date: z.string().describe('Display date string e.g. "Apr 2026"'),
         order: z.number().int().optional().describe('Display order — lower = higher on page. Default 99. Check list_craft for existing values.'),
         slug: z.string().optional().describe('URL slug. Auto-generated from title if omitted.'),
+        cover: z.number().int().optional().describe('Media file id for the cover image — get ids from list_media.'),
         credit: z
           .object({
             name: z.string().describe('Name of the person or source to credit'),
@@ -486,7 +491,7 @@ export async function registerTools(server: any) {
           .describe('Optional attribution if the experiment is inspired by or based on someone else\'s work'),
       },
     },
-    async ({ title, description, date, order, slug, credit }: any) => {
+    async ({ title, description, date, order, slug, cover, credit }: any) => {
       const item = (await payload.create({
         collection: 'craft',
         overrideAccess: true,
@@ -497,6 +502,7 @@ export async function registerTools(server: any) {
           date,
           order: order ?? 99,
           ...(slug ? { slug } : {}),
+          ...(cover !== undefined ? { cover } : {}),
           ...(credit ? { credit } : {}),
         },
       } as any)) as any
@@ -516,27 +522,30 @@ export async function registerTools(server: any) {
     {
       title: 'Update Craft Item',
       description:
-        'Update an existing craft item by id. Only fields you provide are changed — omit anything to leave it untouched. Get the id from list_craft first.',
+        'Update an existing craft item by id. Only fields you provide are changed — omit anything to leave it untouched. Pass a media file id as cover to set the cover image. Get the id from list_craft first.',
       inputSchema: {
         id: z.string().describe('Craft item id — get this from list_craft'),
-        title: z.string().optional(),
-        description: z.string().optional(),
-        date: z.string().optional(),
-        order: z.number().int().optional(),
+        title: z.string().optional().describe('Updated title'),
+        description: z.string().optional().describe('Updated one-sentence description'),
+        date: z.string().optional().describe('Updated display date e.g. "Apr 2026"'),
+        order: z.number().int().optional().describe('Updated display order — lower = higher on page'),
+        cover: z.number().int().optional().describe('Media file id for the cover image — get ids from list_media.'),
         credit: z
           .object({
             name: z.string(),
             href: z.string().optional(),
           })
-          .optional(),
+          .optional()
+          .describe('Updated attribution'),
       },
     },
-    async ({ id, title, description, date, order, credit }: any) => {
+    async ({ id, title, description, date, order, cover, credit }: any) => {
       const data: Record<string, unknown> = {}
       if (title !== undefined) data.title = title
       if (description !== undefined) data.description = description
       if (date !== undefined) data.date = date
       if (order !== undefined) data.order = order
+      if (cover !== undefined) data.cover = cover
       if (credit !== undefined) data.credit = credit
 
       const item = (await payload.update({ collection: 'craft', id, overrideAccess: true, data })) as any
