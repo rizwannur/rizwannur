@@ -1,4 +1,5 @@
 import type { CountryRow, CityRow } from '@/lib/analytics/aggregate'
+import { flagEmoji, countryName } from '@/lib/analytics/country'
 
 const tableStyle: React.CSSProperties = {
   width: '100%',
@@ -40,7 +41,10 @@ export function GeoTables({ countries, cities }: { countries: CountryRow[]; citi
           <tbody>
             {countries.map((c) => (
               <tr key={c.country}>
-                <td style={tdStyle}>{c.country}</td>
+                <td style={tdStyle}>
+                  <span style={{ marginRight: 6 }}>{flagEmoji(c.country)}</span>
+                  {countryName(c.country)}
+                </td>
                 <td style={tdStyle}>{c.visits}</td>
                 <td style={tdStyle}>{c.unique}</td>
                 <td style={tdStyle}>{c.pct}%</td>
@@ -71,7 +75,10 @@ export function GeoTables({ countries, cities }: { countries: CountryRow[]; citi
             {cities.map((c) => (
               <tr key={`${c.city}|${c.country}`}>
                 <td style={tdStyle}>{c.city}</td>
-                <td style={tdStyle}>{c.country}</td>
+                <td style={tdStyle}>
+                  <span style={{ marginRight: 6 }}>{flagEmoji(c.country)}</span>
+                  {countryName(c.country)}
+                </td>
                 <td style={tdStyle}>{c.visits}</td>
               </tr>
             ))}

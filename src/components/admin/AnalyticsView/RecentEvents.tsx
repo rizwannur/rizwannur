@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { EventRow } from '@/lib/analytics/aggregate'
 import type { Range } from '@/lib/analytics/range'
+import { flagEmoji } from '@/lib/analytics/country'
 
 const cardStyle: React.CSSProperties = {
   border: '1px solid var(--theme-elevation-150)',
@@ -51,7 +52,10 @@ export function RecentEvents({
             <tr key={r.id}>
               <td style={cellStyle}>{new Date(r.createdAt).toLocaleString()}</td>
               <td style={cellStyle}>{r.path}</td>
-              <td style={cellStyle}>{r.country}</td>
+              <td style={cellStyle}>
+                <span style={{ marginRight: 4 }}>{flagEmoji(r.country)}</span>
+                {r.country || '—'}
+              </td>
               <td style={cellStyle}>{r.city}</td>
               <td style={cellStyle}>{r.device}</td>
               <td style={cellStyle}>{r.browser}</td>

@@ -7,6 +7,7 @@ import {
   getTopPages,
 } from '@/lib/analytics/aggregate'
 import { parseRange, RANGE_LABELS } from '@/lib/analytics/range'
+import { flagEmoji, countryName } from '@/lib/analytics/country'
 import { RangeSelector } from '@/components/admin/AnalyticsView/RangeSelector'
 import { ChartClient } from './ChartClient'
 
@@ -81,7 +82,9 @@ export default async function BeforeDashboard({
           <div style={tileStyle}>
             <span style={{ fontSize: 11, opacity: 0.7 }}>Top country</span>
             <strong style={{ fontSize: 16 }}>
-              {topCountry ? `${topCountry.country} ${topCountry.pct}%` : '—'}
+              {topCountry
+                ? `${flagEmoji(topCountry.country)} ${countryName(topCountry.country)} ${topCountry.pct}%`
+                : '—'}
             </strong>
           </div>
           <div style={tileStyle}>
@@ -104,7 +107,10 @@ export default async function BeforeDashboard({
                 key={c.country}
                 style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}
               >
-                <span>{c.country}</span>
+                <span>
+                  <span style={{ marginRight: 6 }}>{flagEmoji(c.country)}</span>
+                  {countryName(c.country)}
+                </span>
                 <span>
                   {c.visits} <span style={{ opacity: 0.6 }}>({c.pct}%)</span>
                 </span>
