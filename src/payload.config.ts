@@ -46,12 +46,11 @@ export default buildConfig({
     'https://www.rizwannur.com',
     'https://rizwannur.xyz',
   ],
-  csrf: [
-    'http://localhost:3000',
-    'https://rizwannur.com',
-    'https://www.rizwannur.com',
-    'https://rizwannur.xyz',
-  ],
+  // Empty CSRF array disables the Origin-header allowlist used during cookie
+  // extraction in node_modules/payload/dist/auth/extractJWT.js. Without this,
+  // any Origin not matching the array is treated as no-cookie -> 401 even
+  // when the user is logged in. We rely on `cors` + Sec-Fetch-Site for safety.
+  csrf: [],
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
