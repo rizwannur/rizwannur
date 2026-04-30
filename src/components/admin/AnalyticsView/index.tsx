@@ -1,11 +1,12 @@
 import type { AdminViewServerProps } from 'payload'
 import { Gutter } from '@payloadcms/ui'
 import { parseRange, RANGE_LABELS } from '@/lib/analytics/range'
-import { getTimeseries, getTopCountries, getTopCities, getDeviceSplit, getBrowserSplit, getOsSplit } from '@/lib/analytics/aggregate'
+import { getTimeseries, getTopCountries, getTopCities, getDeviceSplit, getBrowserSplit, getOsSplit, getTopPages } from '@/lib/analytics/aggregate'
 import { RangeSelector } from './RangeSelector'
 import { Timeseries } from './Timeseries'
 import { GeoTables } from './GeoTables'
 import { DeviceCharts } from './DeviceCharts'
+import { TopPages } from './TopPages'
 
 const headerStyle: React.CSSProperties = {
   display: 'flex',
@@ -30,6 +31,8 @@ export default async function AnalyticsView({ initPageResult }: AdminViewServerP
     getBrowserSplit(range),
     getOsSplit(range),
   ])
+
+  const pages = await getTopPages(range, 25)
 
   const vercelTeam = process.env.NEXT_PUBLIC_VERCEL_TEAM_SLUG ?? ''
   const vercelProject = process.env.NEXT_PUBLIC_VERCEL_PROJECT_NAME ?? ''
@@ -64,6 +67,7 @@ export default async function AnalyticsView({ initPageResult }: AdminViewServerP
       <Timeseries data={timeseries} />
       <GeoTables countries={countries} cities={cities} />
       <DeviceCharts devices={devices} browsers={browsers} os={os} />
+      <TopPages pages={pages} />
     </Gutter>
   )
 }
