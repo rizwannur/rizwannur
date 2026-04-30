@@ -17,7 +17,12 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'api.microlink.io' },
       { protocol: 'https', hostname: '**.microlink.io' },
+      { protocol: 'https', hostname: '**.public.blob.vercel-storage.com' },
     ],
+  },
+  async redirects() {
+    const { redirects: getRedirects } = await import('./src/redirects')
+    return getRedirects()
   },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
