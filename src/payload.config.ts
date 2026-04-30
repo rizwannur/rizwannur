@@ -1,7 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
@@ -62,10 +61,6 @@ export default buildConfig({
         (doc as { excerpt?: string; description?: string })?.excerpt ??
         (doc as { description?: string })?.description ??
         '',
-    }),
-    redirectsPlugin({
-      collections: ['work', 'posts'],
-      redirectTypes: ['301', '302'],
     }),
     searchPlugin({
       collections: ['work', 'posts'],
