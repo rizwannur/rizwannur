@@ -579,11 +579,65 @@ export async function registerTools(server: any) {
   // ─── MEDIA ──────────────────────────────────────────────────────────────
 
   server.registerTool(
+    'upload_media',
+    {
+      title: 'Upload Media from URL',
+      description:
+        'Download an image from a public URL and upload it to the Payload media library. Returns the media id, filename, and url. Use the id as a cover field in create_work / update_work / create_craft / update_craft, or embed it in post/work body content using the syntax ![media:<id>](). Supports JPEG, PNG, WebP, GIF, SVG. The URL must be publicly accessible.',
+      inputSchema: {
+        url: z.string().url().describe('Public URL of the image to download and upload e.g. "https://example.com/image.jpg"'),
+        alt: z.string().optional().describe('Alt text for the image, used for accessibility and SEO'),
+        filename: z.string().optional().describe('Filename to save as e.g. "my-image.jpg". Auto-detected from the URL if omitted.'),
+      },
+    },
+    async ({ url, alt, filename }: any) => {
+      const response = await fetch(url)
+      if (!response.ok) {
+        return { content: [{ type: 'text' as const, text: `Failed to fetch image from URL: ${response.status} ${response.statusText}` }] }
+      }
+
+      const contentType = response.headers.get('content-type') || 'image/jpeg'
+      const buffer = await response.arrayBuffer()
+      const name = filename || url.split('/').pop()?.split('?')[0] || 'image.jpg'
+
+      const media = await payload.create({
+        collection: 'media',
+        overrideAccess: true,
+        data: { alt: alt ?? '' },
+        file: {
+          data: Buffer.from(buffer),
+          mimetype: contentType,
+          name,
+          size: buffer.byteLength,
+        },
+      })
+
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(
+              {
+                id: (media as any).id,
+                filename: (media as any).filename,
+                url: (media as any).url,
+                hint: `Use as cover: pass id as cover field. Embed in body: ![media:${(media as any).id}]()`,
+              },
+              null,
+              2,
+            ),
+          },
+        ],
+      }
+    },
+  )
+
+  server.registerTool(
     'list_media',
     {
       title: 'List Media',
       description:
-        'List all uploaded media files. Returns id, filename, url, alt, mimeType for each file. Use the id when you want to assign a cover image to a work or craft item — pass it as the cover field in update_work or update_craft.',
+        'List all uploaded media files. Returns id, filename, url, alt, mimeType for each file. Use the id as a cover field in create_work / update_work / create_craft / update_craft, or embed in post/work body using ![media:<id>](). To upload a new image from a URL, use upload_media instead.',
       inputSchema: {
         limit: z.number().int().min(1).max(100).default(20).describe('Max results (default 20)'),
       },
