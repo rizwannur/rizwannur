@@ -14,7 +14,7 @@ import { Media } from './collections/Media'
 import { Work } from './collections/Work'
 import { Posts } from './collections/Posts'
 import { Craft } from './collections/Craft'
-import { Profile } from './globals/Profile'
+import { Profile } from './collections/Profile'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
