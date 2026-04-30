@@ -1,19 +1,60 @@
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import { PageShell } from '@/components/site/PageShell'
 import { Header } from '@/components/site/Header'
 import { Socials } from '@/components/site/Socials'
 import { SectionHeading } from '@/components/site/SectionHeading'
 import { WorkGrid } from '@/components/site/WorkGrid'
-// import { CraftGrid } from '@/components/site/CraftGrid'
 import { ThoughtRow } from '@/components/site/ThoughtRow'
 import { ViewAll } from '@/components/site/ViewAll'
 import { Footer } from '@/components/site/Footer'
 import { CompanyLink } from '@/components/site/CompanyLink'
 import { profile } from '@/data/profile'
-import { work } from '@/data/work'
-import { thoughts } from '@/data/thoughts'
-// import { craft } from '@/data/craft'
+import type { Work } from '@/data/work'
+import type { Thought } from '@/data/thoughts'
+import type { Media } from '@/payload-types'
 
-export default function HomePage() {
+function formatDate(isoDate: string): string {
+  return new Date(isoDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+}
+
+export default async function HomePage() {
+  const payload = await getPayload({ config })
+
+  const { docs: workDocs } = await payload.find({
+    collection: 'work',
+    sort: 'order',
+    limit: 6,
+    depth: 1,
+  })
+
+  const { docs: postDocs } = await payload.find({
+    collection: 'posts',
+    sort: '-date',
+    limit: 4,
+    depth: 0,
+  })
+
+  const workItems: Work[] = workDocs.map((item) => ({
+    slug: item.slug,
+    title: item.title,
+    subtitle: item.subtitle,
+    cover: typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : '',
+    date: item.date,
+    href: item.href ?? undefined,
+    description: item.description,
+    body: [],
+  }))
+
+  const thoughtItems: Thought[] = postDocs.map((item) => ({
+    slug: item.slug,
+    title: item.title,
+    date: formatDate(item.date),
+    readTime: item.readTime,
+    excerpt: item.excerpt,
+    body: [],
+  }))
+
   return (
     <PageShell>
       <Header />
@@ -54,7 +95,7 @@ export default function HomePage() {
       {/* Work */}
       <section>
         <SectionHeading>Work</SectionHeading>
-        <WorkGrid items={work.slice(0, 6)} />
+        <WorkGrid items={workItems} />
         <ViewAll href="/work" />
       </section>
 
@@ -62,19 +103,12 @@ export default function HomePage() {
       <section>
         <SectionHeading>Thoughts</SectionHeading>
         <div className="flex flex-col gap-6">
-          {thoughts.slice(0, 4).map((t) => (
+          {thoughtItems.map((t) => (
             <ThoughtRow key={t.slug} item={t} />
           ))}
         </div>
         <ViewAll href="/thoughts" />
       </section>
-
-      {/* Craft */}
-      {/* <section>
-        <SectionHeading>Craft</SectionHeading>
-        <CraftGrid items={craft.slice(0, 6)} />
-        <ViewAll href="/craft" />
-      </section> */}
 
       <Footer />
     </PageShell>
