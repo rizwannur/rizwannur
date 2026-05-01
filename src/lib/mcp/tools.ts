@@ -7,6 +7,7 @@ import { checkSeo } from './validators/seo'
 import { suggestInternalLinks } from './internal-links'
 import { buildPreviewUrl } from './preview'
 import { validateInlineImages, formatInlineValidationError } from './validators/inline-images'
+import { authorBlogPost } from './orchestrator'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mediaRef(m: any): { id: string; url: string; alt: string | null } | null {
@@ -1042,6 +1043,67 @@ export async function registerTools(server: any) {
       const post = (await payload.findByID({ collection: 'posts', id, overrideAccess: true })) as { slug: string }
       const previewUrl = buildPreviewUrl({ slug: post.slug })
       return { content: [{ type: 'text' as const, text: JSON.stringify({ previewUrl }, null, 2) }] }
+    },
+  )
+
+  // ─── ORCHESTRATOR ───────────────────────────────────────────────────────
+
+  server.registerTool(
+    'author_blog_post',
+    {
+      title: 'Author Blog Post (One-Pass)',
+      description:
+        'Create a complete blog post in a single call. Server-side pipeline:\n  1. Validate ![alt](IMG_N) placeholders match inlineImages keys\n  2. Generate cover image (or use provided mediaId, or skip)\n  3. Generate inline images in parallel\n  4. Suggest internal links (surfaced in result, not auto-edited)\n  5. Run check_seo — abort on any fail issue\n  6. Substitute placeholders → Lexical → create post\n  7. Return previewUrl\n\nOn failure at any step, the response includes error.partial with already-generated mediaIds; retry with `partial` populated to skip redo.\n\nRecommended default for new posts. For edits / refreshes / partial updates, use the atomic tools (generate_image, update_post, etc.).\n\nBefore calling: read site://voice and site://image-style.\nAfter calling: share previewUrl with user; flip status via update_post on approval.',
+      inputSchema: {
+        title: z.string(),
+        excerpt: z.string(),
+        body: z.string().describe('Markdown. Use ![alt](IMG_N) for inline images.'),
+        readTime: z.string(),
+        tags: z.array(z.string()).optional(),
+        slug: z.string().optional(),
+        date: z.string().optional(),
+        coverImage: z
+          .union([
+            z.object({ generate: z.object({ prompt: z.string(), alt: z.string(), aspectRatio: z.enum(['16:9', '4:3', '1:1', '3:4']).optional() }) }),
+            z.object({ mediaId: z.number().int() }),
+            z.object({ skip: z.literal(true) }),
+          ])
+          .describe('How to obtain the cover image.'),
+        inlineImages: z
+          .record(
+            z.string(),
+            z.object({
+              generate: z.object({ prompt: z.string(), alt: z.string(), aspectRatio: z.enum(['16:9', '4:3', '1:1', '3:4']).optional() }).optional(),
+              mediaId: z.number().int().optional(),
+            }),
+          )
+          .optional()
+          .describe('Map of IMG_N → image spec. Each value either { generate: {...} } or { mediaId }.'),
+        seo: z
+          .object({
+            title: z.string().optional(),
+            description: z.string().optional(),
+            image: z.number().int().optional(),
+          })
+          .optional(),
+        internalLinks: z.enum(['auto', 'skip']).optional().describe('Default "auto" — runs suggester and surfaces matches.'),
+        status: z.enum(['draft', 'published']).optional().describe('Default "draft".'),
+        partial: z
+          .object({
+            coverMediaId: z.number().int().optional(),
+            inlineMediaIds: z.record(z.string(), z.number().int()).optional(),
+          })
+          .optional()
+          .describe('Pass on retry to skip already-completed image generations.'),
+      },
+    },
+    async (input: any) => {
+      const result = await authorBlogPost(input)
+      const isError = 'error' in result
+      return {
+        content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+        ...(isError ? { isError: true } : {}),
+      }
     },
   )
 }
