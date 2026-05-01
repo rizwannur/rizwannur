@@ -5,4 +5,6 @@ export type Thought = {
   readTime: string
   excerpt: string
   body: string[]
+  coverImage?: { url: string; alt: string } | null
+  tags?: string[]
 }
