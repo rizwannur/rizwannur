@@ -27,7 +27,7 @@ export async function registerTools(server: any) {
     {
       title: 'List Posts',
       description:
-        'List all blog posts sorted newest-first. Returns id, slug, title, date, readTime, excerpt — body is excluded (too large). Use this to browse existing posts, find an id before editing, or check for duplicates before creating a new post.',
+        'List blog posts sorted newest-first. Returns id, slug, title, date, readTime, excerpt, tags, coverImage, status.\n\nWhen to use: browse posts, find ids before update/delete, dedup before creating.\n\nNext steps: get_post for full body, update_post / delete_post by id.',
       inputSchema: {
         limit: z.number().int().min(1).max(100).default(20).describe('Max results to return (default 20)'),
         page: z.number().int().min(1).default(1).describe('Page number for pagination (default 1)'),
@@ -90,7 +90,7 @@ export async function registerTools(server: any) {
     {
       title: 'Get Post',
       description:
-        'Fetch the full content of a single blog post including the body returned as Markdown. Always call this before editing — read the current body first, then call update_post with your changes.',
+        'Fetch a single post by id with full body (Lexical → markdown). Returns all fields.\n\nWhen to use: before update_post, when you need to see current body or SEO state.\n\nNext steps: update_post with changes, or check_seo on the returned data.',
       inputSchema: {
         slug: z.string().describe('The post slug, e.g. "my-first-post". Get slugs from list_posts.'),
       },
@@ -311,7 +311,7 @@ export async function registerTools(server: any) {
     {
       title: 'Delete Post',
       description:
-        'Permanently delete a blog post by id. This cannot be undone. Confirm the correct post via list_posts before calling.',
+        'Permanently delete a post by id. Cannot be undone.\n\nWhen to use: explicit user request only. Confirm with list_posts first.\n\nNext steps: none — the post is gone. Inform user.',
       inputSchema: {
         id: z.string().describe('Post id — get this from list_posts'),
       },
@@ -329,7 +329,7 @@ export async function registerTools(server: any) {
     {
       title: 'List Work',
       description:
-        'List work/project items sorted by display order ascending (lower order = higher on the page). Returns id, slug, title, subtitle, description, date, href, order, cover, tech. Supports search and pagination. Use this to browse projects, find ids before editing, or check existing order values before adding a new item.',
+        'List work/project items sorted by display order ascending (lower order = higher on the page). Returns id, slug, title, subtitle, description, date, href, order, cover, tech. Supports search and pagination. Use this to browse projects, find ids before editing, or check existing order values before adding a new item.\n\nNext steps: get_work for full body and gallery, update_work to edit, set_work_images to manage gallery.',
       inputSchema: {
         limit: z.number().int().min(1).max(100).default(50).describe('Max results to return (default 50)'),
         page: z.number().int().min(1).default(1).describe('Page number (default 1)'),
@@ -390,7 +390,7 @@ export async function registerTools(server: any) {
     {
       title: 'Get Work Item',
       description:
-        'Fetch full details of a single work item including the body writeup returned as Markdown. Call this before editing — read the current body first, then call update_work with your changes.',
+        'Fetch full details of a single work item including the body writeup returned as Markdown. Call this before editing — read the current body first, then call update_work with your changes.\n\nNext steps: update_work to edit fields, set_work_images to replace the gallery.',
       inputSchema: {
         slug: z.string().describe('Work item slug. Get slugs from list_work.'),
       },
@@ -452,7 +452,7 @@ export async function registerTools(server: any) {
     {
       title: 'Create Work Item',
       description:
-        'Add a new project to the work section. subtitle is a short type descriptor like "Marketing Website" or "iOS App". description is the one-liner shown on project cards — keep it to ~15 words. body is the full project writeup in Markdown. href is the live site URL. order controls position — lower = higher on the page; call list_work first to see existing order values and pick a sensible number. cover is a media file id from list_media. Gallery images (images field) must be managed through the Payload admin UI.',
+        'Add a new project to the work section. subtitle is a short type descriptor like "Marketing Website" or "iOS App". description is the one-liner shown on project cards — keep it to ~15 words. body is the full project writeup in Markdown. href is the live site URL. order controls position — lower = higher on the page; call list_work first to see existing order values and pick a sensible number. cover is a media file id from list_media. Gallery images (images field) must be managed through the Payload admin UI.\n\nNext steps: set_work_images to populate the gallery, update_work to refine.',
       inputSchema: {
         title: z.string().describe('Project title'),
         subtitle: z.string().describe('Short type descriptor e.g. "Marketing Website", "iOS App", "Brand Identity"'),
@@ -517,7 +517,7 @@ export async function registerTools(server: any) {
     {
       title: 'Update Work Item',
       description:
-        'Update an existing work item by id. Only fields you provide are changed — omit anything to leave it untouched. Pass body as Markdown to update the writeup. Pass a media file id as cover to set the cover image. Get the id from list_work first. Gallery images (images field) must be managed through the Payload admin UI.',
+        'Update an existing work item by id. Only fields you provide are changed — omit anything to leave it untouched. Pass body as Markdown to update the writeup. Pass a media file id as cover to set the cover image. Get the id from list_work first. Gallery images (images field) must be managed through the Payload admin UI.\n\nNext steps: set_work_images to update the gallery, get_work to verify changes.',
       inputSchema: {
         id: z.string().describe('Work item id — get this from list_work'),
         title: z.string().optional().describe('Updated project title'),
@@ -575,7 +575,7 @@ export async function registerTools(server: any) {
     {
       title: 'Delete Work Item',
       description:
-        'Permanently delete a work item by id. This cannot be undone. Confirm the correct item via list_work before calling.',
+        'Permanently delete a work item by id. This cannot be undone. Confirm the correct item via list_work before calling.\n\nNext steps: none — the item is gone. Inform user.',
       inputSchema: {
         id: z.string().describe('Work item id — get this from list_work'),
       },
@@ -591,7 +591,7 @@ export async function registerTools(server: any) {
     {
       title: 'Set Work Gallery',
       description:
-        'Replace the gallery images on a work item. Pass an array of {mediaId, caption?} in display order. Empty array clears the gallery. Atomic replace — existing entries are dropped. Use list_media to get mediaIds.',
+        'Replace the gallery images on a work item. Pass an array of {mediaId, caption?} in display order. Empty array clears the gallery. Atomic replace — existing entries are dropped. Use list_media to get mediaIds.\n\nNext steps: get_work to verify the gallery, or update_work for other field edits.',
       inputSchema: {
         id: z.string().describe('Work item id — get this from list_work'),
         images: z
@@ -634,7 +634,7 @@ export async function registerTools(server: any) {
     {
       title: 'List Craft',
       description:
-        'List craft items (small UI experiments — components, animations, micro-interactions) sorted by display order ascending. Returns id, slug, title, date, description, order, cover, tags. Supports search and pagination. Use to browse items or find an id before editing.',
+        'List craft items (small UI experiments — components, animations, micro-interactions) sorted by display order ascending. Returns id, slug, title, date, description, order, cover, tags. Supports search and pagination. Use to browse items or find an id before editing.\n\nNext steps: get_craft for full details, update_craft / delete_craft by id.',
       inputSchema: {
         limit: z.number().int().min(1).max(100).default(50).describe('Max results (default 50)'),
         page: z.number().int().min(1).default(1).describe('Page (default 1)'),
@@ -689,7 +689,7 @@ export async function registerTools(server: any) {
     {
       title: 'Get Craft Item',
       description:
-        'Fetch full details of a single craft item including credit attribution if set.',
+        'Fetch full details of a single craft item including credit attribution if set.\n\nNext steps: update_craft to edit fields by id.',
       inputSchema: {
         slug: z.string().describe('Craft item slug. Get slugs from list_craft.'),
       },
@@ -736,7 +736,7 @@ export async function registerTools(server: any) {
     {
       title: 'Create Craft Item',
       description:
-        'Add a new craft item. These are small focused UI experiments — keep description to one punchy sentence that describes what makes it interesting. order controls position on the page — call list_craft first to see existing order values. cover is a media file id from list_media.',
+        'Add a new craft item. These are small focused UI experiments — keep description to one punchy sentence that describes what makes it interesting. order controls position on the page — call list_craft first to see existing order values. cover is a media file id from list_media.\n\nNext steps: get_craft to verify, update_craft for refinements.',
       inputSchema: {
         title: z.string().describe('Craft item title e.g. "Magnetic Button"'),
         description: z.string().describe('One punchy sentence describing the experiment e.g. "A button that pulls the cursor toward it with a subtle magnetic effect."'),
@@ -786,7 +786,7 @@ export async function registerTools(server: any) {
     {
       title: 'Update Craft Item',
       description:
-        'Update an existing craft item by id. Only fields you provide are changed — omit anything to leave it untouched. Pass a media file id as cover to set the cover image. Get the id from list_craft first.',
+        'Update an existing craft item by id. Only fields you provide are changed — omit anything to leave it untouched. Pass a media file id as cover to set the cover image. Get the id from list_craft first.\n\nNext steps: get_craft to verify changes.',
       inputSchema: {
         id: z.string().describe('Craft item id — get this from list_craft'),
         title: z.string().optional().describe('Updated title'),
@@ -831,7 +831,7 @@ export async function registerTools(server: any) {
     {
       title: 'Delete Craft Item',
       description:
-        'Permanently delete a craft item by id. This cannot be undone. Confirm the correct item via list_craft before calling.',
+        'Permanently delete a craft item by id. This cannot be undone. Confirm the correct item via list_craft before calling.\n\nNext steps: none — the item is gone. Inform user.',
       inputSchema: {
         id: z.string().describe('Craft item id — get this from list_craft'),
       },
@@ -849,7 +849,7 @@ export async function registerTools(server: any) {
     {
       title: 'Upload Media from URL',
       description:
-        'Download an image from a public URL and upload it to the Payload media library. Returns the media id, filename, and url. Use the id as a cover field in create_work / update_work / create_craft / update_craft, or embed it in post/work body content using the syntax ![media:<id>](). Supports JPEG, PNG, WebP, GIF, SVG. The URL must be publicly accessible.',
+        'Download an image from a public URL and upload to media library. Returns { id, filename, url }.\n\nWhen to use: agent already has an image URL (e.g. from a search result). For AI generation, use generate_image instead.\n\nNext steps: pass id to coverImage / set_work_images, or include in inlineImages map.',
       inputSchema: {
         url: z.string().url().describe('Public URL of the image to download and upload e.g. "https://example.com/image.jpg"'),
         alt: z.string().optional().describe('Alt text for the image, used for accessibility and SEO'),
@@ -903,7 +903,7 @@ export async function registerTools(server: any) {
     {
       title: 'List Media',
       description:
-        'List uploaded media files. Returns id, filename, url, alt, mimeType, width, height, filesize, createdAt, updatedAt. Sorted newest-first. Supports search by filename/alt and pagination. Use the id as a cover field in create_work / update_work / create_craft / update_craft, or embed in body using ![media:<id>](). To upload a new image from a URL, use upload_media instead.',
+        'List media items newest-first. Returns id, filename, url, alt, dimensions.\n\nWhen to use: find existing images to reuse. Avoid regenerating images that already exist.\n\nNext steps: pass id as coverImage / mediaId in author_blog_post, or include in inlineImages.',
       inputSchema: {
         limit: z.number().int().min(1).max(100).default(20).describe('Max results (default 20)'),
         page: z.number().int().min(1).default(1).describe('Page number (default 1)'),
