@@ -106,3 +106,17 @@ export async function lexicalToMarkdown(data: unknown, ref: FieldRef): Promise<s
     editorConfig,
   })
 }
+
+const PLACEHOLDER_IMAGE_RE = /!\[([^\]]*)\]\((IMG_\d+)\)/g
+
+export function substituteInlinePlaceholders(
+  markdown: string,
+  inlineImages: Record<string, { url: string; alt?: string }>,
+): string {
+  return markdown.replace(PLACEHOLDER_IMAGE_RE, (_match, alt: string, key: string) => {
+    const ref = inlineImages[key]
+    if (!ref) return _match
+    const safeAlt = (alt || ref.alt || '').replace(/"/g, '\\"')
+    return `![${safeAlt}](${ref.url})`
+  })
+}
