@@ -144,28 +144,51 @@ export async function registerTools(server: any) {
     {
       title: 'Create Post',
       description:
-        'Publish a new blog post. Write body as Markdown — headings (## for h2, ### for h3), **bold**, *italic*, [links](url), - bullet lists, 1. numbered lists, and ```code blocks``` are all supported. Estimate readTime from word count (e.g. "5 min read" for ~1250 words). slug is auto-generated from title if omitted. date defaults to today if omitted.',
+        'Create a blog post (draft or published). Body is markdown — headings (## h2, ### h3), **bold**, *italic*, [links](url), - lists, 1. ordered lists, ```code blocks``` are supported.\n\nInline images: write ![alt](IMG_1), ![alt](IMG_2) etc. as placeholders, then pass inlineImages: { IMG_1: <mediaId>, IMG_2: <mediaId> }. Validation fires on mismatch.\n\nWhen to use: standalone post creation when you already have media ids and SEO done. For full one-pass authoring (text + image gen + SEO + linking), use author_blog_post instead.\n\nNext steps: call preview_post to get the URL, share with user, then update_post to flip to published if currently draft.',
       inputSchema: {
-        title: z.string().describe('Post title'),
-        excerpt: z.string().describe('1–2 sentence summary shown on the index page and homepage preview'),
-        body: z.string().describe('Full post content written in Markdown'),
-        readTime: z.string().describe('Estimated read time, e.g. "5 min read"'),
-        date: z.string().optional().describe('ISO date string e.g. "2026-04-30T00:00:00.000Z". Defaults to today.'),
-        slug: z.string().optional().describe('URL-safe slug e.g. "my-post-title". Auto-generated from title if omitted.'),
-        tags: z.array(z.string()).optional().describe('Topic tags e.g. ["nextjs","performance"]'),
-        coverImage: z.number().int().optional().describe('Media file id for the post cover image — get ids from list_media.'),
-        status: z.enum(['draft', 'published']).optional().describe('Defaults to "published". Use "draft" to save without publishing.'),
+        title: z.string(),
+        excerpt: z.string(),
+        body: z.string().describe('Markdown. Use ![alt](IMG_N) for inline images.'),
+        readTime: z.string().describe('e.g. "5 min read"'),
+        date: z.string().optional().describe('ISO date — defaults to today.'),
+        slug: z.string().optional().describe('Auto-generated from title if omitted.'),
+        tags: z.array(z.string()).optional(),
+        coverImage: z.number().int().optional().describe('Media id for cover image.'),
+        inlineImages: z.record(z.string(), z.number().int()).optional().describe('Map of IMG_N placeholder → media id, e.g. { IMG_1: 42 }.'),
+        status: z.enum(['draft', 'published']).optional().describe('Defaults to "published".'),
         seo: z
           .object({
-            title: z.string().optional().describe('SEO meta title — defaults to post title if omitted'),
-            description: z.string().optional().describe('SEO meta description — defaults to excerpt if omitted'),
-            image: z.number().int().optional().describe('Media id for OG/Twitter image — defaults to coverImage if omitted'),
+            title: z.string().optional(),
+            description: z.string().optional(),
+            image: z.number().int().optional(),
           })
-          .optional()
-          .describe('Optional SEO overrides for meta tags and social cards'),
+          .optional(),
       },
     },
-    async ({ title, excerpt, body, readTime, date, slug, tags, coverImage, status, seo }: any) => {
+    async ({ title, excerpt, body, readTime, date, slug, tags, coverImage, inlineImages, status, seo }: any) => {
+      const validation = validateInlineImages(body, inlineImages)
+      if (!validation.ok) {
+        return {
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: { code: 'inline_images_invalid', message: formatInlineValidationError(validation), remediation: 'Fix the body or inlineImages map and retry.' } }, null, 2),
+            },
+          ],
+          isError: true,
+        }
+      }
+
+      let processedBody = body
+      if (inlineImages && Object.keys(inlineImages).length > 0) {
+        const resolved: Record<string, { url: string; alt?: string }> = {}
+        for (const [key, mediaId] of Object.entries(inlineImages as Record<string, number>)) {
+          const media = (await payload.findByID({ collection: 'media', id: mediaId, overrideAccess: true })) as { url: string; alt?: string }
+          resolved[key] = { url: media.url, alt: media.alt }
+        }
+        processedBody = substituteInlinePlaceholders(body, resolved)
+      }
+
       const post = (await payload.create({
         collection: 'posts',
         overrideAccess: true,
@@ -187,14 +210,14 @@ export async function registerTools(server: any) {
                 },
               }
             : {}),
-          body: (await markdownToLexical(body, { collection: 'posts', field: 'body' })) as any,
+          body: (await markdownToLexical(processedBody, { collection: 'posts', field: 'body' })) as any,
         },
       } as any)) as any
       return {
         content: [
           {
             type: 'text' as const,
-            text: JSON.stringify({ id: post.id, slug: post.slug, title: post.title }, null, 2),
+            text: JSON.stringify({ id: post.id, slug: post.slug, title: post.title, status: post._status ?? 'published' }, null, 2),
           },
         ],
       }
