@@ -937,4 +937,63 @@ export async function registerTools(server: any) {
       }
     },
   )
+
+  server.registerTool(
+    'check_seo',
+    {
+      title: 'Check SEO',
+      description:
+        'Validate post SEO fields against site rules. Returns { ok, issues, passed }. Each issue has { level: "fail"|"warn", rule, message, fix }. Run before create_post / update_post; fix every fail before publishing.\n\nNext steps: if ok=false, address each fail issue and re-run; if ok=true, proceed to create_post / update_post or author_blog_post.',
+      inputSchema: {
+        title: z.string(),
+        excerpt: z.string(),
+        body: z.string().describe('Markdown body'),
+        slug: z.string().optional().describe('Auto-derived from title if omitted.'),
+        metaTitle: z.string().optional(),
+        metaDescription: z.string().optional(),
+        coverImageId: z.number().int().optional(),
+        tags: z.array(z.string()).optional(),
+        excludePostId: z.string().optional().describe('When updating a post, pass its id to skip self-collision detection.'),
+      },
+    },
+    async (args: any) => {
+      const report = await checkSeo(args)
+      return { content: [{ type: 'text' as const, text: JSON.stringify(report, null, 2) }] }
+    },
+  )
+
+  server.registerTool(
+    'suggest_internal_links',
+    {
+      title: 'Suggest Internal Links',
+      description:
+        'Given a draft body, return up to N existing published posts whose topics overlap (keyword overlap, no embeddings). Returns array of { slug, title, excerpt, score, suggestedAnchorText }.\n\nNext steps: pick 1–3, edit body to weave them in naturally. Or skip if no good matches.',
+      inputSchema: {
+        body: z.string().describe('Draft markdown body'),
+        excludeSlug: z.string().optional().describe('Slug of the post being authored, to exclude from matches.'),
+        limit: z.number().int().min(1).max(10).default(5),
+      },
+    },
+    async ({ body, excludeSlug, limit }: { body: string; excludeSlug?: string; limit: number }) => {
+      const suggestions = await suggestInternalLinks({ body, excludeSlug, limit })
+      return { content: [{ type: 'text' as const, text: JSON.stringify(suggestions, null, 2) }] }
+    },
+  )
+
+  server.registerTool(
+    'preview_post',
+    {
+      title: 'Get Post Preview URL',
+      description:
+        'Return a preview URL for a post (drafts visible to authed admin users; published posts visible to all). Share with the user before publishing.\n\nNext steps: share previewUrl, wait for approval, then update_post with status: "published".',
+      inputSchema: {
+        id: z.string().describe('Post id from list_posts / create_post.'),
+      },
+    },
+    async ({ id }: { id: string }) => {
+      const post = (await payload.findByID({ collection: 'posts', id, overrideAccess: true })) as { slug: string }
+      const previewUrl = buildPreviewUrl({ slug: post.slug })
+      return { content: [{ type: 'text' as const, text: JSON.stringify({ previewUrl }, null, 2) }] }
+    },
+  )
 }
