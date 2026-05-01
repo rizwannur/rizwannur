@@ -1,7 +1,12 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { z } from 'zod'
-import { markdownToLexical, lexicalToMarkdown } from './lexical'
+import { markdownToLexical, lexicalToMarkdown, substituteInlinePlaceholders } from './lexical'
+import { generateImage } from './imagegen'
+import { checkSeo } from './validators/seo'
+import { suggestInternalLinks } from './internal-links'
+import { buildPreviewUrl } from './preview'
+import { validateInlineImages, formatInlineValidationError } from './validators/inline-images'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mediaRef(m: any): { id: string; url: string; alt: string | null } | null {
@@ -895,6 +900,40 @@ export async function registerTools(server: any) {
             ),
           },
         ],
+      }
+    },
+  )
+
+  // ─── IMAGE GENERATION ───────────────────────────────────────────────────
+
+  server.registerTool(
+    'generate_image',
+    {
+      title: 'Generate Image with Nano Banana',
+      description:
+        'Generate a cover or inline body image using Google Gemini 2.5 Flash Image (Nano Banana) and upload it to the media library. Returns { mediaId, url, alt, prompt }.\n\nWhen to use: standalone — when you need a single image. For full blog post authoring, prefer author_blog_post which generates everything in one pass.\n\nNext steps: pass mediaId as coverImage in create_post / update_post, or include in inlineImages map keyed by IMG_N.\n\nCost: ~$0.04 per image. Use sparingly inline (0–2 per post typical).\n\nStyle: read site://image-style first so prompts match site visual direction.',
+      inputSchema: {
+        prompt: z.string().describe('Descriptive prompt. Reference site://image-style for tone/palette/composition guidance.'),
+        alt: z.string().describe('Alt text for accessibility. Required.'),
+        purpose: z.enum(['cover', 'inline']).describe('"cover" defaults to 16:9 framing; "inline" defaults to 4:3.'),
+        aspectRatio: z.enum(['16:9', '4:3', '1:1', '3:4']).optional().describe('Override default aspect ratio.'),
+        filename: z.string().optional().describe('Optional filename, auto-generated otherwise.'),
+      },
+    },
+    async ({ prompt, alt, purpose, aspectRatio, filename }: { prompt: string; alt: string; purpose: 'cover' | 'inline'; aspectRatio?: '16:9' | '4:3' | '1:1' | '3:4'; filename?: string }) => {
+      try {
+        const result = await generateImage({ prompt, alt, purpose, aspectRatio, filename })
+        return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }] }
+      } catch (e) {
+        return {
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: { code: 'image_generation_failed', message: (e as Error).message, remediation: 'Adjust the prompt or check GEMINI_API_KEY, then retry.' } }, null, 2),
+            },
+          ],
+          isError: true,
+        }
       }
     },
   )
