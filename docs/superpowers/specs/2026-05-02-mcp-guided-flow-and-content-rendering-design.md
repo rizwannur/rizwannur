@@ -136,6 +136,41 @@ Returns a server-rendered preview URL for a draft.
 - **Returns:** `{ previewUrl: string }` — uses Payload's draft preview mechanism with a signed token.
 - Agent shares this URL with Rafey before publish.
 
+### One-pass orchestrator: `author_blog_post`
+
+Single high-level tool that runs the full authoring pipeline server-side in one call. Agent provides the post content + image prompts; server handles ordering, validation, and recovery. This is the **default path** for AI agents. Atomic tools remain available for cases where granular control is needed.
+
+- **Input:**
+  - `title: string`
+  - `excerpt: string`
+  - `body: string` — markdown with `![alt](IMG_N)` placeholders allowed.
+  - `readTime: string`
+  - `tags?: string[]`
+  - `slug?: string` — auto-generated if omitted.
+  - `date?: string`
+  - `coverImage:` one of:
+    - `{ generate: { prompt: string; alt: string; aspectRatio?: string } }` — server generates via Nano Banana.
+    - `{ mediaId: number }` — use existing media.
+    - `{ skip: true }` — no cover (warned, not blocked).
+  - `inlineImages?: Record<string, { generate?: { prompt; alt; aspectRatio? }; mediaId?: number }>` — keyed by `IMG_N` placeholder.
+  - `seo?: { title?; description?; image?: number }` — optional overrides; sensible defaults derived from post.
+  - `internalLinks?: 'auto' | 'skip'` — default `auto`; server runs `suggest_internal_links` and weaves top 1–3 matches into body where natural.
+  - `status?: 'draft' | 'published'` — default `draft`. Returns `previewUrl` either way.
+- **Server-side pipeline (in order, atomic):**
+  1. Validate body placeholder ↔ `inlineImages` keys match (fail fast with explicit names).
+  2. Generate cover image (if `generate`). Capture `mediaId`.
+  3. Generate inline images in parallel (if `generate`). Capture `mediaId` per `IMG_N`.
+  4. Run internal-link suggestion if `internalLinks: 'auto'`. Splice up to 3 links into body.
+  5. Run `check_seo` against final inputs. If any **fail** rule fires, abort and return the report (so agent fixes and retries).
+  6. Substitute `IMG_N` refs in body with media URLs / Lexical UploadNodes during `markdownToLexical`.
+  7. Create post via Payload with all fields populated.
+  8. Generate `previewUrl`.
+- **Returns:** `{ id, slug, title, status, coverMediaId, inlineMediaIds, previewUrl, seoReport, internalLinksAdded }`
+- **On failure at any step:** return structured `{ error: { step, code, message, remediation, partial: { ...whatever-succeeded } } }`. Agent retries with `partial` populated to skip already-done work. (E.g. if cover generated but SEO failed, agent fixes SEO and re-calls with `coverImage: { mediaId: <returned-id> }` to skip regeneration.)
+- **Idempotency:** if `slug` provided and exists, returns existing post id with no mutation unless `force: true`.
+
+This makes the common case a **single tool call** while preserving the atomic tools (`generate_image`, `check_seo`, `suggest_internal_links`, `preview_post`, `create_post`, `update_post`) for editing flows or when the agent needs finer control.
+
 ### Modified existing tools
 
 #### `create_post` — extended input
@@ -177,13 +212,10 @@ Three slash-prompts agents can invoke. These are markdown templates returned by 
   1. Read resources `site://voice`, `site://seo-rules`, `site://image-style`, `site://existing-tags`, `site://recent-posts`.
   2. Write outline (4–7 sections, mark which sections benefit from an inline image).
   3. Draft body in markdown using site voice. Use `![alt](IMG_N)` placeholders where images go.
-  4. For each `IMG_N` in body: call `generate_image` with `purpose: 'inline'`. Collect ids.
-  5. Call `generate_image` once with `purpose: 'cover'` and a prompt summarizing the post hook.
-  6. Run `suggest_internal_links` against the draft. Edit body to weave in 1–3 links naturally.
-  7. Compose `meta.title` and `meta.description`. Pick 2–4 tags from `site://existing-tags` (or justify a new one).
-  8. Run `check_seo`. Fix every fail. Aim for zero warns.
-  9. Call `create_post` with `status: 'draft'`, including `inlineImages` map.
-  10. Call `preview_post`, share URL with user. Wait for approval before flipping to `published`.
+  4. Compose meta title/description, pick 2–4 tags, write image prompts (cover + each inline) using `site://image-style`.
+  5. **Single call** to `author_blog_post` with everything assembled — server handles image generation, internal linking, SEO check, validation, and post creation atomically.
+  6. If response contains `error.partial`, fix the cited problem and retry passing `partial` so finished work is skipped.
+  7. Share `previewUrl` with user. On approval, call `update_post` to flip `status` to `published`.
 
 #### `optimize_seo`
 
