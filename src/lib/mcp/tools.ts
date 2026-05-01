@@ -229,28 +229,53 @@ export async function registerTools(server: any) {
     {
       title: 'Update Post',
       description:
-        'Update an existing blog post by id. Only the fields you include are changed — omit anything you want to leave untouched. Pass body as Markdown if updating content. Get the id from list_posts first.',
+        'Update an existing post by id. Only provided fields change.\n\nWhen updating body with inline images: same ![alt](IMG_N) syntax + inlineImages map as create_post. Validation fires on mismatch.\n\nNext steps: if flipping to "published", consider preview_post first.',
       inputSchema: {
-        id: z.string().describe('Post id — get this from list_posts'),
-        title: z.string().optional().describe('New title'),
-        excerpt: z.string().optional().describe('New excerpt'),
-        body: z.string().optional().describe('Updated body written in Markdown'),
-        readTime: z.string().optional().describe('Updated read time e.g. "6 min read"'),
-        date: z.string().optional().describe('Updated ISO date string'),
-        tags: z.array(z.string()).optional().describe('Replace tags with this list. Pass [] to clear.'),
-        coverImage: z.number().int().nullable().optional().describe('Media id for cover image. Pass null to clear.'),
-        status: z.enum(['draft', 'published']).optional().describe('Switch between draft and published'),
+        id: z.string(),
+        title: z.string().optional(),
+        excerpt: z.string().optional(),
+        body: z.string().optional(),
+        readTime: z.string().optional(),
+        date: z.string().optional(),
+        tags: z.array(z.string()).optional().describe('Pass [] to clear.'),
+        coverImage: z.number().int().nullable().optional().describe('Pass null to clear.'),
+        inlineImages: z.record(z.string(), z.number().int()).optional(),
+        status: z.enum(['draft', 'published']).optional(),
         seo: z
           .object({
             title: z.string().optional(),
             description: z.string().optional(),
             image: z.number().int().nullable().optional(),
           })
-          .optional()
-          .describe('Partial SEO update — only provided keys are changed'),
+          .optional(),
       },
     },
-    async ({ id, title, excerpt, body, readTime, date, tags, coverImage, status, seo }: any) => {
+    async ({ id, title, excerpt, body, readTime, date, tags, coverImage, inlineImages, status, seo }: any) => {
+      let processedBody: string | undefined
+      if (body !== undefined) {
+        const validation = validateInlineImages(body, inlineImages)
+        if (!validation.ok) {
+          return {
+            content: [
+              {
+                type: 'text' as const,
+                text: JSON.stringify({ error: { code: 'inline_images_invalid', message: formatInlineValidationError(validation), remediation: 'Fix the body or inlineImages map and retry.' } }, null, 2),
+              },
+            ],
+            isError: true,
+          }
+        }
+        processedBody = body
+        if (inlineImages && Object.keys(inlineImages).length > 0) {
+          const resolved: Record<string, { url: string; alt?: string }> = {}
+          for (const [key, mediaId] of Object.entries(inlineImages as Record<string, number>)) {
+            const media = (await payload.findByID({ collection: 'media', id: mediaId, overrideAccess: true })) as { url: string; alt?: string }
+            resolved[key] = { url: media.url, alt: media.alt }
+          }
+          processedBody = substituteInlinePlaceholders(body, resolved)
+        }
+      }
+
       const data: Record<string, unknown> = {}
       if (title !== undefined) data.title = title
       if (excerpt !== undefined) data.excerpt = excerpt
@@ -258,7 +283,7 @@ export async function registerTools(server: any) {
       if (date !== undefined) data.date = date
       if (tags !== undefined) data.tags = tags
       if (coverImage !== undefined) data.coverImage = coverImage
-      if (body !== undefined) data.body = await markdownToLexical(body, { collection: 'posts', field: 'body' })
+      if (processedBody !== undefined) data.body = await markdownToLexical(processedBody, { collection: 'posts', field: 'body' })
       if (seo !== undefined) {
         const seoData: Record<string, unknown> = {}
         if (seo.title !== undefined) seoData.title = seo.title
@@ -273,7 +298,7 @@ export async function registerTools(server: any) {
         content: [
           {
             type: 'text' as const,
-            text: JSON.stringify({ id: post.id, slug: post.slug, title: post.title }, null, 2),
+            text: JSON.stringify({ id: post.id, slug: post.slug, title: post.title, status: post._status ?? 'published' }, null, 2),
           },
         ],
       }
