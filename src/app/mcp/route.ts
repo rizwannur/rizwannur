@@ -1,5 +1,7 @@
 import { createMcpHandler, withMcpAuth } from 'mcp-handler'
 import { registerTools } from '@/lib/mcp/tools'
+import { registerResources } from '@/lib/mcp/resources'
+import { registerPrompts } from '@/lib/mcp/prompts'
 import { verifyToken } from '@/lib/mcp/auth'
 import { rateLimit } from '@/lib/analytics/rateLimit'
 
@@ -9,6 +11,8 @@ import { rateLimit } from '@/lib/analytics/rateLimit'
 const mcpHandler = createMcpHandler(
   async (server) => {
     await registerTools(server)
+    await registerResources(server)
+    await registerPrompts(server)
   },
   {},
   { basePath: '' },
