@@ -38,17 +38,28 @@ export default async function ThoughtsIndex({
       : {}),
     sort: '-date',
     limit: 100,
-    depth: 0,
+    depth: 1,
   })
 
-  const thoughtItems: Thought[] = docs.map((item) => ({
-    slug: item.slug,
-    title: item.title,
-    date: formatDate(item.date),
-    readTime: item.readTime,
-    excerpt: item.excerpt,
-    body: [],
-  }))
+  const thoughtItems: Thought[] = docs.map((item) => {
+    const cover =
+      item.coverImage && typeof item.coverImage === 'object' && 'url' in item.coverImage
+        ? {
+            url: (item.coverImage as { url: string }).url,
+            alt: (item.coverImage as { alt?: string }).alt ?? item.title,
+          }
+        : null
+    return {
+      slug: item.slug,
+      title: item.title,
+      date: formatDate(item.date),
+      readTime: item.readTime,
+      excerpt: item.excerpt,
+      body: [],
+      coverImage: cover,
+      tags: (item.tags as string[] | undefined) ?? [],
+    }
+  })
 
   return (
     <PageShell>
