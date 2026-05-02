@@ -93,7 +93,7 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
       <BackHomeNav parent="/work" />
       <article className="flex flex-col gap-8">
         <div className="flex items-start justify-between gap-4">
-          <div>
+          <div className="min-w-0">
             <h1 className="font-display text-3xl">{item.title}</h1>
             <p className="text-[14px] text-neutral-500 dark:text-neutral-400 mt-1">
               {item.subtitle} <span aria-hidden>•</span> {item.date}
@@ -104,7 +104,7 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
               href={item.href}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/8 dark:hover:bg-white/15 transition-colors px-3 h-8 text-[13px]"
+              className="inline-flex items-center gap-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/8 dark:hover:bg-white/15 transition-colors px-3 h-8 text-[13px] shrink-0 whitespace-nowrap mt-1"
             >
               <ExternalLink className="size-3.5" />
               View work
