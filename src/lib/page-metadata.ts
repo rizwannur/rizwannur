@@ -2,9 +2,6 @@ import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { getSiteUrl } from '@/lib/site-url'
-import type { Media } from '@/payload-types'
-
-type SeoMeta = { title?: string | null; description?: string | null; image?: Media | null | string }
 
 type Profile = Awaited<ReturnType<Awaited<ReturnType<typeof getPayload>>['findGlobal']>>
 
@@ -24,23 +21,7 @@ async function loadProfile(): Promise<Profile | null> {
   }
 }
 
-function mediaUrl(value: SeoMeta['image'] | Media | string | null | undefined): string | null {
-  if (!value) return null
-  if (typeof value === 'string') {
-    // Pass through full URLs (e.g. microlink screenshot); skip bare ids.
-    return /^(https?:)?\/\//.test(value) ? value : null
-  }
-  return value.url ?? null
-}
-
-function mediaDims(value: SeoMeta['image'] | Media | string | null | undefined): { width?: number; height?: number; alt?: string } {
-  if (!value || typeof value === 'string') return {}
-  return {
-    width: value.width ?? undefined,
-    height: value.height ?? undefined,
-    alt: value.alt ?? undefined,
-  }
-}
+type SeoMeta = { title?: string | null; description?: string | null }
 
 export type PageMetaInput = {
   title: string
@@ -49,35 +30,32 @@ export type PageMetaInput = {
   type: 'article' | 'website'
   publishedTime?: string
   meta?: SeoMeta | null
-  fallbackImage?: Media | string | null
   tags?: string[]
 }
 
+/**
+ * Builds page metadata (title, description, openGraph, twitter, canonical).
+ *
+ * Image handling: this fn intentionally does NOT set openGraph.images or
+ * twitter.images. Each detail route ships its own opengraph-image.tsx
+ * (Next file convention) which composites the post / work cover under
+ * the title text in a center-safe layout. Setting images here would
+ * override the file convention.
+ *
+ * SEO plugin fields (`meta.title`, `meta.description`) are honored as
+ * overrides over the post's title and excerpt.
+ */
 export async function buildPageMetadata(input: PageMetaInput): Promise<Metadata> {
   const siteUrl = getSiteUrl()
   const profile = await loadProfile()
 
   const fullName = profile?.fullName ?? 'Rizwan Nur Rafey'
   const shortName = profile?.shortName ?? 'Rafey'
-  const role = profile?.role ?? 'Full-Stack Product Engineer'
   const twitterHandle = (profile?.socials ?? []).find((s) => s.kind === 'twitter')?.href ?? ''
   const twitterUser = twitterHandle.match(/(?:twitter\.com|x\.com)\/([^/?#]+)/)?.[1]
 
   const title = input.meta?.title || `${input.title} — ${shortName}`
   const description = input.meta?.description || input.description
-
-  const metaImg = input.meta?.image ?? null
-  const fallbackImg = input.fallbackImage ?? null
-  const ogImageUrl =
-    mediaUrl(metaImg) ??
-    mediaUrl(fallbackImg) ??
-    `${siteUrl}/opengraph-image`
-  const dims = mediaUrl(metaImg)
-    ? mediaDims(metaImg)
-    : mediaUrl(fallbackImg)
-      ? mediaDims(fallbackImg)
-      : { width: 1200, height: 630, alt: `${fullName} — ${role}` }
-
   const url = input.path
 
   return {
@@ -95,14 +73,6 @@ export async function buildPageMetadata(input: PageMetaInput): Promise<Metadata>
       ...(input.type === 'article' && input.publishedTime
         ? { publishedTime: input.publishedTime, authors: [`${siteUrl}`], tags: input.tags }
         : {}),
-      images: [
-        {
-          url: ogImageUrl,
-          width: dims.width ?? 1200,
-          height: dims.height ?? 630,
-          alt: dims.alt ?? `${input.title} — ${fullName}`,
-        },
-      ],
     },
     twitter: {
       card: 'summary_large_image',
@@ -110,7 +80,6 @@ export async function buildPageMetadata(input: PageMetaInput): Promise<Metadata>
       description,
       creator: twitterUser ? `@${twitterUser}` : undefined,
       site: twitterUser ? `@${twitterUser}` : undefined,
-      images: [ogImageUrl],
     },
     robots: {
       index: true,
