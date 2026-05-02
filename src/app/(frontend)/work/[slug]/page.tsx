@@ -10,6 +10,8 @@ import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { PrevNext } from '@/components/ui/PrevNext'
 import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
+import { buildPageMetadata } from '@/lib/page-metadata'
+import { isDraftPreview } from '@/lib/preview-mode'
 
 export const revalidate = 60
 export const dynamicParams = true
@@ -36,40 +38,46 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const item = docs[0]
   if (!item) return { title: 'Work' }
 
-  const uploadedUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
-  const coverUrl = uploadedUrl || (item.href ? microlinkScreenshot(item.href) : '')
-  const meta = item.meta as { title?: string; description?: string; image?: Media } | undefined
+  const cover = (typeof item.cover === 'object' ? item.cover : null) as Media | null
+  const microlinkUrl = !cover && item.href ? microlinkScreenshot(item.href) : null
+  const meta = item.meta as { title?: string; description?: string; image?: Media | string } | undefined
 
-  return {
-    title: meta?.title || `${item.title} — ${item.subtitle}`,
-    description: meta?.description || item.description,
-    openGraph: {
-      images: meta?.image?.url
-        ? [{ url: meta.image.url }]
-        : coverUrl
-          ? [{ url: coverUrl }]
-          : [],
-    },
-  }
+  return buildPageMetadata({
+    title: `${item.title} — ${item.subtitle}`,
+    description: item.description,
+    path: `/work/${slug}`,
+    type: 'article',
+    meta,
+    fallbackImage: cover ?? microlinkUrl ?? null,
+    tags: (item.tech as string[] | undefined) ?? [],
+  })
 }
 
 export default async function WorkDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
+  const draft = await isDraftPreview()
   const payload = await getPayload({ config })
+
+  const { docs: itemDocs } = await payload.find({
+    collection: 'work',
+    where: { slug: { equals: slug } },
+    limit: 1,
+    depth: 1,
+    draft,
+    overrideAccess: draft,
+  })
+  const item = itemDocs[0]
+  if (!item) return notFound()
 
   const { docs: allDocs } = await payload.find({
     collection: 'work',
     sort: 'order',
     limit: 100,
-    depth: 1,
+    depth: 0,
   })
-
   const idx = allDocs.findIndex((w) => w.slug === slug)
-  if (idx === -1) return notFound()
-
-  const item = allDocs[idx]!
-  const prev = allDocs[idx - 1]
-  const next = allDocs[idx + 1]
+  const prev = idx > 0 ? allDocs[idx - 1] : undefined
+  const next = idx >= 0 && idx < allDocs.length - 1 ? allDocs[idx + 1] : undefined
 
   const uploadedCoverUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
   const coverUrl = uploadedCoverUrl || (item.href ? microlinkScreenshot(item.href) : '')

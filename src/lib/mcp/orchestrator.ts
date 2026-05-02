@@ -6,6 +6,7 @@ import { suggestInternalLinks, type LinkSuggestion } from './internal-links'
 import { validateInlineImages, formatInlineValidationError } from './validators/inline-images'
 import { markdownToLexical, substituteInlinePlaceholders } from './lexical'
 import { buildPreviewUrl } from './preview'
+import { postUrls } from './urls'
 
 type ImageSpec =
   | { generate: { prompt: string; alt: string; aspectRatio?: AspectRatio } }
@@ -35,6 +36,8 @@ export type AuthorBlogPostInput = {
 export type AuthorBlogPostSuccess = {
   id: string
   slug: string
+  url: string
+  path: string
   title: string
   status: 'draft' | 'published'
   coverMediaId: number | null
@@ -265,14 +268,17 @@ export async function authorBlogPost(input: AuthorBlogPostInput): Promise<Author
     }
   }
 
+  const urls = postUrls(createdPost.slug)
   return {
     id: createdPost.id,
     slug: createdPost.slug,
+    url: urls.url,
+    path: urls.path,
     title: createdPost.title,
     status: (createdPost._status ?? 'published') as 'draft' | 'published',
     coverMediaId,
     inlineMediaIds,
-    previewUrl: buildPreviewUrl({ slug: createdPost.slug }),
+    previewUrl: buildPreviewUrl({ slug: createdPost.slug, section: 'thoughts' }),
     seoReport,
     internalLinksAdded,
   }

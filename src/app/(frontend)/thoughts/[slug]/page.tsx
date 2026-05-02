@@ -8,6 +8,9 @@ import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { PrevNext } from '@/components/ui/PrevNext'
 import { TagChips } from '@/components/ui/TagChips'
 import { CodeBlock } from '@/components/CodeBlock'
+import { AuthorCard } from '@/components/sections/AuthorCard'
+import { buildPageMetadata } from '@/lib/page-metadata'
+import { isDraftPreview } from '@/lib/preview-mode'
 import type { Media } from '@/payload-types'
 
 type CodeBlockNode = { fields?: { code?: string; language?: string } }
@@ -41,17 +44,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     collection: 'posts',
     where: { slug: { equals: slug } },
     limit: 1,
-    depth: 0,
+    depth: 1,
   })
   const item = docs[0]
   if (!item) return { title: 'Thoughts' }
 
-  const meta = item.meta as { title?: string; description?: string; image?: Media } | undefined
+  const meta = item.meta as { title?: string; description?: string; image?: Media | string } | undefined
+  const cover = (typeof item.coverImage === 'object' ? item.coverImage : null) as Media | null
 
-  return {
-    title: meta?.title || item.title,
-    description: meta?.description || item.excerpt,
-  }
+  return buildPageMetadata({
+    title: item.title,
+    description: item.excerpt,
+    path: `/thoughts/${slug}`,
+    type: 'article',
+    publishedTime: item.date,
+    meta,
+    fallbackImage: cover,
+    tags: (item.tags as string[] | undefined) ?? [],
+  })
 }
 
 function formatDate(isoDate: string): string {
@@ -60,21 +70,30 @@ function formatDate(isoDate: string): string {
 
 export default async function ThoughtDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
+  const draft = await isDraftPreview()
   const payload = await getPayload({ config })
 
+  const { docs: itemDocs } = await payload.find({
+    collection: 'posts',
+    where: { slug: { equals: slug } },
+    limit: 1,
+    depth: 1,
+    draft,
+    overrideAccess: draft,
+  })
+  const item = itemDocs[0]
+  if (!item) return notFound()
+
+  // Prev/next never show drafts — keep that surface published-only.
   const { docs: allDocs } = await payload.find({
     collection: 'posts',
     sort: '-date',
     limit: 100,
-    depth: 1,
+    depth: 0,
   })
-
   const idx = allDocs.findIndex((p) => p.slug === slug)
-  if (idx === -1) return notFound()
-
-  const item = allDocs[idx]!
-  const prev = allDocs[idx - 1]
-  const next = allDocs[idx + 1]
+  const prev = idx > 0 ? allDocs[idx - 1] : undefined
+  const next = idx >= 0 && idx < allDocs.length - 1 ? allDocs[idx + 1] : undefined
 
   return (
     <PageShell>
@@ -106,6 +125,8 @@ export default async function ThoughtDetail({ params }: { params: Promise<{ slug
         <div className="rich-text">
           <RichText data={item.body} converters={richTextConverters} />
         </div>
+
+        <AuthorCard />
       </article>
 
       <PrevNext

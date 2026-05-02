@@ -39,7 +39,7 @@ Call \`author_blog_post\` with everything assembled:
 If response contains \`error.partial\`, fix the cited issue and retry. Always pass \`partial\` so already-generated images aren't regenerated.
 
 ## Step 8 — Hand off
-Share \`previewUrl\` with the user. On their approval, call \`update_post\` with status: 'published'.
+Share \`previewUrl\` (which uses /thoughts/{slug} — the site has no /blog route) with the user. On their approval, call \`publish_post\` with the post id.
 `
 
 const OPTIMIZE_SEO = (args: { post_id: string }) => `
@@ -49,7 +49,7 @@ Optimize SEO for post ${args.post_id}.
 2. Call \`check_seo\` with the post's fields.
 3. For each fail/warn, propose a specific fix. Summarize the diff.
 4. Wait for user approval.
-5. On approval, call \`update_post\` with the changes.
+5. On approval, call \`update_post\` with the changes (no publish flip — use publish_post separately).
 6. Re-run \`check_seo\` to confirm zero fails.
 `
 
@@ -59,9 +59,8 @@ Refresh the cover image for post ${args.post_id}.
 1. Call \`get_post\` with id ${args.post_id}.
 2. Read site://image-style.
 3. Compose a new prompt for the cover, incorporating: ${args.style_hint ?? '(no style hint — use defaults)'}.
-4. Call \`generate_image\` with purpose: 'cover'.
-5. Call \`update_post\` with the new coverImage media id.
-6. Share the resulting post page URL with the user.
+4. Call \`set_post_cover\` with the post id and either { generate: { prompt, alt } } or an existing { mediaId } — this generates and attaches in one shot.
+5. Share the resulting post page URL (/thoughts/{slug}) with the user.
 `
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,6 +1,9 @@
-export function buildPreviewUrl(args: { slug: string; baseUrl?: string }): string {
-  const base = args.baseUrl ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-  // Posts auto-revalidate; for drafts, slug page renders if user is authed in admin.
-  // Return the public slug URL — admin users see drafts; everyone else sees published.
-  return `${base.replace(/\/$/, '')}/thoughts/${args.slug}`
+import { pathFor, urlFor, type Section } from './urls'
+
+export function buildPreviewUrl(args: { slug: string; section?: Section; baseUrl?: string }): string {
+  const section = args.section ?? 'thoughts'
+  if (args.baseUrl) {
+    return `${args.baseUrl.replace(/\/$/, '')}${pathFor(section, args.slug)}`
+  }
+  return urlFor(section, args.slug)
 }

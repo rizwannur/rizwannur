@@ -49,6 +49,8 @@ async function recentPosts(): Promise<string> {
     '',
     'Last 20 published posts. Useful for internal-link weaving and avoiding duplicate topics.',
     '',
+    'NOTE: post URLs use the path `/thoughts/{slug}` (NOT `/blog/{slug}`). Use this exact path when linking.',
+    '',
     ...docs.map(
       (p) =>
         `- [${p.title}](/thoughts/${p.slug}) — ${new Date(p.date).toISOString().slice(0, 10)} — ${p.excerpt}`,
@@ -67,6 +69,7 @@ export async function registerResources(server: any) {
     { uri: 'site://voice', name: 'Site voice guide', description: 'Tone of voice + writing style for blog posts.', load: () => readStatic('voice.md') },
     { uri: 'site://seo-rules', name: 'SEO rules', description: 'SEO ruleset enforced by check_seo, in prose.', load: () => readStatic('seo-rules.md') },
     { uri: 'site://image-style', name: 'Image style guide', description: 'Visual direction for generated cover and inline images.', load: () => readStatic('image-style.md') },
+    { uri: 'site://images-and-publishing', name: 'Images and publishing', description: 'How draft/publish, preview, and image attachment all work end-to-end. Read this before authoring or editing.', load: () => readStatic('images-and-publishing.md') },
     { uri: 'site://existing-tags', name: 'Existing tags', description: 'Live list of tags on published posts (frequency sorted).', load: existingTags },
     { uri: 'site://recent-posts', name: 'Recent posts', description: 'Last 20 published posts for internal linking and dedup.', load: recentPosts },
   ]

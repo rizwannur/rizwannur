@@ -20,10 +20,38 @@ export const Work: CollectionConfig = {
   slug: 'work',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'subtitle', 'date', 'order'],
+    defaultColumns: ['title', 'subtitle', 'date', 'order', '_status'],
+    livePreview: {
+      url: ({ data }) => {
+        const slug = (data as { slug?: string }).slug ?? ''
+        const path = `/work/${slug}`
+        const qs = new URLSearchParams({ collection: 'work', slug, path })
+        return `/api/preview?${qs.toString()}`
+      },
+      breakpoints: [
+        { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
+        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
+        { label: 'Desktop', name: 'desktop', width: 1440, height: 900 },
+      ],
+    },
+  },
+  versions: {
+    drafts: {
+      autosave: { interval: 800 },
+    },
   },
   access: {
-    read: () => true,
+    // Mirror Posts: authed users see everything, public sees published or
+    // legacy items that pre-date the drafts column (no `_status` set).
+    read: ({ req }) => {
+      if (req.user) return true
+      return {
+        or: [
+          { _status: { equals: 'published' } },
+          { _status: { exists: false } },
+        ],
+      }
+    },
   },
   hooks: {
     afterChange: [() => { revalidateSection('work') }],

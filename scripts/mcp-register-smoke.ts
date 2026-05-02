@@ -38,14 +38,14 @@ console.log(`\nPrompts registered (${prompts.length}):`)
 prompts.forEach((p) => console.log(`  - ${p.name}`))
 
 const expectedTools = [
-  'list_posts', 'get_post', 'create_post', 'update_post', 'delete_post',
-  'list_work', 'get_work', 'create_work', 'update_work', 'delete_work', 'set_work_images',
+  'list_posts', 'get_post', 'create_post', 'update_post', 'publish_post', 'unpublish_post', 'delete_post', 'set_post_cover',
+  'list_work', 'get_work', 'create_work', 'update_work', 'publish_work', 'unpublish_work', 'delete_work', 'set_work_cover', 'set_work_images',
   'list_craft', 'get_craft', 'create_craft', 'update_craft', 'delete_craft',
-  'upload_media', 'list_media',
-  'generate_image', 'check_seo', 'suggest_internal_links', 'preview_post',
+  'upload_media', 'list_media', 'get_media', 'update_media', 'delete_media',
+  'generate_image', 'check_seo', 'suggest_internal_links', 'preview_post', 'preview_work',
   'author_blog_post',
 ]
-const expectedResources = ['Site voice guide', 'SEO rules', 'Image style guide', 'Existing tags', 'Recent posts']
+const expectedResources = ['Site voice guide', 'SEO rules', 'Image style guide', 'Images and publishing', 'Existing tags', 'Recent posts']
 const expectedPrompts = ['write_blog_post', 'optimize_seo', 'refresh_cover_image']
 
 let fail = 0
