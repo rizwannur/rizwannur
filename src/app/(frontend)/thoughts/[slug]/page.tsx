@@ -8,6 +8,7 @@ import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { PrevNext } from '@/components/ui/PrevNext'
 import { TagChips } from '@/components/ui/TagChips'
 import { CodeBlock } from '@/components/CodeBlock'
+import { AuthorCard } from '@/components/sections/AuthorCard'
 import type { Media } from '@/payload-types'
 
 type CodeBlockNode = { fields?: { code?: string; language?: string } }
@@ -106,6 +107,8 @@ export default async function ThoughtDetail({ params }: { params: Promise<{ slug
         <div className="rich-text">
           <RichText data={item.body} converters={richTextConverters} />
         </div>
+
+        <AuthorCard />
       </article>
 
       <PrevNext

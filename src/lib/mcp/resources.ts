@@ -49,6 +49,8 @@ async function recentPosts(): Promise<string> {
     '',
     'Last 20 published posts. Useful for internal-link weaving and avoiding duplicate topics.',
     '',
+    'NOTE: post URLs use the path `/thoughts/{slug}` (NOT `/blog/{slug}`). Use this exact path when linking.',
+    '',
     ...docs.map(
       (p) =>
         `- [${p.title}](/thoughts/${p.slug}) — ${new Date(p.date).toISOString().slice(0, 10)} — ${p.excerpt}`,
