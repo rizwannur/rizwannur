@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { getSiteUrl } from '@/lib/site-url'
+import type { Media } from '@/payload-types'
 
 type Profile = Awaited<ReturnType<Awaited<ReturnType<typeof getPayload>>['findGlobal']>>
 
@@ -21,7 +22,11 @@ async function loadProfile(): Promise<Profile | null> {
   }
 }
 
-type SeoMeta = { title?: string | null; description?: string | null }
+type SeoMeta = {
+  title?: string | null
+  description?: string | null
+  image?: Media | string | null
+}
 
 export type PageMetaInput = {
   title: string
@@ -34,16 +39,20 @@ export type PageMetaInput = {
 }
 
 /**
- * Builds page metadata (title, description, openGraph, twitter, canonical).
+ * Builds page metadata for /thoughts/{slug} and /work/{slug}.
  *
- * Image handling: this fn intentionally does NOT set openGraph.images or
- * twitter.images. Each detail route ships its own opengraph-image.tsx
- * (Next file convention) which composites the post / work cover under
- * the title text in a center-safe layout. Setting images here would
- * override the file convention.
+ * Image policy:
+ * - The Payload SEO plugin's `meta.image` is the only image source. If it
+ *   is set, it becomes the og:image and twitter:image directly — used
+ *   as-is, no overlay, no compositing.
+ * - If `meta.image` is not set, we ship NO image in the metadata. Embed
+ *   surfaces fall back to whatever the platform does for image-less
+ *   links (usually just title + description, or a transparent fallback).
+ *   Per project policy we do NOT fall back to the cover image.
  *
- * SEO plugin fields (`meta.title`, `meta.description`) are honored as
- * overrides over the post's title and excerpt.
+ * Title and description policy:
+ * - `meta.title`       overrides → otherwise `${title} — ${shortName}`
+ * - `meta.description` overrides → otherwise the doc's excerpt / description
  */
 export async function buildPageMetadata(input: PageMetaInput): Promise<Metadata> {
   const siteUrl = getSiteUrl()
@@ -54,9 +63,36 @@ export async function buildPageMetadata(input: PageMetaInput): Promise<Metadata>
   const twitterHandle = (profile?.socials ?? []).find((s) => s.kind === 'twitter')?.href ?? ''
   const twitterUser = twitterHandle.match(/(?:twitter\.com|x\.com)\/([^/?#]+)/)?.[1]
 
-  const title = input.meta?.title || `${input.title} — ${shortName}`
-  const description = input.meta?.description || input.description
+  const title = input.meta?.title?.trim() || `${input.title} — ${shortName}`
+  const description = input.meta?.description?.trim() || input.description
   const url = input.path
+
+  const seoImage = input.meta?.image ?? null
+  const seoImageUrl =
+    seoImage && typeof seoImage === 'object'
+      ? (seoImage as Media).url ?? null
+      : typeof seoImage === 'string' && /^(https?:)?\/\//.test(seoImage)
+        ? seoImage
+        : null
+  const seoImageDims =
+    seoImage && typeof seoImage === 'object'
+      ? {
+          width: (seoImage as Media).width ?? undefined,
+          height: (seoImage as Media).height ?? undefined,
+          alt: (seoImage as Media).alt ?? undefined,
+        }
+      : {}
+
+  const ogImages = seoImageUrl
+    ? [
+        {
+          url: seoImageUrl,
+          width: seoImageDims.width ?? 1200,
+          height: seoImageDims.height ?? 630,
+          alt: seoImageDims.alt ?? title,
+        },
+      ]
+    : undefined
 
   return {
     metadataBase: new URL(siteUrl),
@@ -73,13 +109,15 @@ export async function buildPageMetadata(input: PageMetaInput): Promise<Metadata>
       ...(input.type === 'article' && input.publishedTime
         ? { publishedTime: input.publishedTime, authors: [`${siteUrl}`], tags: input.tags }
         : {}),
+      ...(ogImages ? { images: ogImages } : {}),
     },
     twitter: {
-      card: 'summary_large_image',
+      card: seoImageUrl ? 'summary_large_image' : 'summary',
       title,
       description,
       creator: twitterUser ? `@${twitterUser}` : undefined,
       site: twitterUser ? `@${twitterUser}` : undefined,
+      ...(seoImageUrl ? { images: [seoImageUrl] } : {}),
     },
     robots: {
       index: true,

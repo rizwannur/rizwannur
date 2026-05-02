@@ -49,7 +49,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const item = docs[0]
   if (!item) return { title: 'Thoughts' }
 
-  const meta = item.meta as { title?: string; description?: string } | undefined
+  const meta = item.meta as
+    | { title?: string; description?: string; image?: Media | string }
+    | undefined
 
   return buildPageMetadata({
     title: item.title,

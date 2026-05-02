@@ -12,6 +12,18 @@
 
 export type LofiHandle = {
   start: () => void
+  /**
+   * Stop oscillators + ramp gain to 0 but keep the AudioContext alive.
+   *
+   * On iOS Safari, resuming a suspended AudioContext requires a user
+   * gesture. If we suspend the context every time the user mutes (or
+   * when the tab backgrounds) we then need a fresh tap to make any
+   * sound again — including SFX clicks the user explicitly triggers.
+   * Keeping the context running solves that whole class of "second
+   * click is silent" bugs.
+   */
+  silence: () => void
+  /** Full teardown — call only on unmount. Suspends the context. */
   stop: () => void
   setVolume: (v: number) => void
   ctx: AudioContext
@@ -138,7 +150,7 @@ export function createLofi(): LofiHandle {
     }, CHORD_DURATION_S * 1000)
   }
 
-  const stop = () => {
+  const silence = () => {
     if (!started) return
     started = false
     if (chordTimer != null) {
@@ -147,9 +159,27 @@ export function createLofi(): LofiHandle {
     }
     master.gain.cancelScheduledValues(ctx.currentTime)
     master.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4)
+    // Tear down active chord oscillators after the gain ramp finishes so
+    // they don't keep eating CPU on a long-lived context.
+    if (chordGain) {
+      const oldOscs = chordOscs
+      chordOscs = []
+      chordGain = null
+      window.setTimeout(() => {
+        oldOscs.forEach((o) => {
+          try { o.stop() } catch { /* noop */ }
+        })
+      }, 500)
+    }
+  }
+
+  const stop = () => {
+    silence()
+    // Full teardown for component unmount. Suspending here is fine
+    // because the page is going away — we'll never need to resume.
     window.setTimeout(() => {
       ctx.suspend().catch(() => {})
-    }, 500)
+    }, 600)
   }
 
   const setVolume = (v: number) => {
@@ -158,7 +188,7 @@ export function createLofi(): LofiHandle {
     master.gain.linearRampToValueAtTime(v, ctx.currentTime + 0.4)
   }
 
-  return { start, stop, setVolume, ctx }
+  return { start, silence, stop, setVolume, ctx }
 }
 
 export function playClick(ctx: AudioContext, volume: number) {
