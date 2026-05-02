@@ -11,6 +11,7 @@ import { PrevNext } from '@/components/ui/PrevNext'
 import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
 import { buildPageMetadata } from '@/lib/page-metadata'
+import { isDraftPreview } from '@/lib/preview-mode'
 
 export const revalidate = 60
 export const dynamicParams = true
@@ -54,21 +55,29 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function WorkDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
+  const draft = await isDraftPreview()
   const payload = await getPayload({ config })
+
+  const { docs: itemDocs } = await payload.find({
+    collection: 'work',
+    where: { slug: { equals: slug } },
+    limit: 1,
+    depth: 1,
+    draft,
+    overrideAccess: draft,
+  })
+  const item = itemDocs[0]
+  if (!item) return notFound()
 
   const { docs: allDocs } = await payload.find({
     collection: 'work',
     sort: 'order',
     limit: 100,
-    depth: 1,
+    depth: 0,
   })
-
   const idx = allDocs.findIndex((w) => w.slug === slug)
-  if (idx === -1) return notFound()
-
-  const item = allDocs[idx]!
-  const prev = allDocs[idx - 1]
-  const next = allDocs[idx + 1]
+  const prev = idx > 0 ? allDocs[idx - 1] : undefined
+  const next = idx >= 0 && idx < allDocs.length - 1 ? allDocs[idx + 1] : undefined
 
   const uploadedCoverUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
   const coverUrl = uploadedCoverUrl || (item.href ? microlinkScreenshot(item.href) : '')

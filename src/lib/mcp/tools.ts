@@ -1559,21 +1559,69 @@ export async function registerTools(server: any) {
   server.registerTool(
     'preview_post',
     {
-      title: 'Get Post Preview URL',
+      title: 'Get Post Preview URLs',
       description:
-        'Return a preview URL for a post. Drafts are visible only to authed admin users; published posts visible to all. Share with the user before publishing.\n\nRoute is /thoughts/{slug} — NOT /blog.\n\nNext steps: share previewUrl, wait for approval, then publish_post(id).',
+        'Return preview URLs for a post.\n\n- publicUrl: /thoughts/{slug} on the live site. Draft posts return 404 here for non-admins.\n- adminPreviewUrl: /api/preview?... — when an authed admin visits this, the route enables Next.js draft mode and redirects to the post page so the latest in-progress version renders. Public visitors get 401.\n- adminEditUrl: deep link into the Payload admin.\n\nShare adminPreviewUrl with the site owner / admin reviewers; share publicUrl only after publish_post.',
       inputSchema: {
         id: z.string().describe('Post id from list_posts / create_post.'),
       },
     },
     async ({ id }: { id: string }) => {
       const post = (await payload.findByID({ collection: 'posts', id, draft: true, overrideAccess: true })) as { slug: string; _status?: string }
-      const previewUrl = buildPreviewUrl({ slug: post.slug, section: 'thoughts' })
+      const publicUrl = buildPreviewUrl({ slug: post.slug, section: 'thoughts' })
+      const path = `/thoughts/${post.slug}`
+      const qs = new URLSearchParams({ collection: 'posts', slug: post.slug, path })
+      const siteBase = publicUrl.replace(path, '')
       return {
         content: [
           {
             type: 'text' as const,
-            text: JSON.stringify({ previewUrl, status: post._status ?? 'published' }, null, 2),
+            text: JSON.stringify(
+              {
+                publicUrl,
+                adminPreviewUrl: `${siteBase}/api/preview?${qs.toString()}`,
+                adminEditUrl: `${siteBase}/admin/collections/posts/${id}`,
+                status: post._status ?? 'published',
+              },
+              null,
+              2,
+            ),
+          },
+        ],
+      }
+    },
+  )
+
+  server.registerTool(
+    'preview_work',
+    {
+      title: 'Get Work Preview URLs',
+      description:
+        'Return preview URLs for a work item. Same model as preview_post — adminPreviewUrl enables Payload Live Preview / draft mode for authed admins; publicUrl is the live /work/{slug} URL.',
+      inputSchema: {
+        id: z.string().describe('Work id from list_work / create_work.'),
+      },
+    },
+    async ({ id }: { id: string }) => {
+      const item = (await payload.findByID({ collection: 'work', id, draft: true, overrideAccess: true })) as { slug: string; _status?: string }
+      const publicUrl = buildPreviewUrl({ slug: item.slug, section: 'work' })
+      const path = `/work/${item.slug}`
+      const qs = new URLSearchParams({ collection: 'work', slug: item.slug, path })
+      const siteBase = publicUrl.replace(path, '')
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(
+              {
+                publicUrl,
+                adminPreviewUrl: `${siteBase}/api/preview?${qs.toString()}`,
+                adminEditUrl: `${siteBase}/admin/collections/work/${id}`,
+                status: item._status ?? 'published',
+              },
+              null,
+              2,
+            ),
           },
         ],
       }
