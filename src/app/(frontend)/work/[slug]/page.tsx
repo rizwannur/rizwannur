@@ -38,9 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const item = docs[0]
   if (!item) return { title: 'Work' }
 
-  const cover = (typeof item.cover === 'object' ? item.cover : null) as Media | null
-  const microlinkUrl = !cover && item.href ? microlinkScreenshot(item.href) : null
-  const meta = item.meta as { title?: string; description?: string; image?: Media | string } | undefined
+  const meta = item.meta as { title?: string; description?: string } | undefined
 
   return buildPageMetadata({
     title: `${item.title} — ${item.subtitle}`,
@@ -48,7 +46,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     path: `/work/${slug}`,
     type: 'article',
     meta,
-    fallbackImage: cover ?? microlinkUrl ?? null,
     tags: (item.tech as string[] | undefined) ?? [],
   })
 }
