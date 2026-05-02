@@ -42,6 +42,7 @@ function workSummary(w: any) {
     url: workUrls(w.slug).url,
     path: workUrls(w.slug).path,
     title: w.title,
+    status: (w._status ?? 'published') as 'draft' | 'published',
   }
 }
 
@@ -538,15 +539,16 @@ export async function registerTools(server: any) {
     {
       title: 'List Work',
       description:
-        'List work/project items at /work/{slug}, sorted by display order ascending (lower order = higher on the page). Returns id, slug, url, path, title, subtitle, description, date, href, order, cover, tech. Supports search and pagination.\n\nNext steps: get_work for full body and gallery, update_work to edit, set_work_images to manage gallery, set_work_cover for the cover.',
+        'List work/project items at /work/{slug}, sorted by display order ascending (lower order = higher on the page). Returns id, slug, url, path, title, status, subtitle, description, date, href, order, cover, tech. Supports search, status filter, and pagination.\n\nNext steps: get_work for full body and gallery, update_work to edit, publish_work / unpublish_work for status flips, set_work_images for the gallery, set_work_cover for the cover.',
       inputSchema: {
         limit: z.number().int().min(1).max(100).default(50).describe('Max results to return (default 50)'),
         page: z.number().int().min(1).default(1).describe('Page number (default 1)'),
         search: z.string().optional().describe('Case-insensitive substring match against title, subtitle, description'),
         tech: z.string().optional().describe('Filter by tech stack entry (exact match)'),
+        status: z.enum(['draft', 'published', 'all']).default('all').describe('Filter by publish status. Default "all".'),
       },
     },
-    async ({ limit, page, search, tech }: { limit: number; page: number; search?: string; tech?: string }) => {
+    async ({ limit, page, search, tech, status }: { limit: number; page: number; search?: string; tech?: string; status: 'draft' | 'published' | 'all' }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const where: any = {}
       if (search) where.or = [
@@ -555,12 +557,14 @@ export async function registerTools(server: any) {
         { description: { contains: search } },
       ]
       if (tech) where.tech = { contains: tech }
+      if (status !== 'all') where._status = { equals: status }
       const { docs, totalDocs } = await payload.find({
         collection: 'work',
         sort: 'order',
         limit,
         page,
         depth: 1,
+        draft: true,
         overrideAccess: true,
         ...(Object.keys(where).length ? { where } : {}),
       })
@@ -610,7 +614,7 @@ export async function registerTools(server: any) {
       let w: any
       if (id) {
         try {
-          w = await payload.findByID({ collection: 'work', id, depth: 1, overrideAccess: true })
+          w = await payload.findByID({ collection: 'work', id, depth: 1, draft: true, overrideAccess: true })
         } catch {
           return errorResult('not_found', `Work item with id "${id}" not found.`, 'Use list_work to see available ids.')
         }
@@ -620,6 +624,7 @@ export async function registerTools(server: any) {
           where: { slug: { equals: slug } },
           limit: 1,
           depth: 1,
+          draft: true,
           overrideAccess: true,
         })
         w = docs[0]
@@ -668,9 +673,9 @@ export async function registerTools(server: any) {
   server.registerTool(
     'create_work',
     {
-      title: 'Create Work Item',
+      title: 'Create Work Item (defaults to DRAFT)',
       description:
-        'Add a new project to /work. subtitle is a short type descriptor like "Marketing Website" or "iOS App". description is the one-liner shown on project cards — keep it to ~15 words. body is the full project writeup in Markdown. href is the live site URL. order controls position — lower = higher on the page; call list_work first to see existing order values and pick a sensible number. cover is a media id from list_media (or use set_work_cover after creation). Gallery images use set_work_images.\n\nReturns id, slug, url (/work/{slug}), path.\n\nNext steps: set_work_images to populate gallery, set_work_cover to refresh cover, update_work to refine.',
+        'Add a new project to /work. DEFAULTS TO DRAFT — pass status: "published" to publish immediately, or call publish_work(id) afterwards. subtitle is a short type descriptor like "Marketing Website" or "iOS App". description is the one-liner shown on project cards — keep it to ~15 words. body is the full project writeup in Markdown. href is the live site URL. order controls position — lower = higher on the page; call list_work first to see existing order values and pick a sensible number. cover is a media id from list_media (or use set_work_cover after creation). Gallery images use set_work_images.\n\nReturns id, slug, url (/work/{slug}), path, status.\n\nNext steps: set_work_images to populate gallery, set_work_cover to refresh cover, publish_work after user approval.',
       inputSchema: {
         title: z.string().describe('Project title'),
         subtitle: z.string().describe('Short type descriptor e.g. "Marketing Website", "iOS App", "Brand Identity"'),
@@ -682,6 +687,7 @@ export async function registerTools(server: any) {
         slug: z.string().optional().describe('URL slug. Auto-generated from title if omitted.'),
         cover: z.number().int().optional().describe('Media id for cover — get from list_media. Or skip and call set_work_cover after.'),
         tech: z.array(z.string()).optional().describe('Tech stack entries e.g. ["Next.js","Tailwind"]'),
+        status: z.enum(['draft', 'published']).default('draft').describe('Defaults to "draft" so nothing is published without explicit approval.'),
         seo: z
           .object({
             title: z.string().optional().describe('SEO meta title — defaults to project title if omitted'),
@@ -692,11 +698,11 @@ export async function registerTools(server: any) {
           .describe('Optional SEO overrides for meta tags and social cards'),
       },
     },
-    async ({ title, subtitle, description, body, date, order, href, slug, cover, tech, seo }: any) => {
+    async ({ title, subtitle, description, body, date, order, href, slug, cover, tech, status, seo }: any) => {
       const item = (await payload.create({
         collection: 'work',
         overrideAccess: true,
-        draft: false,
+        draft: status === 'draft',
         data: {
           title,
           subtitle,
@@ -778,7 +784,67 @@ export async function registerTools(server: any) {
         data.meta = seoData
       }
 
-      const item = (await payload.update({ collection: 'work', id, overrideAccess: true, data })) as any
+      const existing = (await payload.findByID({ collection: 'work', id, draft: true, overrideAccess: true })) as any
+      const isDraft = existing?._status === 'draft'
+      const item = (await payload.update({ collection: 'work', id, overrideAccess: true, draft: isDraft, data })) as any
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(workSummary(item), null, 2),
+          },
+        ],
+      }
+    },
+  )
+
+  server.registerTool(
+    'publish_work',
+    {
+      title: 'Publish Work Item',
+      description:
+        'Move a work item from draft to published. After publishing, it becomes visible at /work/{slug} to all visitors.\n\nWhen to use: user has reviewed the draft and approved.',
+      inputSchema: {
+        id: z.string().describe('Work id from list_work / create_work.'),
+      },
+    },
+    async ({ id }: { id: string }) => {
+      const item = (await payload.update({
+        collection: 'work',
+        id,
+        overrideAccess: true,
+        draft: false,
+        data: { _status: 'published' },
+      })) as any
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(workSummary(item), null, 2),
+          },
+        ],
+      }
+    },
+  )
+
+  server.registerTool(
+    'unpublish_work',
+    {
+      title: 'Unpublish Work Item (back to draft)',
+      description:
+        'Revert a published work item to draft. The item is no longer visible at /work/{slug} to public visitors.',
+      inputSchema: {
+        id: z.string().describe('Work id from list_work.'),
+      },
+    },
+    async ({ id }: { id: string }) => {
+      const item = (await payload.update({
+        collection: 'work',
+        id,
+        overrideAccess: true,
+        draft: true,
+        data: { _status: 'draft' },
+      })) as any
       return {
         content: [
           {
@@ -856,13 +922,14 @@ export async function registerTools(server: any) {
         }
       }
 
-      const existing = (await payload.findByID({ collection: 'work', id, overrideAccess: true })) as any
+      const existing = (await payload.findByID({ collection: 'work', id, draft: true, overrideAccess: true })) as any
+      const isDraft = existing?._status === 'draft'
       const data: Record<string, unknown> = { cover: mediaId }
       if (updateMetaImage) {
         const currentMeta = (existing.meta ?? {}) as Record<string, unknown>
         data.meta = { ...currentMeta, image: mediaId }
       }
-      const item = (await payload.update({ collection: 'work', id, overrideAccess: true, data })) as any
+      const item = (await payload.update({ collection: 'work', id, overrideAccess: true, draft: isDraft, data })) as any
       return {
         content: [
           {
@@ -901,10 +968,13 @@ export async function registerTools(server: any) {
       },
     },
     async ({ id, images }: { id: string; images: { mediaId: string | number; caption?: string }[] }) => {
+      const existing = (await payload.findByID({ collection: 'work', id, draft: true, overrideAccess: true })) as any
+      const isDraft = existing?._status === 'draft'
       const item = (await payload.update({
         collection: 'work',
         id,
         overrideAccess: true,
+        draft: isDraft,
         data: {
           images: images.map(({ mediaId, caption }) => ({
             image: String(mediaId),

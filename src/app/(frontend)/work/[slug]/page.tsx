@@ -10,6 +10,7 @@ import { BackHomeNav } from '@/components/layout/BackHomeNav'
 import { PrevNext } from '@/components/ui/PrevNext'
 import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
+import { buildPageMetadata } from '@/lib/page-metadata'
 
 export const revalidate = 60
 export const dynamicParams = true
@@ -36,21 +37,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const item = docs[0]
   if (!item) return { title: 'Work' }
 
-  const uploadedUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
-  const coverUrl = uploadedUrl || (item.href ? microlinkScreenshot(item.href) : '')
-  const meta = item.meta as { title?: string; description?: string; image?: Media } | undefined
+  const cover = (typeof item.cover === 'object' ? item.cover : null) as Media | null
+  const microlinkUrl = !cover && item.href ? microlinkScreenshot(item.href) : null
+  const meta = item.meta as { title?: string; description?: string; image?: Media | string } | undefined
 
-  return {
-    title: meta?.title || `${item.title} — ${item.subtitle}`,
-    description: meta?.description || item.description,
-    openGraph: {
-      images: meta?.image?.url
-        ? [{ url: meta.image.url }]
-        : coverUrl
-          ? [{ url: coverUrl }]
-          : [],
-    },
-  }
+  return buildPageMetadata({
+    title: `${item.title} — ${item.subtitle}`,
+    description: item.description,
+    path: `/work/${slug}`,
+    type: 'article',
+    meta,
+    fallbackImage: cover ?? microlinkUrl ?? null,
+    tags: (item.tech as string[] | undefined) ?? [],
+  })
 }
 
 export default async function WorkDetail({ params }: { params: Promise<{ slug: string }> }) {

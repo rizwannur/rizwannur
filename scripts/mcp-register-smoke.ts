@@ -39,7 +39,7 @@ prompts.forEach((p) => console.log(`  - ${p.name}`))
 
 const expectedTools = [
   'list_posts', 'get_post', 'create_post', 'update_post', 'publish_post', 'unpublish_post', 'delete_post', 'set_post_cover',
-  'list_work', 'get_work', 'create_work', 'update_work', 'delete_work', 'set_work_cover', 'set_work_images',
+  'list_work', 'get_work', 'create_work', 'update_work', 'publish_work', 'unpublish_work', 'delete_work', 'set_work_cover', 'set_work_images',
   'list_craft', 'get_craft', 'create_craft', 'update_craft', 'delete_craft',
   'upload_media', 'list_media', 'get_media', 'update_media', 'delete_media',
   'generate_image', 'check_seo', 'suggest_internal_links', 'preview_post',

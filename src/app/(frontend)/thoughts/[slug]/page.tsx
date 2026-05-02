@@ -9,6 +9,7 @@ import { PrevNext } from '@/components/ui/PrevNext'
 import { TagChips } from '@/components/ui/TagChips'
 import { CodeBlock } from '@/components/CodeBlock'
 import { AuthorCard } from '@/components/sections/AuthorCard'
+import { buildPageMetadata } from '@/lib/page-metadata'
 import type { Media } from '@/payload-types'
 
 type CodeBlockNode = { fields?: { code?: string; language?: string } }
@@ -42,17 +43,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     collection: 'posts',
     where: { slug: { equals: slug } },
     limit: 1,
-    depth: 0,
+    depth: 1,
   })
   const item = docs[0]
   if (!item) return { title: 'Thoughts' }
 
-  const meta = item.meta as { title?: string; description?: string; image?: Media } | undefined
+  const meta = item.meta as { title?: string; description?: string; image?: Media | string } | undefined
+  const cover = (typeof item.coverImage === 'object' ? item.coverImage : null) as Media | null
 
-  return {
-    title: meta?.title || item.title,
-    description: meta?.description || item.excerpt,
-  }
+  return buildPageMetadata({
+    title: item.title,
+    description: item.excerpt,
+    path: `/thoughts/${slug}`,
+    type: 'article',
+    publishedTime: item.date,
+    meta,
+    fallbackImage: cover,
+    tags: (item.tags as string[] | undefined) ?? [],
+  })
 }
 
 function formatDate(isoDate: string): string {
