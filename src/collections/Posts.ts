@@ -45,14 +45,13 @@ export const Posts: CollectionConfig = {
     afterDelete: [() => { revalidateSection('thoughts') }],
   },
   access: {
+    // Authed users see everything; public sees only explicitly-published items.
+    // Don't allow `_status: exists: false` — Payload's response synthesizes
+    // `_status` from the latest version, but the access filter runs against the
+    // stored field, and legacy rows missing it would leak unfinished drafts.
     read: ({ req }) => {
       if (req.user) return true
-      return {
-        or: [
-          { _status: { equals: 'published' } },
-          { _status: { exists: false } },
-        ],
-      }
+      return { _status: { equals: 'published' } }
     },
   },
   fields: [

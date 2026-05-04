@@ -1,6 +1,6 @@
 'use client'
 
-import { useTheme } from 'next-themes'
+import { useTheme } from '@/app/(frontend)/ThemeProvider'
 import { useEffect, useState } from 'react'
 import { Moon, Sun, Volume2, Volume1, VolumeX } from 'lucide-react'
 import { useAudio } from '@/components/providers/AudioProvider'
@@ -8,7 +8,7 @@ import { cn } from '@/lib/cn'
 
 export function ThemeAudioPill() {
   const [mounted, setMounted] = useState(false)
-  const { theme, setTheme, systemTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const { level, cycleLevel, playSweep, playClick } = useAudio()
 
   useEffect(() => { setMounted(true) }, [])
@@ -17,7 +17,7 @@ export function ThemeAudioPill() {
     return <div className="flex items-center gap-0.5 p-0.5 bg-black/5 dark:bg-[#222222] rounded-full h-[32px] w-[62px]" aria-hidden />
   }
 
-  const currentTheme = theme === 'system' ? systemTheme : theme
+  const currentTheme = resolvedTheme
   const isDark = currentTheme === 'dark'
 
   const toggleTheme = () => {

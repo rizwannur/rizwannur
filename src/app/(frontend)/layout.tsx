@@ -5,7 +5,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Track } from '@/components/site/Track'
 import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google'
-import { ThemeProvider } from './ThemeProvider'
+import { ThemeProvider, themeInitScript } from './ThemeProvider'
 import { AudioProvider } from '@/components/providers/AudioProvider'
 import { getSiteUrl, KNOWN_DOMAINS } from '@/lib/site-url'
 import { SITE_META, rootTitle } from '@/lib/site-meta'
@@ -111,6 +111,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en" className={`${geist.variable} ${geistMono.variable} ${instrument.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="px-8">
         <ThemeProvider>
           <AudioProvider>{children}</AudioProvider>

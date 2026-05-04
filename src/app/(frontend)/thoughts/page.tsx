@@ -1,4 +1,4 @@
-import { getPayload } from 'payload'
+import { getPayload, type Where } from 'payload'
 import config from '@payload-config'
 import { PageShell } from '@/components/layout/PageShell'
 import { BackHomeNav } from '@/components/layout/BackHomeNav'
@@ -6,6 +6,7 @@ import { ThoughtRow } from '@/components/sections/ThoughtRow'
 import { Footer } from '@/components/layout/Footer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import type { Thought } from '@/lib/types/thoughts'
+import { isAuthedAdmin } from '@/lib/preview-mode'
 
 export const metadata = { title: 'Thoughts — Rafey' }
 export const revalidate = 60
@@ -24,21 +25,27 @@ export default async function ThoughtsIndex({
 
   const query = q?.trim()
 
+  const showDrafts = await isAuthedAdmin()
+  const baseWhere: Where | undefined = query
+    ? {
+        or: [
+          { title: { like: query } },
+          { excerpt: { like: query } },
+        ],
+      }
+    : undefined
+  const where: Where | undefined = showDrafts
+    ? baseWhere
+    : baseWhere
+      ? { and: [baseWhere, { _status: { equals: 'published' } }] }
+      : { _status: { equals: 'published' } }
   const { docs } = await payload.find({
     collection: 'posts',
-    ...(query
-      ? {
-          where: {
-            or: [
-              { title: { like: query } },
-              { excerpt: { like: query } },
-            ],
-          },
-        }
-      : {}),
+    ...(where ? { where } : {}),
     sort: '-date',
     limit: 100,
     depth: 1,
+    ...(showDrafts ? { overrideAccess: true, draft: true } : {}),
   })
 
   const thoughtItems: Thought[] = docs.map((item) => {

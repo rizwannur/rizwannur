@@ -11,7 +11,7 @@ import { PrevNext } from '@/components/ui/PrevNext'
 import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
 import { buildPageMetadata } from '@/lib/page-metadata'
-import { isDraftPreview } from '@/lib/preview-mode'
+import { isDraftPreview, isAuthedAdmin } from '@/lib/preview-mode'
 
 export const revalidate = 60
 export const dynamicParams = true
@@ -54,7 +54,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function WorkDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const draft = await isDraftPreview()
+  const [draft, authed] = await Promise.all([isDraftPreview(), isAuthedAdmin()])
+  const showDrafts = draft || authed
   const payload = await getPayload({ config })
 
   const { docs: itemDocs } = await payload.find({
@@ -62,8 +63,8 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
     where: { slug: { equals: slug } },
     limit: 1,
     depth: 1,
-    draft,
-    overrideAccess: draft,
+    draft: showDrafts,
+    overrideAccess: showDrafts,
   })
   const item = itemDocs[0]
   if (!item) return notFound()
@@ -73,6 +74,8 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
     sort: 'order',
     limit: 100,
     depth: 0,
+    overrideAccess: showDrafts,
+    ...(showDrafts ? {} : { where: { _status: { equals: 'published' as const } } }),
   })
   const idx = allDocs.findIndex((w) => w.slug === slug)
   const prev = idx > 0 ? allDocs[idx - 1] : undefined
