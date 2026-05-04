@@ -11,15 +11,15 @@
 export const SITE_META = {
   fullName: 'Rizwan Nur Rafey',
   shortName: 'Rafey',
-  role: 'Full-Stack Product Engineer',
+  role: 'Product Engineer',
   description:
-    'Full-Stack Product Engineer. I design and ship web products end-to-end — from UX to deploy.',
+    'Product Engineer. I design, build, and ship products end-to-end — interface to infrastructure.',
   twitterHandle: 'rizwannur',
   keywords: [
     'Rizwan Nur Rafey',
     'Rafey',
-    'Full-Stack Product Engineer',
     'Product Engineer',
+    'Full-Stack Product Engineer',
     'Full-Stack Engineer',
     'Web Developer',
     'Next.js',

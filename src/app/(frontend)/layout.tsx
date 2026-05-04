@@ -7,10 +7,9 @@ import { Track } from '@/components/site/Track'
 import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google'
 import { ThemeProvider } from './ThemeProvider'
 import { AudioProvider } from '@/components/providers/AudioProvider'
-import { getPayload } from 'payload'
-import config from '@payload-config'
 import { getSiteUrl, KNOWN_DOMAINS } from '@/lib/site-url'
 import { SITE_META, rootTitle } from '@/lib/site-meta'
+import { PROFILE } from '@/lib/profile'
 import './styles.css'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist', display: 'swap' })
@@ -84,19 +83,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
   const siteUrl = getSiteUrl()
 
-  // Person JSON-LD pulls socials from Profile (since they evolve), but
-  // identity fields stay code-defined to match the root SEO above.
-  const socialUrls: string[] = []
-  let avatarUrl: string | null = null
-  try {
-    const payload = await getPayload({ config })
-    const profile = await payload.findGlobal({ slug: 'profile', depth: 1 })
-    if (typeof profile.avatar === 'object' && profile.avatar && 'url' in profile.avatar) {
-      avatarUrl = (profile.avatar as { url?: string | null }).url ?? null
-    }
-    for (const s of profile.socials ?? []) if (s.href) socialUrls.push(s.href)
-  } catch {}
-
+  const socialUrls = PROFILE.socials.map((s) => s.href)
   const sameAs = Array.from(
     new Set([...KNOWN_DOMAINS.filter((d) => d !== siteUrl), ...socialUrls]),
   )
@@ -105,10 +92,20 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: SITE_META.fullName,
+    alternateName: ['Rafey', 'Rizwan Nur', 'Rizwan Nur Rafey'],
+    givenName: 'Rizwan',
+    additionalName: 'Nur',
+    familyName: 'Rafey',
     url: siteUrl,
-    image: avatarUrl ?? `${siteUrl}/rafey.png`,
+    image: `${siteUrl}${PROFILE.avatar}`,
     jobTitle: SITE_META.role,
     description: SITE_META.description,
+    knowsAbout: ['Product Engineering', 'Next.js', 'TypeScript', 'Payload CMS', 'Web Development', 'UI/UX', 'Full-Stack Development'],
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Dhaka',
+      addressCountry: 'BD',
+    },
     sameAs,
   }
 

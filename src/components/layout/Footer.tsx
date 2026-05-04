@@ -1,23 +1,15 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
 import { CompanyLink } from '@/components/ui/CompanyLink'
 import { FooterClock } from './FooterClock'
+import { PROFILE } from '@/lib/profile'
 
-export async function Footer() {
-  const payload = await getPayload({ config })
-  const profile = await payload.findGlobal({ slug: 'profile', depth: 0 })
-
+export function Footer() {
   const year = new Date().getFullYear()
-  const shortName = profile.shortName ?? 'Rafey'
-  const bookCall = profile.bookCall ?? '#'
-  const timezone = profile.timezone ?? 'Asia/Dhaka'
-  const timezoneAbbr = profile.timezoneAbbr ?? 'BDT'
 
   return (
     <footer className="flex items-center justify-between text-[13px] text-black/70 dark:text-white/70 pt-6">
-      <p className="text-black/50 dark:text-white/50">© {year} {shortName}</p>
-      <CompanyLink name="Start a project" href={bookCall} brand="#292929" logo="/portfolio/logos/cal.svg" />
-      <FooterClock timezone={timezone} timezoneAbbr={timezoneAbbr} />
+      <p className="text-black/50 dark:text-white/50">© {year} {PROFILE.shortName}</p>
+      <CompanyLink name="Start a project" href={PROFILE.bookCall} brand="#292929" logo="/portfolio/logos/cal.svg" />
+      <FooterClock timezone={PROFILE.timezone} timezoneAbbr={PROFILE.timezoneAbbr} />
     </footer>
   )
 }

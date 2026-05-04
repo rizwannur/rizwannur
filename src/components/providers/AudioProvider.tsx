@@ -14,12 +14,14 @@ type AudioContextValue = {
 
 const Ctx = createContext<AudioContextValue | null>(null)
 
-const STORAGE_KEY = 'site:audio-level'
+// SFX (clicks, theme sweep) are independent of the background lofi level —
+// they're UI feedback and always play. Only the bg loop respects the level.
+const SFX_VOLUME = 0.18
 
-const VOLUMES: Record<AudioLevel, { bg: number; sfx: number }> = {
-  muted: { bg: 0, sfx: 0 },
-  low: { bg: 0.12, sfx: 0.15 },
-  high: { bg: 0.28, sfx: 0.35 },
+const BG_VOLUMES: Record<AudioLevel, number> = {
+  muted: 0,
+  low: 0.12,
+  high: 0.28,
 }
 
 const NEXT: Record<AudioLevel, AudioLevel> = {
@@ -29,17 +31,13 @@ const NEXT: Record<AudioLevel, AudioLevel> = {
 }
 
 export function AudioProvider({ children }: { children: React.ReactNode }) {
+  // Always start muted on visit. We deliberately don't persist the level —
+  // browsers can't autostart audio without a user gesture, so a restored
+  // "low/high" would show a volume-on icon while playing nothing.
   const [level, setLevel] = useState<AudioLevel>('muted')
   const levelRef = useRef<AudioLevel>('muted')
   const lofiRef = useRef<LofiHandle | null>(null)
   const initialized = useRef(false)
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY) as AudioLevel | null
-      if (saved && saved in VOLUMES) setLevel(saved)
-    } catch { /* ignore */ }
-  }, [])
 
   // iOS Safari: AudioContext must be created AND resumed inside the user-
   // gesture callstack — synchronously, no awaits. Any function that fires
@@ -74,7 +72,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       // a gesture).
       if (lofi.ctx.state === 'suspended') lofi.ctx.resume().catch(() => {})
       lofi.start()
-      lofi.setVolume(VOLUMES[next].bg)
+      lofi.setVolume(BG_VOLUMES[next])
     }
   }, [])
 
@@ -86,7 +84,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     levelRef.current = level
-    try { localStorage.setItem(STORAGE_KEY, level) } catch { /* ignore */ }
     applyLevel(level)
   }, [level, applyLevel])
 
@@ -129,7 +126,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       } else if (levelRef.current !== 'muted') {
         if (lofi.ctx.state === 'suspended') lofi.ctx.resume().catch(() => {})
         lofi.start()
-        lofi.setVolume(VOLUMES[levelRef.current].bg)
+        lofi.setVolume(BG_VOLUMES[levelRef.current])
       }
     }
     document.addEventListener('visibilitychange', onVis)
@@ -149,21 +146,19 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   }, [initSync])
 
   const playClick = useCallback(() => {
-    if (levelRef.current === 'muted') return
     initSync()
     const lofi = lofiRef.current
     if (!lofi) return
     if (lofi.ctx.state === 'suspended') lofi.ctx.resume().catch(() => {})
-    synthClick(lofi.ctx, VOLUMES[levelRef.current].sfx)
+    synthClick(lofi.ctx, SFX_VOLUME)
   }, [initSync])
 
   const playSweep = useCallback(() => {
-    if (levelRef.current === 'muted') return
     initSync()
     const lofi = lofiRef.current
     if (!lofi) return
     if (lofi.ctx.state === 'suspended') lofi.ctx.resume().catch(() => {})
-    synthSweep(lofi.ctx, VOLUMES[levelRef.current].sfx)
+    synthSweep(lofi.ctx, SFX_VOLUME)
   }, [initSync])
 
   return <Ctx.Provider value={{ level, cycleLevel, playClick, playSweep }}>{children}</Ctx.Provider>
