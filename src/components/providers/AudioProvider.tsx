@@ -164,8 +164,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   return <Ctx.Provider value={{ level, cycleLevel, playClick, playSweep }}>{children}</Ctx.Provider>
 }
 
+const NOOP_AUDIO: AudioContextValue = {
+  level: 'muted',
+  cycleLevel: () => {},
+  playClick: () => {},
+  playSweep: () => {},
+}
+
 export function useAudio() {
-  const v = useContext(Ctx)
-  if (!v) throw new Error('useAudio must be used within AudioProvider')
-  return v
+  return useContext(Ctx) ?? NOOP_AUDIO
 }

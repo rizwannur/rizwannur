@@ -81,14 +81,22 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
   const prev = idx > 0 ? allDocs[idx - 1] : undefined
   const next = idx >= 0 && idx < allDocs.length - 1 ? allDocs[idx + 1] : undefined
 
-  const uploadedCoverUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
+  const coverMedia = typeof item.cover === 'object' && item.cover !== null ? (item.cover as Media) : null
+  const uploadedCoverUrl = coverMedia?.url ?? ''
   const coverUrl = uploadedCoverUrl || (item.href ? microlinkScreenshot(item.href) : '')
+  const coverW = coverMedia?.width ?? undefined
+  const coverH = coverMedia?.height ?? undefined
 
   const galleryImages =
-    item.images?.map((img) => ({
-      src: typeof img.image === 'object' ? ((img.image as Media).url ?? '') : '',
-      caption: img.caption ?? undefined,
-    })) ?? []
+    item.images?.map((img) => {
+      const m = typeof img.image === 'object' && img.image !== null ? (img.image as Media) : null
+      return {
+        src: m?.url ?? '',
+        caption: img.caption ?? undefined,
+        width: m?.width ?? undefined,
+        height: m?.height ?? undefined,
+      }
+    }) ?? []
 
   return (
     <PageShell>
@@ -119,7 +127,10 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
         </p>
 
         {coverUrl && (
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl ring-1 ring-black/5 dark:ring-white/10 bg-black/5 dark:bg-white/5">
+          <div
+            className="relative w-full overflow-hidden rounded-2xl ring-1 ring-black/5 dark:ring-white/10 bg-black/5 dark:bg-white/5"
+            style={{ aspectRatio: coverW && coverH ? `${coverW} / ${coverH}` : '4 / 3' }}
+          >
             <Image
               src={coverUrl}
               alt={`${item.title} cover image`}
@@ -137,7 +148,10 @@ export default async function WorkDetail({ params }: { params: Promise<{ slug: s
 
         {galleryImages.map((img, i) => (
           <figure key={i} className="flex flex-col gap-2">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl ring-1 ring-black/5 dark:ring-white/10">
+            <div
+              className="relative w-full overflow-hidden rounded-2xl ring-1 ring-black/5 dark:ring-white/10"
+              style={{ aspectRatio: img.width && img.height ? `${img.width} / ${img.height}` : '4 / 3' }}
+            >
               <Image src={img.src} alt={img.caption ?? ''} fill sizes="669px" className="object-cover" />
             </div>
             {img.caption && (

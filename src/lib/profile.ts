@@ -1,4 +1,4 @@
-type SocialKind = 'twitter' | 'instagram' | 'github' | 'linkedin' | 'resume' | 'mail'
+type SocialKind = 'twitter' | 'instagram' | 'whatsapp' | 'github' | 'linkedin' | 'resume' | 'mail'
 
 export const PROFILE = {
   shortName: 'Rafey',
@@ -20,12 +20,13 @@ export const PROFILE = {
   bookCall: 'https://cal.com/rizwannur',
 
   socials: [
-    { label: 'Twitter', href: 'https://x.com/rafeyum', kind: 'twitter' as SocialKind },
-    { label: 'Instagram', href: 'https://instagram.com/rafeyum', kind: 'instagram' as SocialKind },
-    { label: 'GitHub', href: 'https://github.com/rizwannur', kind: 'github' as SocialKind },
+    { label: 'Email', href: 'mailto:rizwannur116@gmail.com', kind: 'mail' as SocialKind },
+    { label: 'WhatsApp', href: 'https://wa.me/8801534593563', kind: 'whatsapp' as SocialKind },
     { label: 'LinkedIn', href: 'https://linkedin.com/in/rizwannur', kind: 'linkedin' as SocialKind },
     { label: 'Resume', href: 'https://docs.google.com/document/d/15W39xx3tRk7Cdbk690ODD9yLBJv9xZvq/edit?usp=sharing&ouid=103439662159800937701&rtpof=true&sd=true', kind: 'resume' as SocialKind },
-    { label: 'Email', href: 'mailto:rizwannur116@gmail.com', kind: 'mail' as SocialKind },
+    { label: 'GitHub', href: 'https://github.com/rizwannur', kind: 'github' as SocialKind },
+    { label: 'Twitter', href: 'https://x.com/rafeyum', kind: 'twitter' as SocialKind },
+    { label: 'Instagram', href: 'https://instagram.com/rafeyum', kind: 'instagram' as SocialKind },
   ],
 
   timezone: 'Asia/Dhaka',

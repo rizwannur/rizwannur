@@ -16,12 +16,15 @@ export const revalidate = 60
 import type { Work as PayloadWork } from '@/payload-types'
 
 function toWorkItem(item: PayloadWork): Work {
-  const uploadedUrl = typeof item.cover === 'object' && item.cover !== null ? ((item.cover as Media).url ?? '') : ''
+  const coverMedia = typeof item.cover === 'object' && item.cover !== null ? (item.cover as Media) : null
+  const uploadedUrl = coverMedia?.url ?? ''
   return {
     slug: item.slug,
     title: item.title,
     subtitle: item.subtitle,
     cover: uploadedUrl || (item.href ? microlinkScreenshot(item.href) : ''),
+    coverWidth: coverMedia?.width ?? undefined,
+    coverHeight: coverMedia?.height ?? undefined,
     date: item.date,
     href: item.href ?? undefined,
     description: item.description,

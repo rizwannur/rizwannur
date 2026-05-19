@@ -16,7 +16,7 @@
     height: 100%;
   }
   body {
-    @apply bg-[#F9FAFA] text-neutral-900 antialiased font-sans dark:bg-[#09090B] dark:text-neutral-100;
+    @apply bg-[#F9FAFA] text-neutral-900 antialiased font-sans dark:bg-[#171A22] dark:text-neutral-100;
     font-family: var(--font-sans);
     letter-spacing: 0.005em;
   }

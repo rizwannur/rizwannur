@@ -1,5 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 import { PageShell } from '@/components/layout/PageShell'
 import { Header } from '@/components/layout/Header'
 import { Socials } from '@/components/ui/Socials'
@@ -41,13 +43,16 @@ export default async function HomePage() {
   ])
 
   const workItems: Work[] = workDocs.map((item) => {
-    const uploadedUrl = typeof item.cover === 'object' ? ((item.cover as Media).url ?? '') : ''
+    const coverMedia = typeof item.cover === 'object' && item.cover !== null ? (item.cover as Media) : null
+    const uploadedUrl = coverMedia?.url ?? ''
     const cover = uploadedUrl || (item.href ? microlinkScreenshot(item.href) : '')
     return {
       slug: item.slug,
       title: item.title,
       subtitle: item.subtitle,
       cover,
+      coverWidth: coverMedia?.width ?? undefined,
+      coverHeight: coverMedia?.height ?? undefined,
       date: item.date,
       href: item.href ?? undefined,
       description: item.description,
@@ -75,7 +80,6 @@ export default async function HomePage() {
     excerpt: item.excerpt,
     body: [],
   }))
-
   return (
     <PageShell>
       <Header
@@ -94,11 +98,16 @@ export default async function HomePage() {
           <p key={i}>{p}</p>
         ))}
         <p>{PROFILE.searching}</p>
-        <p className="rounded-2xl border border-black/8 bg-black/[0.03] p-4 text-[14px] text-neutral-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-300">
-          {PROFILE.availability}
-        </p>
-
-        <div className="pt-2">
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href={PROFILE.bookCall}
+            target="_blank"
+            rel="noreferrer"
+            className="group inline-flex h-9 items-center gap-1.5 rounded-full bg-black px-4 text-[13px] font-semibold text-white transition-[opacity,transform] duration-200 hover:-translate-y-0.5 hover:opacity-90 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-white dark:text-black dark:focus-visible:ring-white/40 dark:focus-visible:ring-offset-black"
+          >
+            Book a call
+            <ArrowUpRight className="size-3.5 text-white/60 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-black/45" aria-hidden />
+          </Link>
           <Socials socials={PROFILE.socials} />
         </div>
       </section>

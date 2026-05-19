@@ -6,15 +6,10 @@ import { motion } from 'motion/react'
 import { useState } from 'react'
 import { useAudio } from '@/components/providers/AudioProvider'
 import type { Work } from '@/lib/types/work'
-import { microlinkScreenshot } from '@/lib/microlink'
 
 export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 2 }) {
   const [hovered, setHovered] = useState<number | null>(null)
-  const [previewed, setPreviewed] = useState<Set<number>>(() => new Set())
   const { playClick } = useAudio()
-
-  const markPreviewed = (i: number) =>
-    setPreviewed((prev) => (prev.has(i) ? prev : new Set(prev).add(i)))
 
   return (
     <div
@@ -29,12 +24,12 @@ export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 
             key={item.slug}
             href={`/work/${item.slug}`}
             onClick={() => playClick()}
-            onMouseEnter={() => { setHovered(i); if (item.href) markPreviewed(i) }}
-            onFocus={() => { setHovered(i); if (item.href) markPreviewed(i) }}
+            onMouseEnter={() => setHovered(i)}
+            onFocus={() => setHovered(i)}
             onBlur={() => setHovered(null)}
             aria-label={`${item.title} ${item.subtitle}`}
             className={`block cursor-pointer pt-2.5 pb-2.5 [&:first-child]:pt-0 [&:last-child]:pb-0 ${
-              columns === 2 ? 'md:[&:nth-child(odd)]:pr-2.5 md:[&:nth-child(even)]:pl-2.5 md:pt-0 md:pb-0 md:[&:nth-child(-n+2)]:pt-0 md:[&:nth-last-child(-n+2)]:pb-0' : ''
+              columns === 2 ? 'md:[&:nth-child(odd)]:pr-2.5 md:[&:nth-child(even)]:pl-2.5 md:pt-2.5 md:pb-2.5 md:[&:nth-child(-n+2)]:pt-0 md:[&:nth-last-child(-n+2)]:pb-0' : ''
             }`}
           >
             <motion.div
@@ -42,7 +37,15 @@ export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 
               transition={{ duration: 0.2, ease: 'easeOut' }}
               className="flex flex-col gap-3 w-full p-1 bg-white dark:bg-white/5 border border-black/10 dark:border-white/8 rounded-[10px] hover:border-black/20 dark:hover:border-white/10 transition-colors"
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
+              <div
+                className="relative w-full overflow-hidden rounded-md bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5"
+                style={{
+                  aspectRatio:
+                    item.coverWidth && item.coverHeight
+                      ? `${item.coverWidth} / ${item.coverHeight}`
+                      : '4 / 3',
+                }}
+              >
                 {item.cover ? (
                   <Image
                     src={item.cover}
@@ -53,25 +56,6 @@ export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 
                   />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900" />
-                )}
-                {item.href && previewed.has(i) && (
-                  <motion.div
-                    aria-hidden
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: isHovered ? 1 : 0 }}
-                    transition={{ duration: 0.25, ease: 'easeOut' }}
-                    className="absolute inset-0"
-                  >
-                    <Image
-                      src={microlinkScreenshot(item.href)}
-                      alt=""
-                      fill
-                      sizes="(max-width: 768px) 100vw, 320px"
-                      className="object-cover"
-                      loading="lazy"
-                      unoptimized
-                    />
-                  </motion.div>
                 )}
               </div>
               <div className="px-2 pb-1 pt-1">
