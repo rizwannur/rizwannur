@@ -14,7 +14,7 @@ export const SITE_META = {
   role: 'Product Engineer',
   description:
     'Product Engineer. I design, build, and ship products end-to-end — interface to infrastructure.',
-  twitterHandle: 'rizwannur',
+  twitterHandle: 'rafeyum',
   keywords: [
     'Rizwan Nur Rafey',
     'Rafey',
