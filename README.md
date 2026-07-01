@@ -9,6 +9,7 @@
 
 ### 👨‍💻 About Me
 
+- 🌐 **Portfolio → [rizwannur.com](https://www.rizwannur.com)** — my work, writing, and how to hire me
 - 🧠 Full Stack Product Engineer 
 - ⚡ I build clean, minimal products — function meets aesthetic
 - 💬 Reach me: [rizwannur116@gmail.com](mailto:rizwannur116@gmail.com)
@@ -81,6 +82,7 @@
 
 <p align="center">
   <a href="https://rizwannur.com"><img src="https://img.shields.io/badge/-Portfolio-3423A6?style=flat&logo=Google-Chrome&logoColor=white" /></a>
+  <a href="https://x.com/rafeyum"><img src="https://img.shields.io/badge/-X%2F@rafeyum-000000?style=flat&logo=x&logoColor=white" /></a>
   <a href="https://linkedin.com/in/rizwannur"><img src="https://img.shields.io/badge/-LinkedIn-0077B5?style=flat&logo=Linkedin&logoColor=white" /></a>
   <a href="mailto:rizwannur116@gmail.com"><img src="https://img.shields.io/badge/-Email-D14836?style=flat&logo=Gmail&logoColor=white" /></a>
 </p>
