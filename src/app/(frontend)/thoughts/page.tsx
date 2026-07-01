@@ -6,7 +6,7 @@ import { ThoughtRow } from '@/components/sections/ThoughtRow'
 import { Footer } from '@/components/layout/Footer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import type { Thought } from '@/lib/types/thoughts'
-import { isAuthedAdmin } from '@/lib/preview-mode'
+import { isDraftPreview } from '@/lib/preview-mode'
 
 export const metadata = { title: 'Thoughts — Rafey' }
 export const revalidate = 60
@@ -25,7 +25,7 @@ export default async function ThoughtsIndex({
 
   const query = q?.trim()
 
-  const showDrafts = await isAuthedAdmin()
+  const showDrafts = await isDraftPreview()
   const baseWhere: Where | undefined = query
     ? {
         or: [

@@ -1,6 +1,4 @@
-import { draftMode, headers } from 'next/headers'
-import { getPayload } from 'payload'
-import config from '@payload-config'
+import { draftMode } from 'next/headers'
 
 /**
  * Returns true when Next.js draft mode is on. Draft mode is only enabled
@@ -18,23 +16,6 @@ export async function isDraftPreview(): Promise<boolean> {
   try {
     const draft = await draftMode()
     return draft.isEnabled
-  } catch {
-    return false
-  }
-}
-
-/**
- * Returns true when the request comes from a logged-in Payload admin.
- * Lets public pages opt admins into seeing drafts without requiring them
- * to click the Preview button — anyone signed into the CMS sees the same
- * latest version they would in the admin UI.
- */
-export async function isAuthedAdmin(): Promise<boolean> {
-  try {
-    const payload = await getPayload({ config })
-    const reqHeaders = await headers()
-    const { user } = await payload.auth({ headers: reqHeaders })
-    return Boolean(user)
   } catch {
     return false
   }

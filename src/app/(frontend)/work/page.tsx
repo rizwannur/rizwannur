@@ -8,7 +8,7 @@ import { SearchInput } from '@/components/ui/SearchInput'
 import type { Work } from '@/lib/types/work'
 import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
-import { isAuthedAdmin } from '@/lib/preview-mode'
+import { isDraftPreview } from '@/lib/preview-mode'
 
 export const metadata = { title: 'Work — Rafey' }
 export const revalidate = 60
@@ -42,7 +42,7 @@ export default async function WorkIndex({
 
   const query = q?.trim()
 
-  const showDrafts = await isAuthedAdmin()
+  const showDrafts = await isDraftPreview()
   const baseWhere: Where | undefined = query
     ? {
         or: [

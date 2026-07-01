@@ -10,7 +10,7 @@ import { TagChips } from '@/components/ui/TagChips'
 import { CodeBlock } from '@/components/CodeBlock'
 import { AuthorCard } from '@/components/sections/AuthorCard'
 import { buildPageMetadata } from '@/lib/page-metadata'
-import { isDraftPreview, isAuthedAdmin } from '@/lib/preview-mode'
+import { isDraftPreview } from '@/lib/preview-mode'
 import type { Media } from '@/payload-types'
 
 type CodeBlockNode = { fields?: { code?: string; language?: string } }
@@ -70,8 +70,7 @@ function formatDate(isoDate: string): string {
 
 export default async function ThoughtDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const [draft, authed] = await Promise.all([isDraftPreview(), isAuthedAdmin()])
-  const showDrafts = draft || authed
+  const showDrafts = await isDraftPreview()
   const payload = await getPayload({ config })
 
   const { docs: itemDocs } = await payload.find({

@@ -17,7 +17,7 @@ import type { Craft } from '@/lib/types/craft'
 import type { Media } from '@/payload-types'
 import { microlinkScreenshot } from '@/lib/microlink'
 import { PROFILE } from '@/lib/profile'
-import { isAuthedAdmin } from '@/lib/preview-mode'
+import { isDraftPreview } from '@/lib/preview-mode'
 
 export const revalidate = 60
 
@@ -32,7 +32,7 @@ export default async function HomePage() {
   // defaults to `overrideAccess: true` and silently bypasses the read access
   // filter, so we can't rely on it. Authed admins skip the filter and see
   // drafts inline — same as they would in the admin UI.
-  const showDrafts = await isAuthedAdmin()
+  const showDrafts = await isDraftPreview()
   const scope = showDrafts
     ? { overrideAccess: true as const, draft: true as const }
     : { where: { _status: { equals: 'published' as const } } }
