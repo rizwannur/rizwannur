@@ -9,13 +9,24 @@ export async function GET() {
   const siteUrl = getSiteUrl()
   const payload = await getPayload({ config })
 
-  const { docs: posts } = await payload.find({
-    collection: 'posts',
-    limit: 100,
-    sort: '-date',
-    depth: 0,
-    where: { _status: { equals: 'published' } },
-  })
+  const [{ docs: posts }, { docs: works }] = await Promise.all([
+    payload.find({
+      collection: 'posts',
+      limit: 100,
+      sort: '-date',
+      depth: 0,
+      where: { _status: { equals: 'published' } },
+    }),
+    payload
+      .find({
+        collection: 'work',
+        limit: 100,
+        sort: 'order',
+        depth: 0,
+        where: { _status: { equals: 'published' } },
+      })
+      .catch(() => ({ docs: [] as Array<{ slug: string; title: string; subtitle?: string; description?: string }> })),
+  ])
 
   const lines: string[] = []
 
@@ -42,6 +53,17 @@ export async function GET() {
     lines.push(`- [${s.label}](${s.href})`)
   }
   lines.push('')
+
+  if (works.length > 0) {
+    lines.push('## Work')
+    lines.push('')
+    for (const w of works) {
+      const url = `${siteUrl}/work/${w.slug}`
+      const sub = w.subtitle ? ` — ${w.subtitle}` : w.description ? ` — ${w.description}` : ''
+      lines.push(`- [${w.title}](${url})${sub}`)
+    }
+    lines.push('')
+  }
 
   if (posts.length > 0) {
     lines.push('## Writing')

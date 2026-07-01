@@ -27,7 +27,6 @@ export function WorkGrid({ items, columns = 2 }: { items: Work[]; columns?: 1 | 
             onMouseEnter={() => setHovered(i)}
             onFocus={() => setHovered(i)}
             onBlur={() => setHovered(null)}
-            aria-label={`${item.title} ${item.subtitle}`}
             className={`block cursor-pointer pt-2.5 pb-2.5 [&:first-child]:pt-0 [&:last-child]:pb-0 ${
               columns === 2 ? 'md:[&:nth-child(odd)]:pr-2.5 md:[&:nth-child(even)]:pl-2.5 md:pt-2.5 md:pb-2.5 md:[&:nth-child(-n+2)]:pt-0 md:[&:nth-last-child(-n+2)]:pb-0' : ''
             }`}

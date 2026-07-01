@@ -10,7 +10,7 @@ export function ViewAll({ href }: { href: string }) {
       <Link
         href={href}
         onClick={() => playClick()}
-        className="text-[11px] font-medium tracking-wider uppercase text-neutral-400 hover:text-neutral-700 dark:text-neutral-500 dark:hover:text-neutral-200 transition-colors"
+        className="text-[11px] font-medium tracking-wider uppercase text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 transition-colors"
       >
         View all
       </Link>

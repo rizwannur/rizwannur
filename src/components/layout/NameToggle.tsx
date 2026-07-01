@@ -38,7 +38,6 @@ export function NameToggle({ avatar, shortName, fullName, role }: NameToggleProp
             <button
               type="button"
               aria-expanded={expanded}
-              aria-label={expanded ? 'Show short name' : 'Show full name'}
               onClick={() => { playClick(); setExpanded((v) => !v) }}
               className="font-display text-2xl leading-[1.1] text-black dark:text-white flex flex-wrap gap-x-2 items-baseline text-left bg-transparent border-0 p-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-black/30 dark:focus-visible:ring-white/40 rounded-sm"
             >
