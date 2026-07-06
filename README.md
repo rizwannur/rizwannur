@@ -3,7 +3,9 @@
   <img src="./assets/flower.jpeg" alt="Rizwan Nur Banner" />
 </p>
 
-<p><img src="https://raw.githubusercontent.com/AVS1508/AVS1508/master/assets/Hand%20Wave.gif" width="40" align="left" /> <h2>Hey, I'm Rafey</h2></p>
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=3000&pause=1000&color=7A79FF&center=true&vCenter=true&width=600&lines=Hey%2C+I'm+Rafey+%F0%9F%91%8B;Full+Stack+Product+Engineer;Building+clean%2C+minimal+products" alt="Typing SVG" />
+</p>
 
 ---
 
@@ -53,6 +55,11 @@
 ---
 
 ### 📊 GitHub Stats
+
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=rizwannur&show_icons=true&theme=tokyonight&hide_border=true&bg_color=00000000&title_color=7A79FF&icon_color=7A79FF" height="165px" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=rizwannur&layout=compact&theme=tokyonight&hide_border=true&bg_color=00000000&title_color=7A79FF" height="165px" />
+</div>
 
 <div align="center">
   <img src="https://github-readme-streak-stats.herokuapp.com?user=rizwannur&theme=tokyonight&hide_border=true&background=00000000&dates=7A79FF&stroke=7A79FF" height="200px" />
