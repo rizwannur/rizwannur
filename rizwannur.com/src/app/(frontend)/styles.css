@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, "Times New Roman", Times, serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html, body {
+    height: 100%;
+  }
+  body {
+    @apply bg-[#F9FAFA] text-neutral-900 antialiased font-sans dark:bg-[#171A22] dark:text-neutral-100;
+    font-family: var(--font-sans);
+    letter-spacing: 0.005em;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* Theme switch: incoming layer wipes in as a blurred circle from the top-right
+     corner. Old layer stays put underneath so the new theme reveals over it. */
+  @supports (view-transition-name: root) {
+    ::view-transition-old(root) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+    ::view-transition-new(root) {
+      animation: theme-circle-blur 500ms ease-out;
+      transform-origin: top right;
+      mix-blend-mode: normal;
+      filter: blur(0);
+    }
+  }
+
+  @keyframes theme-circle-blur {
+    from {
+      clip-path: circle(0% at 100% 0%);
+      filter: blur(4px);
+    }
+    to {
+      clip-path: circle(150% at 100% 0%);
+      filter: blur(0);
+    }
+  }
+}
+
+@utility font-display {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* ── Rich text / Lexical rendered content ─────────────────────────────────── */
+.rich-text {
+  & p {
+    @apply text-[15px] leading-relaxed text-neutral-700 dark:text-neutral-300 mb-5;
+  }
+  & h2 {
+    @apply font-display text-[1.65rem] leading-tight text-black dark:text-white mt-12 mb-4;
+  }
+  & h3 {
+    @apply text-[17px] font-semibold tracking-tight text-black dark:text-white mt-10 mb-3;
+  }
+  & h4 {
+    @apply text-[15px] font-semibold text-neutral-800 dark:text-neutral-200 mt-8 mb-2;
+  }
+  & ul {
+    @apply pl-5 mb-5 text-[15px] text-neutral-700 dark:text-neutral-300;
+    list-style-type: disc;
+    & li {
+      @apply mb-1.5 leading-relaxed;
+    }
+  }
+  & ol {
+    @apply pl-5 mb-5 text-[15px] text-neutral-700 dark:text-neutral-300;
+    list-style-type: decimal;
+    & li {
+      @apply mb-1.5 leading-relaxed;
+    }
+  }
+  & strong {
+    @apply font-semibold text-neutral-900 dark:text-neutral-100;
+  }
+  & em {
+    @apply italic;
+  }
+  & u {
+    @apply underline underline-offset-2;
+  }
+  & a {
+    @apply text-black dark:text-white underline underline-offset-2 decoration-black/25 dark:decoration-white/25 hover:decoration-black/70 dark:hover:decoration-white/70 transition-colors;
+  }
+  /* inline code */
+  & :not(pre) > code {
+    @apply font-mono text-[13px] bg-black/[0.06] dark:bg-white/[0.08] rounded px-1.5 py-0.5 text-neutral-800 dark:text-neutral-200;
+  }
+  /* code blocks (Shiki-rendered) */
+  & .rich-code-block {
+    @apply rounded-xl my-6 overflow-hidden border border-black/8 dark:border-white/10;
+  }
+  & .rich-code-block pre.shiki {
+    @apply font-mono text-[13px] leading-relaxed p-4 m-0 overflow-x-auto;
+    background-color: var(--shiki-light-bg);
+  }
+  & .rich-code-block pre.shiki,
+  & .rich-code-block pre.shiki span {
+    color: var(--shiki-light);
+  }
+  /* code blocks fallback (legacy raw <pre>) */
+  & pre:not(.shiki) {
+    @apply rounded-xl p-4 mb-6 mt-2 overflow-x-auto bg-neutral-950 dark:bg-black/70 border border-white/8;
+    & code {
+      @apply font-mono text-[13px] leading-relaxed text-neutral-200 bg-transparent p-0;
+    }
+  }
+  & blockquote {
+    @apply border-l-2 border-black/20 dark:border-white/20 pl-4 my-6 italic text-neutral-600 dark:text-neutral-400;
+  }
+  & hr {
+    @apply border-black/10 dark:border-white/10 my-10;
+  }
+  & img {
+    @apply rounded-xl w-full my-6;
+  }
+  /* tighten top/bottom on first/last child */
+  & > *:first-child {
+    margin-top: 0;
+  }
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Shiki dual-theme: switch tokens + bg when html.dark */
+html.dark .rich-code-block pre.shiki {
+  background-color: var(--shiki-dark-bg);
+}
+html.dark .rich-code-block pre.shiki,
+html.dark .rich-code-block pre.shiki span {
+  color: var(--shiki-dark);
+}

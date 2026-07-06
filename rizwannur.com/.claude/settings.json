@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:rizwannur.com)",
+      "Bash(bun run *)",
+      "Bash(bunx tsc *)",
+      "Bash(claude mcp *)",
+      "WebFetch(domain:context7.ai)",
+      "WebFetch(domain:payloadcms.com)",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "Bash(grep -rn \"//\" \"d:/Downloads/Rafey/rizwannur.xyz/src\")",
+      "Bash(xargs grep *)",
+      "WebSearch",
+      "mcp__plugin_context7_context7__query-docs"
+    ]
+  }
+}
