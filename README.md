@@ -57,21 +57,10 @@
 ### 📊 GitHub Stats
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=rizwannur&show_icons=true&theme=tokyonight&hide_border=true&bg_color=00000000&title_color=7A79FF&icon_color=7A79FF" height="165px" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=rizwannur&layout=compact&theme=tokyonight&hide_border=true&bg_color=00000000&title_color=7A79FF" height="165px" />
+  <img src="https://streak-stats.demolab.com?user=rizwannur&theme=tokyonight&hide_border=true&background=00000000&dates=7A79FF&stroke=7A79FF" height="200px" />
 </div>
 
-<div align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com?user=rizwannur&theme=tokyonight&hide_border=true&background=00000000&dates=7A79FF&stroke=7A79FF" height="200px" />
-</div>
-
----
-
-### 🏆 Achievements
-
-<div align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=rizwannur&theme=tokyonight&margin-w=15&no-frame=true&row=2&column=4" />
-</div>
+<p align="center"><sub>Full stats cards, top languages, and trophy widgets were dropped — the shared public instances they depended on (github-readme-stats.vercel.app, github-profile-trophy.vercel.app) are down. GitHub's own contribution graph, pinned repos, and achievement badges already show natively on <a href="https://github.com/rizwannur">my profile</a>.</sub></p>
 
 ---
 
