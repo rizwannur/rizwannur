@@ -1,6 +1,6 @@
 <!-- Banner -->
 <p align="center">
-  <img src="./assets/flower.jpeg" alt="Rizwan Nur Banner" />
+  <img src="./assets/banner.jpg" alt="Rizwan Nur Banner" width="100%" />
 </p>
 
 <p align="center">
