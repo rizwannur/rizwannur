@@ -1,47 +1,103 @@
-# Payload Blank Template
+<div align="center">
 
-This template comes configured with the bare minimum to get started on anything you need.
+# rizwannur.com
 
-## Quick start
+Source for [rizwannur.com](https://www.rizwannur.com) — my personal site, blog, and portfolio.
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+Built on [Payload CMS](https://payloadcms.com) 3.0 and Next.js, with content (posts, work, media) managed through Payload's admin panel and rendered by a Next.js App Router front end.
 
-## Quick Start - local setup
+[Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [Scripts](#-available-scripts) • [Structure](#-project-structure) • [Links](#-links)
 
-To spin up this template locally, follow these steps:
+</div>
 
-### Clone
+---
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+### 🧪 Tech Stack
 
-### Development
+![Next.js](https://img.shields.io/badge/-Next.js%2016-05122A?style=flat&logo=next.js)&nbsp;
+![React](https://img.shields.io/badge/-React%2019-05122A?style=flat&logo=react)&nbsp;
+![TypeScript](https://img.shields.io/badge/-TypeScript-05122A?style=flat&logo=typescript)&nbsp;
+![Payload CMS](https://img.shields.io/badge/-Payload%20CMS%203-05122A?style=flat&logo=payloadcms)&nbsp;
+![MongoDB](https://img.shields.io/badge/-MongoDB-05122A?style=flat&logo=mongodb)&nbsp;
+![TailwindCSS](https://img.shields.io/badge/-Tailwind%20CSS%204-05122A?style=flat&logo=tailwind-css)&nbsp;
+![Vercel](https://img.shields.io/badge/-Vercel-05122A?style=flat&logo=vercel)&nbsp;
+![Zod](https://img.shields.io/badge/-Zod-05122A?style=flat&logo=zod)&nbsp;
+![ESLint](https://img.shields.io/badge/-ESLint-05122A?style=flat&logo=eslint)&nbsp;
+![bun](https://img.shields.io/badge/-bun-05122A?style=flat&logo=bun)
 
-1. First [clone the repo](#clone) if you have not done so already
-2. Create a `.env` in the project root with the variables your database and email setup require (e.g. `DATABASE_URI` for Postgres as configured in Payload).
+**How it's put together**
 
-3. `bun install` then `bun dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+- **Payload CMS** powers the content layer — collections for Users (auth) and Media live under `src/collections`, configured in `src/payload.config.ts`.
+- **MongoDB** is the database, via `@payloadcms/db-mongodb`.
+- **Vercel Blob** handles media storage in production, via `@payloadcms/storage-vercel-blob`.
+- **Next.js App Router** (`src/app`) renders the public site and the Payload admin UI side by side.
+- **SEO** and **Search** plugins (`@payloadcms/plugin-seo`, `@payloadcms/plugin-search`) are wired in for metadata and on-site search.
+- **Vercel Analytics** and **Speed Insights** track real-world performance.
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+---
 
-## How it works
+### 🚀 Getting Started
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+This project uses [bun](https://bun.sh) as the package manager and runtime.
 
-### Collections
+1. **Install dependencies**
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+   ```bash
+   bun install
+   ```
 
-- #### Users (Authentication)
+2. **Set up environment variables**
 
-  Users are auth-enabled collections that have access to the admin panel.
+   Copy `.env.example` to `.env` and fill in the values (database connection string, Payload secret, blob storage token, etc.):
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/3.x/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+   ```bash
+   cp .env.example .env
+   ```
 
-- #### Media
+3. **Run the dev server**
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+   ```bash
+   bun dev
+   ```
 
-## Questions
+   Open [http://localhost:3000](http://localhost:3000) for the site, and `/admin` for the Payload admin panel. Follow the on-screen prompts to create your first admin user.
 
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+---
+
+### 📜 Available Scripts
+
+| Command | What it does |
+|---|---|
+| `bun dev` | Start the dev server |
+| `bun devsafe` | Wipe `.next` and start the dev server clean (use if you hit stale build weirdness) |
+| `bun run build` | Production build |
+| `bun start` | Run the production build |
+| `bun run lint` | Lint the codebase |
+| `bun run type-check` | Type-check with `tsc --noEmit` |
+| `bun run payload` | Run the Payload CLI |
+| `bun run generate:types` | Regenerate `src/payload-types.ts` from your Payload config |
+| `bun run generate:importmap` | Regenerate the Payload admin import map |
+
+---
+
+### 📁 Project Structure
+
+```
+rizwannur.com/
+├── src/
+│   ├── app/            # Next.js routes (public site + Payload admin)
+│   ├── collections/    # Payload collections (Users, Media, etc.)
+│   ├── components/     # Shared React components
+│   ├── lib/            # Utilities and helpers
+│   └── payload.config.ts
+├── public/             # Static assets
+├── scripts/            # Maintenance/build scripts
+└── docs/               # Project docs
+```
+
+---
+
+### 🔗 Links
+
+- Live site: [rizwannur.com](https://www.rizwannur.com)
+- Part of the [rizwannur](../) repo, merged in with full commit history preserved.

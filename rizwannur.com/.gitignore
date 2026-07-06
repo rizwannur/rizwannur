@@ -45,3 +45,8 @@ next-env.d.ts
 
 # local MCP client config — contains bearer token for /mcp
 .mcp.json
+
+# internal AI-tooling / planning docs — not meant for the public repo
+/.claude
+/CLAUDE.md
+/docs
