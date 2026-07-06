@@ -97,17 +97,3 @@
 ---
 
 <p align="center">Last updated: May 2026 • rizwannur.com</p>
-
----
-
-### 📦 Projects in this Repo
-
-<div align="center">
-
-| Project | What it is |
-|---|---|
-| **[`rizwannur.com/`](./rizwannur.com)** | Source for [rizwannur.com](https://www.rizwannur.com) — my personal site and blog, built on Payload CMS 3.0 + Next.js. Merged in here with full commit history preserved. |
-
-</div>
-
-<p align="center"><a href="./rizwannur.com/README.md"><img src="https://img.shields.io/badge/-Read%20the%20project%20README-05122A?style=flat&logo=readme&logoColor=white" /></a></p>
